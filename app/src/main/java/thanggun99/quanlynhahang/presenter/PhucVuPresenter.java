@@ -11,6 +11,7 @@ import thanggun99.quanlynhahang.model.PhucVuInteractor;
 import thanggun99.quanlynhahang.model.entity.Ban;
 import thanggun99.quanlynhahang.model.entity.DatBan;
 import thanggun99.quanlynhahang.model.entity.HoaDon;
+import thanggun99.quanlynhahang.model.entity.KhachHang;
 import thanggun99.quanlynhahang.model.entity.Mon;
 import thanggun99.quanlynhahang.model.entity.MonOrder;
 import thanggun99.quanlynhahang.model.entity.NhomMon;
@@ -163,7 +164,6 @@ public class PhucVuPresenter implements PhucVuInteractor.OnPhucVuInteractorFinis
 
             getDatabase().addYeuCau(yeuCauNew);
             yeuCauView.notifyAddYeuCau();
-            showOnMain.showFloatButton();
             showOnMain.updateFloatButton(getDatabase().getYeuCauList().size());
         }
 
@@ -201,7 +201,7 @@ public class PhucVuPresenter implements PhucVuInteractor.OnPhucVuInteractorFinis
         if (Utils.isConnectingToInternet()) {
             return true;
         } else {
-            showOnMain.showConnectFailDialog();
+            showOnMain.showNotifyDialog(Utils.getStringByRes(R.string.kiem_tra_ket_noi_mang));
             return false;
         }
     }
@@ -615,6 +615,10 @@ public class PhucVuPresenter implements PhucVuInteractor.OnPhucVuInteractorFinis
 
     public void setYeuCauView(YeuCauView yeuCauView) {
         this.yeuCauView = yeuCauView;
+    }
+
+    public void addKhachHang(KhachHang khachHang) {
+        getDatabase().addKhachHang(khachHang);
     }
 
 
