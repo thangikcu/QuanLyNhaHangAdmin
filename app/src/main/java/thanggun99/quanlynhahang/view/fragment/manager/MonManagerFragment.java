@@ -56,7 +56,7 @@ public class MonManagerFragment extends BaseFragment implements MonManager.MonMa
     public void findViews(View view) {
         spnNhomMon = (Spinner) view.findViewById(R.id.spn_nhom_mon);
         edtTimKiemMon = (SearchView) view.findViewById(R.id.edt_tim_kiem_mon);
-        monRecyclerView = (RecyclerView) view.findViewById(R.id.list_thuc_don);
+        monRecyclerView = (RecyclerView) view.findViewById(R.id.list_mon);
         btnThemMoi = (Button) view.findViewById(R.id.btn_them_thuc_don);
     }
 

@@ -98,7 +98,7 @@ public class Utils {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-        return info != null && info.isConnectedOrConnecting();
+        return info != null && info.isConnected();
     }
 
     public static boolean isConnectAvalilabe() {

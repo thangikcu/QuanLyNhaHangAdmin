@@ -3,9 +3,9 @@ package thanggun99.quanlynhahang.view.dialog;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
+import butterknife.BindView;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.presenter.MainPresenter;
 import thanggun99.quanlynhahang.util.Utils;
@@ -16,29 +16,21 @@ import thanggun99.quanlynhahang.util.Utils;
  */
 
 public class ChangePasswordDialog extends BaseDialog implements MainPresenter.ChangepasswordView {
-    private Context context;
+    @BindView(R.id.edt_password)
+    EditText edtPassword;
+    @BindView(R.id.edt_new_password)
+    EditText edtNewPassword;
+    @BindView(R.id.edt_re_password)
+    EditText edtRePassword;
+
     private MainPresenter mainPresenter;
-    private EditText edtPassword, edtNewPassword, edtRePassword;
 
     public ChangePasswordDialog(Context context, MainPresenter mainPresenter) {
-        super(context);
-        this.context = context;
+        super(context, R.layout.dialog_change_password);
         this.mainPresenter = mainPresenter;
-        mainPresenter.setChangepasswordView(this);
-        setContentView(R.layout.dialog_change_password);
         setCancelable(true);
 
-        edtPassword = (EditText) findViewById(R.id.edt_password);
-        edtNewPassword = (EditText) findViewById(R.id.edt_new_password);
-        edtRePassword = (EditText) findViewById(R.id.edt_re_password);
-
-
-        btnCancle = (Button) findViewById(R.id.btn_cancel);
-        btnOk = (Button) findViewById(R.id.btn_ok);
-
-        btnOk.setOnClickListener(this);
-        btnCancle.setOnClickListener(this);
-
+        mainPresenter.setChangepasswordView(this);
     }
 
     @Override

@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.model.entity.Mon;
 import thanggun99.quanlynhahang.presenter.PhucVuPresenter;
@@ -48,7 +50,7 @@ public class MonAdapter extends RecyclerView.Adapter<MonAdapter.ViewHolder> {
         holder.tvTenMon.scrollTo(0, 0);
         holder.tvDonGia.setText(Utils.formatMoney(mon.getDonGia()) + "/" + mon.getDonViTinh());
         holder.ratingBar.setRating(mon.getRating() / mon.getPersonRating());
-        holder.tvRatingPoint.setText(mon.getRatingPoint());
+        holder.tvPointRating.setText(mon.getRatingPoint());
         Glide.with(context)
                 .load(mon.getHinhAnh())
                 .error(R.drawable.ic_food)
@@ -72,30 +74,29 @@ public class MonAdapter extends RecyclerView.Adapter<MonAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        RatingBar ratingBar;
-        TextView tvTenMon;
-        TextView tvDonGia;
+        @BindView(R.id.iv_mon)
         ImageView ivMon;
-        TextView tvRatingPoint;
+        @BindView(R.id.tv_ten_mon)
+        TextView tvTenMon;
+        @BindView(R.id.tv_don_gia)
+        TextView tvDonGia;
+        @BindView(R.id.ratingBar)
+        RatingBar ratingBar;
+        @BindView(R.id.tv_point_rating)
+        TextView tvPointRating;
 
-        public ViewHolder(final View itemView) {
-            super(itemView);
-            tvRatingPoint = (TextView) itemView.findViewById(R.id.tv_point_rating);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
-            tvDonGia = (TextView) itemView.findViewById(R.id.tv_don_gia);
-            ivMon = (ImageView) itemView.findViewById(R.id.iv_mon);
-            tvTenMon = (TextView) itemView.findViewById(R.id.tv_ten_mon);
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
 
             tvTenMon.setMovementMethod(new ScrollingMovementMethod());
             tvTenMon.setOnClickListener(this);
             itemView.setOnClickListener(this);
-
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
             phucVuPresenter.onClickMon(getItem(getAdapterPosition()));
-
         }
     }
 }

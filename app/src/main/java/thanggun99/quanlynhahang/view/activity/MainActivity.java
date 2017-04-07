@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.interfaces.CommondActionForView;
 import thanggun99.quanlynhahang.model.Database;
@@ -45,23 +47,39 @@ import thanggun99.quanlynhahang.view.fragment.SettingFragment;
 import thanggun99.quanlynhahang.view.fragment.ThongKeFragment;
 
 public class MainActivity extends AppCompatActivity implements CommondActionForView, View.OnClickListener, MainPresenter.MainView {
+
+    @BindView(R.id.btn_phuc_vu)
+    Button btnPhucVu;
+    @BindView(R.id.btn_dat_ban)
+    Button btnDatBan;
+    @BindView(R.id.btn_manager)
+    Button btnManager;
+    @BindView(R.id.btn_thong_ke)
+    Button btnThongKe;
+    @BindView(R.id.btn_setting)
+    Button btnSetting;
+    @BindView(R.id.tv_username)
+    TextView tvUsername;
+    @BindView(R.id.tv_ho_ten)
+    TextView tvHoTen;
+    @BindView(R.id.btn_drop_down)
+    ImageButton btnDropDown;
+
     private static boolean isShowFloatButton = false;
+
     private WindowManager wm;
     private WindowManager.LayoutParams params;
     private LinearLayout layoutFloat;
     private TextView tvNumber;
-
-    private Database database;
+    private Button btnSelected;
 
     private Admin admin;
-    private TextView tvAdmin, tvHoTen;
-    private ImageButton btnDropDown;
+    private Database database;
+
     private PopupMenu popupMenu;
 
     private MainPresenter mainPresenter;
     private PhucVuPresenter phucVuPresenter;
-
-    private Button btnPhucVu, btnManage, btnThongKe, btnDatBan, btnSetting, btnSelected;
 
     private PhucVuFragment phucVuFragment;
     private SettingFragment settingFragment;
@@ -82,10 +100,10 @@ public class MainActivity extends AppCompatActivity implements CommondActionForV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         admin = (Admin) getIntent().getSerializableExtra(Admin.ADMIN);
 
-        findViews(null);
         initComponents();
         setEvents();
         mainPresenter.getDatas();
@@ -117,20 +135,12 @@ public class MainActivity extends AppCompatActivity implements CommondActionForV
 
     @Override
     public void findViews(View view) {
-        btnDropDown = (ImageButton) findViewById(R.id.btn_drop_down);
-        tvAdmin = (TextView) findViewById(R.id.tv_ten_admin);
-        tvHoTen = (TextView) findViewById(R.id.tv_ho_ten);
-        btnPhucVu = (Button) findViewById(R.id.btn_sell);
-        btnManage = (Button) findViewById(R.id.btn_manager);
-        btnThongKe = (Button) findViewById(R.id.btn_thong_ke);
-        btnDatBan = (Button) findViewById(R.id.btn_dat_ban);
-        btnSetting = (Button) findViewById(R.id.btn_setting);
 
-        btnSelected = btnPhucVu;
     }
 
     @Override
     public void initComponents() {
+        btnSelected = new Button(this);
 
         wm = (WindowManager) getApplicationContext().getSystemService(
                 Context.WINDOW_SERVICE);
@@ -184,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements CommondActionForV
         });
 
         btnPhucVu.setOnClickListener(this);
-        btnManage.setOnClickListener(this);
+        btnManager.setOnClickListener(this);
         btnThongKe.setOnClickListener(this);
         btnDatBan.setOnClickListener(this);
         btnSetting.setOnClickListener(this);
@@ -203,10 +213,10 @@ public class MainActivity extends AppCompatActivity implements CommondActionForV
     }
 
     private void setAdmin() {
-        tvAdmin.setText(admin.getTenDangNhap());
+        tvUsername.setText(admin.getTenDangNhap());
         tvHoTen.setText("(" + admin.getHoTen() + ")");
         if (admin.getType() == 2) {
-            btnManage.setEnabled(false);
+            btnManager.setEnabled(false);
             btnThongKe.setEnabled(false);
         }
     }
@@ -214,13 +224,13 @@ public class MainActivity extends AppCompatActivity implements CommondActionForV
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_sell:
+            case R.id.btn_phuc_vu:
                 if (phucVuFragment == null) phucVuFragment = new PhucVuFragment(phucVuPresenter);
                 fillFrame(phucVuFragment, btnPhucVu);
                 break;
             case R.id.btn_manager:
                 if (managerFragment == null) managerFragment = new ManagerFragment(mainPresenter);
-                fillFrame(managerFragment, btnManage);
+                fillFrame(managerFragment, btnManager);
                 break;
             case R.id.btn_thong_ke:
                 if (thongKeFragment == null) {
@@ -327,15 +337,18 @@ public class MainActivity extends AppCompatActivity implements CommondActionForV
     }
 
     @Override
-    public void clearFrame() {
+    public void clearFrames() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
 
         if (fragments.size() > 0) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             for (Fragment fragment : fragments) {
-                Utils.showLog("xoa " + fragment.getClass().getName());
-                transaction.remove(fragment);
+                if (fragment != null) {
+
+                    Utils.showLog("xoa " + fragment.getClass().getName());
+                    transaction.remove(fragment);
+                }
             }
             transaction.commit();
         }

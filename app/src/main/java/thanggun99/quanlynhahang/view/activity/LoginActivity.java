@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.model.LoginTask;
 import thanggun99.quanlynhahang.model.entity.Admin;
@@ -19,10 +21,17 @@ import thanggun99.quanlynhahang.view.dialog.NotifiDialog;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginTask.OnLoginListener {
-    private EditText edtUsername, edtPassword;
-    private CheckBox ckbGhiNho;
-    private TextView tvError;
-    private Button btnLogin;
+    @BindView(R.id.edt_username)
+    EditText edtUsername;
+    @BindView(R.id.edt_password)
+    EditText edtPassword;
+    @BindView(R.id.ckb_ghi_nho)
+    CheckBox ckbGhiNho;
+    @BindView(R.id.tv_error_login)
+    TextView tvErrorLogin;
+    @BindView(R.id.btn_login)
+    Button btnLogin;
+
     private LoginTask loginTask;
 
     private ProgressDialog progressDialog;
@@ -32,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         loginTask = new LoginTask();
         loginTask.setOnLoginListener(this);
@@ -42,12 +52,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.setMessage(Utils.getStringByRes(R.string.loading));
-
-        edtUsername = (EditText) findViewById(R.id.edt_username);
-        edtPassword = (EditText) findViewById(R.id.edt_password);
-        ckbGhiNho = (CheckBox) findViewById(R.id.ckb_ghi_nho);
-        tvError = (TextView) findViewById(R.id.tv_error_login);
-        btnLogin = (Button) findViewById(R.id.btn_login);
 
         btnLogin.setOnClickListener(this);
 
@@ -134,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onLoginFail() {
-        tvError.setVisibility(View.VISIBLE);
+        tvErrorLogin.setVisibility(View.VISIBLE);
     }
 
     @Override

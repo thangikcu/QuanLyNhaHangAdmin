@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import thanggun99.quanlynhahang.App;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.interfaces.CommondActionForView;
@@ -20,6 +22,7 @@ public abstract class BaseFragment extends Fragment implements CommondActionForV
     protected View view;
     private int layoutResource;
     private Animation zoomAnimation;
+    private Unbinder unbinder;
 
     public BaseFragment(int layoutResource) {
         this.layoutResource = layoutResource;
@@ -40,6 +43,7 @@ public abstract class BaseFragment extends Fragment implements CommondActionForV
     public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         this.view = inflater.inflate(layoutResource, container, false);
+        unbinder = ButterKnife.bind(this, view);
         findViews(view);
         return view;
     }
@@ -60,4 +64,10 @@ public abstract class BaseFragment extends Fragment implements CommondActionForV
 
     @Override
     public abstract void setEvents();
+
+    @Override
+    public void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
+    }
 }

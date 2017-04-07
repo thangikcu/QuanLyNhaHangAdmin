@@ -5,6 +5,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.model.entity.DatBan;
 
@@ -13,16 +14,18 @@ import thanggun99.quanlynhahang.model.entity.DatBan;
  */
 
 public class ThongTinDatBanDialog extends BaseDialog {
-    private TextView tvTenKhachHang, tvSoDienThoai, tvKhoangGioDen, tvYeuCau;
+    @BindView(R.id.tv_ten_khach_hang)
+    TextView tvTenKhachHang;
+    @BindView(R.id.tv_so_dien_thoai)
+    TextView tvSoDienThoai;
+    @BindView(R.id.tv_khoang_gio_den)
+    TextView tvKhoangGioDen;
+    @BindView(R.id.tv_yeu_cau)
+    TextView tvYeuCau;
 
     public ThongTinDatBanDialog(Context context) {
-        super(context);
-        setContentView(R.layout.dialog_thong_tin_dat_ban);
+        super(context, R.layout.dialog_thong_tin_dat_ban);
 
-        tvTenKhachHang = (TextView) findViewById(R.id.tv_ten_khach_hang);
-        tvSoDienThoai = (TextView) findViewById(R.id.tv_so_dien_thoai);
-        tvKhoangGioDen = (TextView) findViewById(R.id.tv_gio_den);
-        tvYeuCau = (TextView) findViewById(R.id.tv_yeu_cau);
         tvYeuCau.setMovementMethod(new ScrollingMovementMethod());
     }
 

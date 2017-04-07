@@ -102,7 +102,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/container_thong_tin_ban"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -122,7 +121,7 @@
                     android:src="@drawable/logo_thong_tin_ban" />
 
                 <TextView
-                    android:id="@+id/tv_title"
+                    android:id="@+id/tv_ten_ban"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"

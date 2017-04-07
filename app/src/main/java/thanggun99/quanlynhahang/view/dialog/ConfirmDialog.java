@@ -3,30 +3,22 @@ package thanggun99.quanlynhahang.view.dialog;
 import android.content.Context;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import thanggun99.quanlynhahang.R;
 
 
 public class ConfirmDialog extends BaseDialog {
-    private TextView tvTitle, tvMessage;
+    @BindView(R.id.tv_message)
+    TextView tvMessage;
+
     private OnClickOkListener onClickOkListener;
 
     public ConfirmDialog(Context context) {
-        super(context);
-        setContentView(R.layout.dialog_confirm);
+        super(context, R.layout.dialog_confirm);
 
-        tvTitle = (TextView) findViewById(R.id.tv_title);
-
-        tvMessage = (TextView) findViewById(R.id.tv_message);
         tvMessage.setMovementMethod(new ScrollingMovementMethod());
-
-        btnOk = (Button) findViewById(R.id.btn_ok);
-        btnOk.setOnClickListener(this);
-
-        btnCancle = (Button) findViewById(R.id.btn_cancel);
-        btnCancle.setOnClickListener(this);
     }
 
     public void setContent(String title, String message) {
@@ -47,7 +39,7 @@ public class ConfirmDialog extends BaseDialog {
         this.onClickOkListener = onClickOkListener;
     }
 
-    public interface OnClickOkListener{
+    public interface OnClickOkListener {
         void onClickOk();
     }
 }

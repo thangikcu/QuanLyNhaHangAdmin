@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.adapter.MonKhachHangYeuCauAdapter;
 import thanggun99.quanlynhahang.adapter.YeuCauAdapter;
@@ -24,68 +25,62 @@ import thanggun99.quanlynhahang.presenter.PhucVuPresenter;
 
 public class KhachHangYeuCauDialog extends BaseDialog implements PhucVuPresenter.YeuCauView {
 
-    private Context context;
-    private PhucVuPresenter phucVuPresenter;
-    private RecyclerView yeuCauRecyclerView;
-    private YeuCauAdapter yeuCauAdapter;
-    private LinearLayout chiTietYeuCauLayout, yeuCauLayout;
-    private TextView tvTenKhachHang, tvSoDienThoai, tvTenBan;
-    private Button btnClose;
+    @BindView(R.id.list_yeu_cau)
+    RecyclerView listYeuCau;
+    @BindView(R.id.btn_close)
+    Button btnClose;
+    @BindView(R.id.layout_yeu_cau)
+    LinearLayout layoutYeuCau;
+    @BindView(R.id.spn_ban)
+    Spinner spnBan;
+    @BindView(R.id.tv_ten_ban)
+    TextView tvTenBan;
+    @BindView(R.id.tv_ten_khach_hang)
+    TextView tvTenKhachHang;
+    @BindView(R.id.tv_so_dien_thoai)
+    TextView tvSoDienThoai;
+    @BindView(R.id.list_mon_order)
+    RecyclerView listMonOrder;
+    @BindView(R.id.layout_chi_tiet_yeu_cau)
+    LinearLayout layoutChiTietYeuCau;
 
-    private RecyclerView monOrderRecyclerView;
+    private PhucVuPresenter phucVuPresenter;
+
+    private YeuCauAdapter yeuCauAdapter;
+
     private MonKhachHangYeuCauAdapter monKhachHangYeuCauAdapter;
-    private Spinner banSpinner;
     private ArrayList<Ban> banList;
     private ArrayAdapter<String> banAdapter;
     private Ban ban;
 
     @SuppressLint("NewApi")
     public KhachHangYeuCauDialog(Context context, PhucVuPresenter phucVuPresenter) {
-        super(context);
-        this.context = context;
+        super(context, R.layout.dialog_khach_hang_yeu_cau);
         this.phucVuPresenter = phucVuPresenter;
-        setContentView(R.layout.dialog_khach_hang_yeu_cau);
         getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         setCancelable(true);
 
-        chiTietYeuCauLayout = (LinearLayout) findViewById(R.id.layout_chi_tiet_yeu_cau);
-        chiTietYeuCauLayout.setVisibility(View.GONE);
+        layoutChiTietYeuCau.setVisibility(View.GONE);
 
-        monOrderRecyclerView = (RecyclerView) chiTietYeuCauLayout.findViewById(R.id.list_mon_order);
-        monOrderRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        listMonOrder.setLayoutManager(new LinearLayoutManager(context));
         monKhachHangYeuCauAdapter = new MonKhachHangYeuCauAdapter(context);
-        monOrderRecyclerView.setAdapter(monKhachHangYeuCauAdapter);
-
-        banSpinner = (Spinner) chiTietYeuCauLayout.findViewById(R.id.spn_ban);
-        tvTenBan = (TextView) chiTietYeuCauLayout.findViewById(R.id.tv_ten_ban);
+        listMonOrder.setAdapter(monKhachHangYeuCauAdapter);
 
         banList = new ArrayList<>();
         banAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, banList);
 
         banAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        banSpinner.setAdapter(banAdapter);
-        banSpinner.setDropDownWidth(250);
+        spnBan.setAdapter(banAdapter);
+        spnBan.setDropDownWidth(250);
 
-        tvTenKhachHang = (TextView) chiTietYeuCauLayout.findViewById(R.id.tv_ten_khach_hang);
-        tvSoDienThoai = (TextView) chiTietYeuCauLayout.findViewById(R.id.tv_so_dien_thoai);
-        btnOk = (Button) chiTietYeuCauLayout.findViewById(R.id.btn_ok);
-        btnCancle = (Button) chiTietYeuCauLayout.findViewById(R.id.btn_cancel);
+        layoutYeuCau.setVisibility(View.VISIBLE);
 
-        btnOk.setOnClickListener(this);
-        btnCancle.setOnClickListener(this);
-
-
-        yeuCauLayout = (LinearLayout) findViewById(R.id.layout_yeu_cau);
-        yeuCauLayout.setVisibility(View.VISIBLE);
-
-        btnClose = (Button) yeuCauLayout.findViewById(R.id.btn_close);
         btnClose.setOnClickListener(this);
 
-        yeuCauRecyclerView = (RecyclerView) yeuCauLayout.findViewById(R.id.list_yeu_cau);
-        yeuCauRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        listYeuCau.setLayoutManager(new LinearLayoutManager(context));
 
         yeuCauAdapter = new YeuCauAdapter(context, phucVuPresenter);
-        yeuCauRecyclerView.setAdapter(yeuCauAdapter);
+        listYeuCau.setAdapter(yeuCauAdapter);
 
         phucVuPresenter.setYeuCauView(this);
 
@@ -96,14 +91,14 @@ public class KhachHangYeuCauDialog extends BaseDialog implements PhucVuPresenter
         switch (v.getId()) {
             case R.id.btn_ok:
                 if (!tvTenBan.isShown()) {
-                    ban = banList.get(banSpinner.getSelectedItemPosition());
+                    ban = banList.get(spnBan.getSelectedItemPosition());
                 }
                 phucVuPresenter.khachHangOrderMon(ban);
                 dismiss();
                 break;
             case R.id.btn_cancel:
-                chiTietYeuCauLayout.setVisibility(View.GONE);
-                yeuCauLayout.setVisibility(View.VISIBLE);
+                layoutChiTietYeuCau.setVisibility(View.GONE);
+                layoutYeuCau.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_close:
                 dismiss();
@@ -121,8 +116,8 @@ public class KhachHangYeuCauDialog extends BaseDialog implements PhucVuPresenter
         tvTenKhachHang.setText(yeuCau.getKhachHang().getHoTen());
         tvSoDienThoai.setText(yeuCau.getKhachHang().getSoDienThoai());
 
-        yeuCauLayout.setVisibility(View.GONE);
-        chiTietYeuCauLayout.setVisibility(View.VISIBLE);
+        layoutYeuCau.setVisibility(View.GONE);
+        layoutChiTietYeuCau.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -136,7 +131,7 @@ public class KhachHangYeuCauDialog extends BaseDialog implements PhucVuPresenter
         banAdapter.notifyDataSetChanged();
 
         tvTenBan.setVisibility(View.GONE);
-        banSpinner.setVisibility(View.VISIBLE);
+        spnBan.setVisibility(View.VISIBLE);
 
     }
 
@@ -146,7 +141,7 @@ public class KhachHangYeuCauDialog extends BaseDialog implements PhucVuPresenter
         tvTenBan.setText(ban.getTenBan());
 
         tvTenBan.setVisibility(View.VISIBLE);
-        banSpinner.setVisibility(View.INVISIBLE);
+        spnBan.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -162,8 +157,8 @@ public class KhachHangYeuCauDialog extends BaseDialog implements PhucVuPresenter
         if (yeuCauAdapter != null) {
 
             yeuCauAdapter.notifyItemChanged(yeuCau);
-            chiTietYeuCauLayout.setVisibility(View.GONE);
-            yeuCauLayout.setVisibility(View.VISIBLE);
+            layoutChiTietYeuCau.setVisibility(View.GONE);
+            layoutYeuCau.setVisibility(View.VISIBLE);
         }
     }
 
@@ -172,8 +167,8 @@ public class KhachHangYeuCauDialog extends BaseDialog implements PhucVuPresenter
         if (yeuCauAdapter != null) {
 
             yeuCauAdapter.notifyItemRemoved(yeuCau);
-            chiTietYeuCauLayout.setVisibility(View.GONE);
-            yeuCauLayout.setVisibility(View.VISIBLE);
+            layoutChiTietYeuCau.setVisibility(View.GONE);
+            layoutYeuCau.setVisibility(View.VISIBLE);
         }
 
     }
@@ -182,7 +177,7 @@ public class KhachHangYeuCauDialog extends BaseDialog implements PhucVuPresenter
     public void notifyAddYeuCau() {
 
         yeuCauAdapter.notifyItemInserted(0);
-        chiTietYeuCauLayout.setVisibility(View.GONE);
-        yeuCauLayout.setVisibility(View.VISIBLE);
+        layoutChiTietYeuCau.setVisibility(View.GONE);
+        layoutYeuCau.setVisibility(View.VISIBLE);
     }
 }

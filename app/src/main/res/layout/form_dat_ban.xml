@@ -43,7 +43,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/edt_ghi_chu"
+        android:id="@+id/edt_yeu_cau"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_note"

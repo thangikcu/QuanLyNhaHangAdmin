@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import thanggun99.quanlynhahang.App;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.adapter.DatBanChuaSetBanAdapter;
@@ -36,21 +37,48 @@ import static android.view.View.VISIBLE;
 @SuppressLint("ValidFragment")
 public class DatBanFragment extends BaseFragment implements View.OnClickListener, PhucVuPresenter.DatBanView, TimePicker.OnFinishPickTimeListener {
 
+    @BindView(R.id.tv_ten_khach_hang)
+    TextView tvTenKhachHang;
+    @BindView(R.id.tv_so_dien_thoai)
+    TextView tvSoDienThoai;
+    @BindView(R.id.tv_khoang_gio_den)
+    TextView tvKhoangGioDen;
+    @BindView(R.id.tv_yeu_cau)
+    TextView tvYeuCau;
+    @BindView(R.id.layout_thong_tin_dat_ban)
+    LinearLayout layoutThongTinDatBan;
+    @BindView(R.id.spn_ban)
+    Spinner spnBan;
+    @BindView(R.id.layout_thong_tin_dat_ban_chua_set_ban)
+    LinearLayout layoutThongTinDatBanChuaSetBan;
+    @BindView(R.id.edt_ten_khach_hang)
+    EditText edtTenKhachHang;
+    @BindView(R.id.edt_so_dien_thoai)
+    EditText edtSoDienThoai;
+    @BindView(R.id.edt_gio_den)
+    EditText edtGioDen;
+    @BindView(R.id.edt_yeu_cau)
+    EditText edtYeuCau;
+    @BindView(R.id.layout_dat_ban)
+    LinearLayout layoutDatBan;
+    @BindView(R.id.btn_them_dat_ban)
+    Button btnThemDatBan;
+    @BindView(R.id.btn_vao_ban)
+    Button btnVaoBan;
+    @BindView(R.id.btn_cancel)
+    Button btnCancel;
+    @BindView(R.id.edt_tim_kiem_dat_ban)
+    SearchView edtTimKiemDatBan;
+    @BindView(R.id.list_dat_ban)
+    RecyclerView listDatBan;
+
     private PhucVuPresenter phucVuPresenter;
-
-    private SearchView edtTimKiemDatBan;
-    private RecyclerView listDatBanChuaSetBan;
-    private Button btnThemDatBan, btnVaoBan, btnCancel;
     private DatBanChuaSetBanAdapter datBanChuaSetBanAdapter;
-    private EditText edtTenKhachHang, edtSoDienThoai, edtYeuCau, edtGioDen;
 
-    private Spinner spnBan;
     private ArrayList<Ban> banList;
     private ArrayAdapter<String> banAdapter;
 
     private TimePicker timePicker;
-    private LinearLayout layoutDatBan, layoutThongTinDatBan;
-    private TextView tvTenKhachHang, tvSoDienThoai, tvKhoangGioDen, tvYeuCau;
     private ConfirmDialog confirmDialog;
 
     private Animation animationZoom;
@@ -63,27 +91,7 @@ public class DatBanFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void findViews(View view) {
-        spnBan = (Spinner) view.findViewById(R.id.spn_ban);
 
-        layoutThongTinDatBan = (LinearLayout) view.findViewById(R.id.layout_thong_tin_dat_ban_chua_set_ban);
-        tvTenKhachHang = (TextView) layoutThongTinDatBan.findViewById(R.id.tv_ten_khach_hang);
-        tvKhoangGioDen = (TextView) layoutThongTinDatBan.findViewById(R.id.tv_gio_den);
-        tvSoDienThoai = (TextView) layoutThongTinDatBan.findViewById(R.id.tv_so_dien_thoai);
-        tvYeuCau = (TextView) layoutThongTinDatBan.findViewById(R.id.tv_yeu_cau);
-
-        layoutDatBan = (LinearLayout) view.findViewById(R.id.layout_dat_ban_chua_set_ban);
-
-        edtTenKhachHang = (EditText) layoutDatBan.findViewById(R.id.edt_ten_khach_hang);
-        edtSoDienThoai = (EditText) layoutDatBan.findViewById(R.id.edt_so_dien_thoai);
-        edtGioDen = (EditText) layoutDatBan.findViewById(R.id.edt_gio_den);
-        edtYeuCau = (EditText) layoutDatBan.findViewById(R.id.edt_ghi_chu);
-
-        btnThemDatBan = (Button) view.findViewById(R.id.btn_them_dat_ban);
-        btnVaoBan = (Button) view.findViewById(R.id.btn_vao_ban);
-        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
-
-        edtTimKiemDatBan = (SearchView) view.findViewById(R.id.edt_tim_kiem_dat_ban);
-        listDatBanChuaSetBan = (RecyclerView) view.findViewById(R.id.list_dat_ban);
     }
 
     @SuppressLint("NewApi")
@@ -91,8 +99,8 @@ public class DatBanFragment extends BaseFragment implements View.OnClickListener
     public void setEvents() {
         showLayoutDatBan();
 
-        listDatBanChuaSetBan.setAdapter(datBanChuaSetBanAdapter);
-        listDatBanChuaSetBan.setLayoutManager(new LinearLayoutManager(getContext()));
+        listDatBan.setAdapter(datBanChuaSetBanAdapter);
+        listDatBan.setLayoutManager(new LinearLayoutManager(getContext()));
 
         banAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnBan.setAdapter(banAdapter);
@@ -186,9 +194,9 @@ public class DatBanFragment extends BaseFragment implements View.OnClickListener
 
         layoutDatBan.setVisibility(GONE);
 
-        layoutThongTinDatBan.setVisibility(VISIBLE);
+        layoutThongTinDatBanChuaSetBan.setVisibility(VISIBLE);
 
-        layoutThongTinDatBan.startAnimation(animationZoom);
+        layoutThongTinDatBanChuaSetBan.startAnimation(animationZoom);
     }
 
     private void showLayoutDatBan() {
@@ -197,9 +205,9 @@ public class DatBanFragment extends BaseFragment implements View.OnClickListener
 
         btnCancel.setVisibility(GONE);
 
-        layoutThongTinDatBan.clearAnimation();
+        layoutThongTinDatBanChuaSetBan.clearAnimation();
 
-        layoutThongTinDatBan.setVisibility(GONE);
+        layoutThongTinDatBanChuaSetBan.setVisibility(GONE);
 
         layoutDatBan.setVisibility(VISIBLE);
 
@@ -221,7 +229,7 @@ public class DatBanFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void notifyAddListDatBanChuaSetBan() {
-        listDatBanChuaSetBan.scrollToPosition(0);
+        listDatBan.scrollToPosition(0);
         datBanChuaSetBanAdapter.notifyItemInserted(0);
     }
 
@@ -232,7 +240,7 @@ public class DatBanFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void notifyUpdateListDatBanChuaSetBan(DatBan datBan) {
-        listDatBanChuaSetBan.scrollToPosition(datBanChuaSetBanAdapter.getPositonOf(datBan));
+        listDatBan.scrollToPosition(datBanChuaSetBanAdapter.getPositonOf(datBan));
         datBanChuaSetBanAdapter.notifyItemChanged(datBan);
     }
 

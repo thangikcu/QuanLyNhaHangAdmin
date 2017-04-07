@@ -2,6 +2,8 @@ package thanggun99.quanlynhahang.model;
 
 import android.os.AsyncTask;
 
+import thanggun99.quanlynhahang.model.entity.Admin;
+
 
 /**
  * Created by Thanggun99 on 07/03/2017.
@@ -124,8 +126,9 @@ public class MainInteractor {
                 onMainInteractorFinishListener.onOtherlogin();
             }
         });
-
-        loginTask.login(getDatabase().getAdmin());
+        Admin admin = getDatabase().getAdmin();
+        admin.setKieuDangNhap(LoginTask.AUTO);
+        loginTask.login(admin);
     }
 
 

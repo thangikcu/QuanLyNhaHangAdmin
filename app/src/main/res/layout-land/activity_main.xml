@@ -12,7 +12,7 @@
         android:gravity="center_vertical">
 
         <Button
-            android:id="@+id/btn_sell"
+            android:id="@+id/btn_phuc_vu"
             style="@style/CommonButton"
             android:background="@drawable/menu_main_button_background"
             android:drawableLeft="@drawable/ic_phuc_vu"
@@ -65,7 +65,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_ten_admin"
+                    android:id="@+id/tv_username"
                     style="@style/CommonTextView"
                     android:paddingLeft="4dp"
                     android:text="thanggun99"

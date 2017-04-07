@@ -89,8 +89,11 @@ public class MainPresenter implements MainInteractor.OnMainInteractorFinishListe
     }
 
     public void otherLogin() {
-        mainview.showOtherLoginDialog();
-        logout();
+        if (getDatabase().getAdmin() != null) {
+
+            mainview.showOtherLoginDialog();
+            logout();
+        }
     }
 
     public void logout() {
@@ -108,7 +111,7 @@ public class MainPresenter implements MainInteractor.OnMainInteractorFinishListe
     }
 
     public void reLoadDatas() {
-        mainview.clearFrame();
+        mainview.clearFrames();
         mainInteractor.reloadDatas();
     }
 
@@ -135,7 +138,7 @@ public class MainPresenter implements MainInteractor.OnMainInteractorFinishListe
 
         void setYeuCauList();
 
-        void clearFrame();
+        void clearFrames();
 
         void showOtherLoginDialog();
     }

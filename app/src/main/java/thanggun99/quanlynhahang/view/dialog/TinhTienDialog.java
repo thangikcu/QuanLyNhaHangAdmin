@@ -3,11 +3,11 @@ package thanggun99.quanlynhahang.view.dialog;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.model.entity.HoaDon;
 import thanggun99.quanlynhahang.presenter.PhucVuPresenter;
@@ -18,31 +18,30 @@ import thanggun99.quanlynhahang.util.Utils;
  */
 
 public class TinhTienDialog extends BaseDialog {
+
+    @BindView(R.id.tv_tien_mon)
+    TextView tvTienMon;
+    @BindView(R.id.tv_so_luong)
+    TextView tvSoLuong;
+    @BindView(R.id.tv_tien_giam_gia)
+    TextView tvTienGiamGia;
+    @BindView(R.id.tv_giam_gia)
+    TextView tvGiamGia;
+    @BindView(R.id.tv_tong_tien)
+    TextView tvTongTien;
+    @BindView(R.id.edt_tien_khach_dua)
+    SearchView edtTienKhachDua;
+    @BindView(R.id.tv_tien_tra_lai)
+    TextView tvTienTraLai;
+
     private PhucVuPresenter phucVuPresenter;
-    private TextView tvTienMon, tvSoLuong, tvTienGiamGia, tvGiamGia, tvTongTien, tvTienTraLai;
-    private SearchView edtTienKhachDua;
     private int tongtien;
 
     public TinhTienDialog(Context context, PhucVuPresenter phucVuPresenter) {
-        super(context);
-        setContentView(R.layout.dialog_tinh_tien);
+        super(context, R.layout.dialog_tinh_tien);
 
         this.phucVuPresenter = phucVuPresenter;
 
-        tvTitle = (TextView) findViewById(R.id.tv_title);
-        tvTienMon = (TextView) findViewById(R.id.tv_tien_mon);
-        tvSoLuong = (TextView) findViewById(R.id.tv_so_luong);
-        tvGiamGia = (TextView) findViewById(R.id.tv_giam_gia);
-        tvTienGiamGia = (TextView) findViewById(R.id.tv_tien_giam_gia);
-        tvTongTien = (TextView) findViewById(R.id.tv_tong_tien);
-        tvTienTraLai = (TextView) findViewById(R.id.tv_tien_tra_lai);
-
-        btnOk = (Button) findViewById(R.id.btn_ok);
-        btnCancle = (Button) findViewById(R.id.btn_cancel);
-        btnOk.setOnClickListener(this);
-        btnCancle.setOnClickListener(this);
-
-        edtTienKhachDua = (SearchView) findViewById(R.id.edt_tien_khach_dua);
         edtTienKhachDua.setIconifiedByDefault(false);
         edtTienKhachDua.setIconified(false);
         int icSearchID = context.getResources().getIdentifier("android:id/search_mag_icon", null, null);

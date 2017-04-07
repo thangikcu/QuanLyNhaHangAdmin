@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +16,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.Calendar;
 
+import butterknife.BindView;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.model.TinTucManager;
 import thanggun99.quanlynhahang.model.entity.TinTuc;
@@ -24,21 +24,30 @@ import thanggun99.quanlynhahang.util.Utils;
 
 public class ThemTinTucDialog extends BaseDialog {
     public static final int SELECT_PHOTO = 1;
+    @BindView(R.id.btn_chon_hinh)
+    TextView btnChonHinh;
+    @BindView(R.id.iv_hinh_anh)
+    ImageView ivHinhAnh;
+    @BindView(R.id.edt_tieu_de)
+    EditText edtTieuDe;
+    @BindView(R.id.edt_noi_dung)
+    EditText edtNoiDung;
+    @BindView(R.id.edt_ngay_dang)
+    EditText edtNgayDang;
+    @BindView(R.id.ckb_hien_thi)
+    CheckBox ckbHienThi;
+
     private String action = "";
     private String date;
 
     private TinTucManager tinTucManager;
-    private ImageView ivHinhAnh;
-    private EditText edtTieuDe, edtNoiDung, edtNgayDang;
-    private CheckBox ckbHienThi;
-    private TextView btnChonHinh;
+
     private byte[] hinhAnhByte;
 
 
     public ThemTinTucDialog(Context context, TinTucManager tinTucManager) {
-        super(context);
+        super(context, R.layout.dialog_them_tin_tuc);
         this.tinTucManager = tinTucManager;
-        setContentView(R.layout.dialog_them_tin_tuc);
         setCancelable(true);
 
         Calendar c = Calendar.getInstance();
@@ -48,21 +57,10 @@ public class ThemTinTucDialog extends BaseDialog {
 
         date = day + "/" + month + "/" + year;
 
-        ckbHienThi = (CheckBox) findViewById(R.id.ckb_hien_thi);
-        ivHinhAnh = (ImageView) findViewById(R.id.iv_hinh_anh);
-        edtTieuDe = (EditText) findViewById(R.id.edt_tieu_de);
+
         edtTieuDe.setMovementMethod(new ScrollingMovementMethod());
-        edtNoiDung = (EditText) findViewById(R.id.edt_noi_dung);
-        edtNgayDang = (EditText) findViewById(R.id.edt_ngay_dang);
-        btnChonHinh = (TextView) findViewById(R.id.btn_chon_hinh);
 
         btnChonHinh.setOnClickListener(this);
-
-        btnCancle = (Button) findViewById(R.id.btn_cancel);
-        btnOk = (Button) findViewById(R.id.btn_ok);
-
-        btnOk.setOnClickListener(this);
-        btnCancle.setOnClickListener(this);
 
     }
 

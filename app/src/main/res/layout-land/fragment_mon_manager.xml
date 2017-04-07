@@ -52,7 +52,7 @@
             android:padding="@dimen/layout_padding">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_thuc_don"
+                android:id="@+id/list_mon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_list"

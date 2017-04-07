@@ -4,10 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.model.entity.DatBan;
 import thanggun99.quanlynhahang.presenter.PhucVuPresenter;
@@ -88,26 +91,29 @@ public class DatBanChuaSetBanAdapter extends RecyclerView.Adapter<DatBanChuaSetB
         return datBanChuaSetBanList.indexOf(datBan);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.tv_ten_khach_hang)
         TextView tvTenKhachHang;
+        @BindView(R.id.tv_gio_den)
         TextView tvGioDen;
+        @BindView(R.id.btn_update_dat_ban)
+        ImageButton btnUpdateDatBan;
+        @BindView(R.id.btn_delete_dat_ban)
+        ImageButton btnDeleteDatBan;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
 
-            tvTenKhachHang = (TextView) itemView.findViewById(R.id.tv_ten_khach_hang);
-
-            tvGioDen = (TextView) itemView.findViewById(R.id.tv_gio_den);
-
-            itemView.findViewById(R.id.btn_update_dat_ban).setOnClickListener(this);
-            itemView.findViewById(R.id.btn_delete_dat_ban).setOnClickListener(this);
+            btnDeleteDatBan.setOnClickListener(this);
+            btnUpdateDatBan.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
             currentPosition = getAdapterPosition();
-            switch (v.getId()) {
+            switch (view.getId()) {
                 case R.id.btn_delete_dat_ban:
                     phucVuPresenter.onClickDeleteDatBanChuaSetBan(datBanChuaSetBanList.get(currentPosition));
                     break;

@@ -13,7 +13,7 @@ import static thanggun99.quanlynhahang.model.entity.Admin.USERNAME;
  */
 
 public class LoginTask {
-    private static final String AUTO = "AUTO";
+    public static final String AUTO = "AUTO";
     public static final String NOT_AUTO = "NOT_AUTO";
 
     public static final String FAIL = "FAIL";

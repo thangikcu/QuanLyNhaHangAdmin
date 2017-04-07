@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +17,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import thanggun99.quanlynhahang.R;
 import thanggun99.quanlynhahang.model.MonManager;
 import thanggun99.quanlynhahang.model.entity.Mon;
@@ -26,24 +26,34 @@ import thanggun99.quanlynhahang.util.Utils;
 
 public class ThemMonDialog extends BaseDialog {
     public static final int SELECT_PHOTO = 1;
+
+    @BindView(R.id.btn_chon_hinh)
+    TextView btnChonHinh;
+    @BindView(R.id.iv_hinh_anh)
+    ImageView ivHinhAnh;
+    @BindView(R.id.edt_ten_mon)
+    EditText edtTenMon;
+    @BindView(R.id.edt_don_gia)
+    EditText edtDonGia;
+    @BindView(R.id.edt_don_vi_tinh)
+    EditText edtDonViTinh;
+    @BindView(R.id.spn_nhom_mon)
+    Spinner spnNhomMon;
+    @BindView(R.id.ckb_hien_thi)
+    CheckBox ckbHienThi;
+
     private String action = "";
 
     private MonManager monManager;
-    private ImageView ivHinhAnh;
-    private EditText edtTenMon, edtDonViTinh, edtDonGia;
-    private CheckBox ckbHienThi;
-    private TextView btnChonHinh;
-    private byte[] hinhAnhByte;
 
-    private Spinner spnNhomMon;
     private ArrayList<NhomMon> nhomMonList;
     private ArrayAdapter<String> nhomMonAdapter;
+    private byte[] hinhAnhByte;
 
 
     public ThemMonDialog(Context context, MonManager monManager) {
-        super(context);
+        super(context, R.layout.dialog_them_mon);
         this.monManager = monManager;
-        setContentView(R.layout.dialog_them_mon);
         setCancelable(true);
 
         nhomMonList = monManager.getNhomMonList();
@@ -52,23 +62,9 @@ public class ThemMonDialog extends BaseDialog {
 
         nhomMonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spnNhomMon = (Spinner) findViewById(R.id.spn_nhom_mon);
         spnNhomMon.setAdapter(nhomMonAdapter);
 
-        ckbHienThi = (CheckBox) findViewById(R.id.ckb_hien_thi);
-        ivHinhAnh = (ImageView) findViewById(R.id.iv_hinh_anh);
-        edtTenMon = (EditText) findViewById(R.id.edt_ten_mon);
-        edtDonViTinh = (EditText) findViewById(R.id.edt_don_vi_tinh);
-        edtDonGia = (EditText) findViewById(R.id.edt_don_gia);
-        btnChonHinh = (TextView) findViewById(R.id.btn_chon_hinh);
-
         btnChonHinh.setOnClickListener(this);
-
-        btnCancle = (Button) findViewById(R.id.btn_cancel);
-        btnOk = (Button) findViewById(R.id.btn_ok);
-
-        btnOk.setOnClickListener(this);
-        btnCancle.setOnClickListener(this);
 
     }
 
