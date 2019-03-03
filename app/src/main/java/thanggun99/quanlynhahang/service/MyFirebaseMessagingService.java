@@ -9,11 +9,15 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import thanggun99.quanlynhahang.model.entity.Admin;
 import thanggun99.quanlynhahang.model.entity.Ban;
 import thanggun99.quanlynhahang.model.entity.DatBan;
 import thanggun99.quanlynhahang.model.entity.KhachHang;
 import thanggun99.quanlynhahang.model.entity.YeuCau;
+import thanggun99.quanlynhahang.util.API;
 import thanggun99.quanlynhahang.util.Utils;
 
 /**
@@ -35,6 +39,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String YEU_CAU = "YEU_CAU";
     public static final String MA_DAT_BAN = "MA_DAT_BAN";
     public static final String TEN_KHACH_HANG = "TEN_KHACH_HANG";
+
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("type", "1");
+        map.put("token", s);
+
+        API.callService(API.REGISTER_TOKEN_URL, null, map);
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

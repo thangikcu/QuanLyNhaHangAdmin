@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements CommondActionForV
         ImageButton btnFloat = (ImageButton) layoutFloat.findViewById(R.id.btn_float);
 
         params = new WindowManager.LayoutParams();
-        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        params.type = WindowManager.LayoutParams.TYPE_APPLICATION;
         params.format = PixelFormat.TRANSLUCENT;
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
@@ -312,20 +312,20 @@ public class MainActivity extends AppCompatActivity implements CommondActionForV
     public void showFloatButton() {
         if (!isShowFloatButton) {
             isShowFloatButton = true;
-            createFloatView();
+            //createFloatView();
         }
     }
 
     @Override
     public void updateFloatButton(int size) {
-        if (size == 0) {
+        /*if (size == 0) {
             removeFloatButton();
         } else {
             showFloatButton();
 
             tvNumber.setText(size + "");
             wm.updateViewLayout(layoutFloat, params);
-        }
+        }*/
     }
 
     @Override

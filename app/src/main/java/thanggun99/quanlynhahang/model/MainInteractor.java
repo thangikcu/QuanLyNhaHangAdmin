@@ -1,5 +1,6 @@
 package thanggun99.quanlynhahang.model;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import thanggun99.quanlynhahang.model.entity.Admin;
@@ -19,6 +20,7 @@ public class MainInteractor {
     }
 
     public void getDatas() {
+        @SuppressLint("StaticFieldLeak")
         class GetDatasTask extends AsyncTask<Void, Void, Boolean> {
             @Override
             protected void onPreExecute() {

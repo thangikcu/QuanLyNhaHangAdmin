@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Thanggun99 on 17/11/2016.
@@ -17,8 +19,8 @@ import java.util.Map;
 
 public class API {
     public static final String SCHEME = "http";
-    public static final String HOST = "192.168.56.1";
-    //    public static final String HOST = "thanggun99.000webhostapp.com";
+    //    public static final String HOST = "192.168.56.1";
+    public static final String HOST = "thanggun99.000webhostapp.com";
     public static final String PATH = "WebService";
     public static final String PATH_BAN = "BanService/";
     public static final String PATH_MON = "MonService/";
@@ -92,7 +94,7 @@ public class API {
             connect.setRequestProperty("accept", "application/json");
             connect.setRequestProperty("Connection", "close");
             connect.setDoInput(true);
-            connect.setConnectTimeout(5000);
+            connect.setConnectTimeout(10000);
 
             if (postParams != null) {
                 Uri.Builder builderPostParams = new Uri.Builder();
@@ -102,20 +104,20 @@ public class API {
                         "application/x-www-form-urlencoded;charset=UTF-8");
                 connect.setRequestMethod("POST");
                 connect.setDoOutput(true);
-                connect.setReadTimeout(5000);
+                connect.setReadTimeout(10000);
 
 
                 OutputStream outputStream = connect.getOutputStream();
-                outputStream.write(builderPostParams.build().getEncodedQuery().getBytes());
+                outputStream.write(Objects.requireNonNull(builderPostParams.build().getEncodedQuery()).getBytes());
                 outputStream.close();
             } else connect.setRequestMethod("GET");
 
             is = connect.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8), 8);
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
+                sb.append(line).append("\n");
             }
             is.close();
             response = sb.toString();

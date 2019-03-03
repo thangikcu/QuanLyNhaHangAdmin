@@ -5,7 +5,6 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import java.util.HashMap;
 import java.util.Map;
 
-import thanggun99.quanlynhahang.util.API;
 import thanggun99.quanlynhahang.util.Utils;
 
 /**
@@ -20,6 +19,6 @@ public class MyFirebaseIDService extends FirebaseInstanceIdService {
         map.put("type", "1");
         map.put("token", Utils.getToken());
 
-        API.callService(API.REGISTER_TOKEN_URL, null, map);
+        //API.callService(API.REGISTER_TOKEN_URL, null, map);
     }
 }

@@ -1,5 +1,6 @@
 package thanggun99.quanlynhahang.model;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
@@ -50,6 +51,7 @@ public class LoginTask {
         return admin;
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class LoginAsyncTask extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -59,12 +61,16 @@ public class LoginTask {
 
         @Override
         protected void onPostExecute(String s) {
-            if (s.equals(SUCCESS)) {
-                onLoginListener.onLoginSuccess();
-            } else if (s.equals(OTHER)) {
-                onLoginListener.onOtherLogin();
-            } else {
-                onLoginListener.onLoginFail();
+            switch (s) {
+                case SUCCESS:
+                    onLoginListener.onLoginSuccess();
+                    break;
+                case OTHER:
+                    onLoginListener.onOtherLogin();
+                    break;
+                default:
+                    onLoginListener.onLoginFail();
+                    break;
             }
             onLoginListener.onFinishTask();
             super.onPostExecute(s);
