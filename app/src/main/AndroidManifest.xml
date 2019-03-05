@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="thanggun99.quanlynhahang">
+    package="com.coffeehouse">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNAL_SYSTEM_WINDOW"
-        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".App"
+        android:name="com.coffeehouse.AppInstance"
         android:allowBackup="false"
+        android:appComponentFactory="whateverString"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:appComponentFactory"
-        android:appComponentFactory="whateverString"
-        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
+        tools:replace="android:appComponentFactory">
 
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name="com.coffeehouse.view.activity.MainActivity"
             android:screenOrientation="landscape">
 
         </activity>
 
         <activity
-            android:name=".view.activity.LoginActivity"
+            android:name="com.coffeehouse.view.activity.LoginActivity"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name="com.coffeehouse.view.activity.BeginActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,19 +39,21 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".service.ConnectChangeBroadcastReceiver">
+        <receiver android:name="com.coffeehouse.service.ConnectChangeBroadcastReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.MyFirebaseMessagingService">
+        <service android:name="com.coffeehouse.service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name=".service.MyFirebaseIDService">
+        <service android:name="com.coffeehouse.service.MyFirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

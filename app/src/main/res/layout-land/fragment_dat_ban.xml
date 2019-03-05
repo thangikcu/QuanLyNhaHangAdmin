@@ -5,7 +5,7 @@
     android:background="@color/colorBackgroudMain"
     android:orientation="horizontal"
     android:padding="@dimen/layout_padding"
-    tools:context="thanggun99.quanlynhahang.view.fragment.DatBanFragment">
+    tools:context="com.coffeehouse.view.fragment.DatBanFragment">
 
     <LinearLayout
         android:layout_width="0dp"

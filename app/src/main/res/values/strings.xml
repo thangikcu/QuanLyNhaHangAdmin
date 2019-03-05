@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Quản lý nhà hàng</string>
+    <string name="app_name">The coffee</string>
     <string name="ban_hang">Phục vụ</string>
     <string name="home">Trang chủ</string>
     <string name="quan_ly">Quản lý</string>
@@ -8,7 +8,7 @@
     <string name="cai_dat">Cài đặt</string>
     <string name="da_dat_truoc">Đã đặt trước</string>
     <string name="dang_phuc_vu">Đang phục vụ</string>
-    <string name="loading">Đợi tẹo...</string>
+    <string name="loading">Loading…</string>
     <string name="trong">Trống</string>
     <string name="so_luong">Số lượng</string>
     <string name="tim_kiem">Tìm kiếm</string>

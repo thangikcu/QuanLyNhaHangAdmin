@@ -163,14 +163,6 @@
             </TableRow>
 
             <include
-                layout="@layout/layout_thong_tin_dat_ban"
-                android:visibility="gone" />
-
-            <include
-                layout="@layout/layout_dat_ban_set_ban"
-                android:visibility="visible" />
-
-            <include
                 layout="@layout/layout_ban_phuc_vu"
                 android:visibility="gone" />
 

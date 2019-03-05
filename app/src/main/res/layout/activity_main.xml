@@ -65,7 +65,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_username"
+                    android:id="@+id/tv_name"
                     style="@style/CommonTextView"
                     android:paddingLeft="4dp"
                     android:text="thanggun99"
@@ -73,7 +73,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_ho_ten"
+                    android:id="@+id/tv_rule"
                     style="@style/CommonTextView"
                     android:text="(Trần Văn Thắng)"
                     android:textColor="@color/white"

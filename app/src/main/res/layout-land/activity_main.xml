@@ -62,20 +62,20 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingStart="8dp">
 
                 <TextView
-                    android:id="@+id/tv_username"
+                    android:id="@+id/tv_name"
                     style="@style/CommonTextView"
-                    android:paddingLeft="4dp"
                     android:text="thanggun99"
                     android:textColor="@color/colorTextInfo"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_ho_ten"
+                    android:id="@+id/tv_rule"
                     style="@style/CommonTextView"
-                    android:text="(Trần Văn Thắng)"
+                    android:text="Employee"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="italic" />
