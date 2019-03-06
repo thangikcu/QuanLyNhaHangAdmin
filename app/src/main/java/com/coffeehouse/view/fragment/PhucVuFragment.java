@@ -171,7 +171,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
     private void OrderDrink(Drink drink, int count) {
         mainView.showLoading();
 
-        if (currentBill != null) {
+        if (currentBill != null && currentDesk != null && currentDesk.isServing()) {
 
             boolean drinkExist = false;
 
@@ -306,6 +306,8 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
                     mainView.showMessage(t.getMessage());
                 }
             });
+        } else {
+            currentBill = null;
         }
     }
 
@@ -353,6 +355,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
         DrawerLayout.LayoutParams params = (DrawerLayout.LayoutParams) layoutThucDon.getLayoutParams();
         params.width = getResources().getDisplayMetrics().widthPixels / 2;
         layoutThucDon.setLayoutParams(params);
+        layoutBanPhucVu.setVisibility(GONE);
 
         listBan.setLayoutManager(new GridLayoutManager(getContext(), 4));
 
@@ -482,34 +485,36 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void payment() {
-        new TinhTienDialog(getContext(), currentBill, () -> {
+        if (currentBill != null) {
+            new TinhTienDialog(getContext(), currentBill, () -> {
 
-            mainView.showLoading();
+                mainView.showLoading();
 
-            ResfulApi.getInstance().getService(TheCoffeeService.class)
-                    .payment(currentBill.getID())
-                    .enqueue(new Callback<ResponseData<String>>() {
-                        @Override
-                        public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
-                            mainView.hideLoading();
-                            if (response.body() != null && response.body().getContent().equals("Successful")) {
-                                currentDesk.setServing(false);
-                                deskAdapter.updateBan(currentDesk);
-                                showDeskInfo(currentDesk);
-                                showSnackbar(currentDesk.getDeskName() + " thanh toán +" + Utils.formatMoney(currentBill.getTotalPrice()));
-                                currentBill = null;
-                            } else {
-                                mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error");
+                ResfulApi.getInstance().getService(TheCoffeeService.class)
+                        .payment(currentBill.getID())
+                        .enqueue(new Callback<ResponseData<String>>() {
+                            @Override
+                            public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
+                                mainView.hideLoading();
+                                if (response.body() != null && response.body().getContent().equals("Successful")) {
+                                    currentDesk.setServing(false);
+                                    deskAdapter.updateBan(currentDesk);
+                                    showDeskInfo(currentDesk);
+                                    showSnackbar(currentDesk.getDeskName() + " thanh toán +" + Utils.formatMoney(currentBill.getTotalPrice()));
+                                    currentBill = null;
+                                } else {
+                                    mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error");
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<ResponseData<String>> call, Throwable t) {
-                            mainView.hideLoading();
-                            mainView.showMessage(t.getMessage());
-                        }
-                    });
-        }).show();
+                            @Override
+                            public void onFailure(Call<ResponseData<String>> call, Throwable t) {
+                                mainView.hideLoading();
+                                mainView.showMessage(t.getMessage());
+                            }
+                        });
+            }).show();
+        }
     }
 
     public void closeThucDonLayout() {
