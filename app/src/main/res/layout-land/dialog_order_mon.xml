@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+    android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_dialog"
     android:orientation="vertical"
@@ -10,10 +10,10 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
         android:text="Bàn 12"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
-        android:paddingBottom="16dp"
         android:textStyle="bold" />
 
     <TextView
@@ -51,7 +51,8 @@
             android:id="@+id/edt_so_luong"
             android:layout_width="28dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:gravity="center_horizontal"
             android:inputType="number"
             android:lines="1"
@@ -60,15 +61,6 @@
             android:textColor="@color/colorTextTitleDialog"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/tv_don_vi_tinh"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="true"
-            android:scrollbars="horizontal"
-            android:text="miếng"
-            android:textColor="@color/colorTextTenMon"
-            android:textSize="12sp" />
 
         <ImageButton
             android:id="@+id/btn_cong"
@@ -78,11 +70,18 @@
             android:src="@drawable/ic_cong" />
     </TableRow>
 
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="alsjf alskfdj asdlfja flasdfj alsdkfla fasdfjlakflaksjdf lakdsflaksfdlkajsdfl kjalsdfj alsdkfjla jfdalksdfj ladsjfl kjadldfkj alskdfj asfl k"
+        android:textColor="@color/black" />
+
     <TableRow
-        android:layout_marginTop="4dp"
-        android:gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical">
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -90,12 +89,12 @@
 
         <TextView
             android:id="@+id/tv_point_rating"
-            android:paddingLeft="4dp"
             style="@style/CommonTextView"
-            android:typeface="serif"
+            android:paddingLeft="4dp"
+            android:text="(15,3/6)"
             android:textColor="@color/colorTextInfo"
             android:textSize="9sp"
-            android:text="(15,3/6)" />
+            android:typeface="serif" />
     </TableRow>
 
     <TableRow

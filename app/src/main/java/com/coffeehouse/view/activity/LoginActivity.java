@@ -3,7 +3,6 @@ package com.coffeehouse.view.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -13,25 +12,26 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import com.coffeehouse.AppInstance;
 import com.coffeehouse.BuildConfig;
 import com.coffeehouse.R;
 import com.coffeehouse.model.LoginTask;
 import com.coffeehouse.model.entity.Admin;
 import com.coffeehouse.model.entity.User;
-import com.coffeehouse.restapi.TheCoffeeService;
 import com.coffeehouse.restapi.ResfulApi;
 import com.coffeehouse.restapi.ResponseData;
+import com.coffeehouse.restapi.TheCoffeeService;
 import com.coffeehouse.util.Utils;
 import com.coffeehouse.view.dialog.NotifiDialog;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginTask.OnLoginListener {
+
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.edt_username)
     EditText edtUsername;
     @BindView(R.id.edt_password)
@@ -43,8 +43,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @BindView(R.id.btn_login)
     Button btnLogin;
 
-    private LoginTask loginTask;
-
     private ProgressDialog progressDialog;
     private NotifiDialog notifiDialog;
 
@@ -53,9 +51,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-        loginTask = new LoginTask();
-        loginTask.setOnLoginListener(this);
 
         notifiDialog = new NotifiDialog(this);
 
@@ -68,25 +63,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (BuildConfig.DEBUG) {
             edtUsername.setText("tran20190304");
-            edtPassword.setText("tran555");
+            edtPassword.setText("chienthan123");
         }
     }
 
-    @Override
     public void onStartTask() {
         progressDialog.show();
     }
 
-    @Override
     public void onFinishTask() {
         progressDialog.dismiss();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (progressDialog != null) progressDialog.cancel();
-        if (notifiDialog != null) notifiDialog.cancel();
-        super.onDestroy();
     }
 
     private boolean checkConnect() {
@@ -145,19 +131,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 @Override
                                 public void onResponse(Call<ResponseData<User>> call, Response<ResponseData<User>> response) {
 
-                                    onFinishTask();
-
                                     User loginUser = response.body() != null ? response.body().getContent() : null;
 
                                     if (loginUser == null) {
-                                        new AlertDialog.Builder(LoginActivity.this)
-                                                .setMessage("Incorrect username or password!")
-                                                .create()
-                                                .show();
+                                        onFinishTask();
+                                        new NotifiDialog(LoginActivity.this)
+                                                .notifi("Incorrect username or password!");
                                     } else {
+                                        loginUser.setPassword(admin.getMatKhau());
                                         AppInstance.saveLoginUser(loginUser, admin.isGhiNho());
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                        finish();
+                                        LoginActivity.this.finish();
+                                        LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        onFinishTask();
                                     }
                                 }
 
@@ -165,36 +150,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 public void onFailure(Call<ResponseData<User>> call, Throwable t) {
                                     onFinishTask();
 
-                                    new AlertDialog.Builder(LoginActivity.this)
-                                            .setMessage(t.getMessage())
-                                            .create()
-                                            .show();
+                                    new NotifiDialog(LoginActivity.this).notifi(t.getMessage());
                                 }
                             });
                 }
             }
         }
-    }
-
-
-    @Override
-    public void onLoginSuccess() {
-/*        finish();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Admin.ADMIN, loginTask.getAdmin());
-        startActivity(intent);*/
-    }
-
-    @Override
-    public void onLoginFail() {
-        tvErrorLogin.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onOtherLogin() {
-        NotifiDialog notifiDialog = new NotifiDialog(this);
-        notifiDialog.notifi(Utils.getStringByRes(R.string.other_people_login));
-
     }
 }
 

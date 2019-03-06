@@ -1,5 +1,6 @@
 package com.coffeehouse.restapi;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
@@ -31,6 +32,7 @@ public class ResfulApi {
                 .baseUrl(new HttpUrl.Builder()
                         .scheme("http")
                         .host("192.168.1.246")
+//                        .host("127.0.0.1")
                         .port(8080)
                         .build())
                 .client(new OkHttpClient.Builder().build())
@@ -45,5 +47,9 @@ public class ResfulApi {
 
     public static RequestBody createJsonRequestBody(Map<String, Object> params) {
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new JSONObject(params).toString());
+    }
+
+    public static RequestBody createJsonRequestBody(Object object) {
+        return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(object));
     }
 }

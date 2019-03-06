@@ -7,11 +7,11 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import butterknife.BindView;
 import com.coffeehouse.R;
-import com.coffeehouse.model.entity.HoaDon;
-import com.coffeehouse.presenter.PhucVuPresenter;
+import com.coffeehouse.model.entity.Bill;
 import com.coffeehouse.util.Utils;
+
+import butterknife.BindView;
 
 /**
  * Created by Thanggun99 on 12/12/2016.
@@ -19,14 +19,7 @@ import com.coffeehouse.util.Utils;
 
 public class TinhTienDialog extends BaseDialog {
 
-    @BindView(R.id.tv_tien_mon)
-    TextView tvTienMon;
-    @BindView(R.id.tv_so_luong)
-    TextView tvSoLuong;
-    @BindView(R.id.tv_tien_giam_gia)
-    TextView tvTienGiamGia;
-    @BindView(R.id.tv_giam_gia)
-    TextView tvGiamGia;
+    private final OnClickOk onClickOk;
     @BindView(R.id.tv_tong_tien)
     TextView tvTongTien;
     @BindView(R.id.edt_tien_khach_dua)
@@ -34,18 +27,16 @@ public class TinhTienDialog extends BaseDialog {
     @BindView(R.id.tv_tien_tra_lai)
     TextView tvTienTraLai;
 
-    private PhucVuPresenter phucVuPresenter;
-    private int tongtien;
+    private long tongtien;
 
-    public TinhTienDialog(Context context) {
+    public TinhTienDialog(Context context, Bill bill, OnClickOk onClickOk) {
         super(context, R.layout.dialog_tinh_tien);
-
-        this.phucVuPresenter = phucVuPresenter;
+        this.onClickOk = onClickOk;
 
         edtTienKhachDua.setIconifiedByDefault(false);
         edtTienKhachDua.setIconified(false);
         int icSearchID = context.getResources().getIdentifier("android:id/search_mag_icon", null, null);
-        ImageView imageView = (ImageView) edtTienKhachDua.findViewById(icSearchID);
+        ImageView imageView = edtTienKhachDua.findViewById(icSearchID);
         imageView.setVisibility(View.GONE);
         edtTienKhachDua.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -72,33 +63,30 @@ public class TinhTienDialog extends BaseDialog {
                 return false;
             }
         });
+
+        setContent(bill);
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
         if (v.getId() == R.id.btn_ok) {
-            phucVuPresenter.tinhTien();
             dismiss();
+            onClickOk.onClick();
         }
     }
 
-    public void setContent(HoaDon hoaDon) {
-        if (hoaDon.getMonOrderList().size() > 0) {
-            this.tongtien = hoaDon.getTongTien();
-            edtTienKhachDua.setQuery("", false);
-            tvTitle.setText(hoaDon.getBan().getTenBan());
-            tvTienMon.setText(Utils.formatMoney(hoaDon.getTienMon()));
-            tvSoLuong.setText("(" + hoaDon.getSoMon() + ")");
-            tvTongTien.setText(Utils.formatMoney(hoaDon.getTongTien()));
-            if (hoaDon.getGiamGia() > 0) {
-                tvTienGiamGia.setText(Utils.formatMoney(hoaDon.getTienGiamGia()));
-                tvGiamGia.setText("(" + hoaDon.getGiamGia() + "%)");
-            } else {
-                tvTienGiamGia.setText("...");
-                tvGiamGia.setText("");
-            }
-            show();
-        }
+    public void setContent(Bill bill) {
+        this.tongtien = bill.getTotalPrice();
+        edtTienKhachDua.setQuery("", false);
+        tvTitle.setText("Bàn " + bill.getDeskId());
+//        tvTienMon.setText(Utils.formatMoney(bill.getTotalPrice()));
+//        tvSoLuong.setText("(" + bill.getOrderDetails().size() + ")");
+        tvTongTien.setText(Utils.formatMoney(bill.getTotalPrice()));
     }
+
+    public interface OnClickOk {
+        void onClick();
+    }
+
 }

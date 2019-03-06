@@ -20,6 +20,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.coffeehouse.AppInstance;
+import com.coffeehouse.R;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.ByteArrayOutputStream;
@@ -33,10 +35,6 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
-
-import com.coffeehouse.AppInstance;
-import com.coffeehouse.R;
-import com.coffeehouse.view.dialog.NotifiDialog;
 
 /**
  * Created by Thanggun99 on 05/12/2016.
@@ -127,7 +125,6 @@ public class Utils {
     }
 
     public static void notifiOnDialog(String message) {
-        new NotifiDialog(AppInstance.getContext()).notifi(message);
     }
 
     public static void showLog(String message) {

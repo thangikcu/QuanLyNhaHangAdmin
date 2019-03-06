@@ -24,7 +24,6 @@
             android:id="@+id/tv_gio_den"
             style="@style/CommonTextView"
             android:paddingLeft="@dimen/margin"
-            android:text="25/11/2016 06:00 PM"
             android:textColor="@color/colorTextInfo" />
     </TableRow>
 
@@ -52,7 +51,6 @@
             android:layout_width="97dp"
             android:layout_height="wrap_content"
             android:paddingLeft="32dp"
-            android:text="150K"
             android:textColor="@color/colorTextMoney"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -64,7 +62,8 @@
             android:layout_height="36dp"
             android:background="@drawable/ic_sale"
             android:text="@string/sale"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
     </TableRow>
 
     <Button

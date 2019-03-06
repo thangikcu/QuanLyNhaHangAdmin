@@ -10,18 +10,16 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.coffeehouse.R;
+import com.coffeehouse.model.entity.Drink;
 
 import butterknife.BindView;
-import com.coffeehouse.R;
-import com.coffeehouse.model.entity.Mon;
-import com.coffeehouse.presenter.PhucVuPresenter;
 
 /**
  * Created by Thanggun99 on 22/11/2016.
  */
 
-public class OrderMonDialog extends BaseDialog {
+public class OrderDialog extends BaseDialog {
     @BindView(R.id.tv_ten_mon)
     TextView tvTenMon;
     @BindView(R.id.iv_mon)
@@ -30,45 +28,36 @@ public class OrderMonDialog extends BaseDialog {
     ImageButton btnTru;
     @BindView(R.id.edt_so_luong)
     EditText edtSoLuong;
-    @BindView(R.id.tv_don_vi_tinh)
-    TextView tvDonViTinh;
     @BindView(R.id.btn_cong)
     ImageButton btnCong;
     @BindView(R.id.ratingBar)
     RatingBar ratingBar;
     @BindView(R.id.tv_point_rating)
     TextView tvPointRating;
+    @BindView(R.id.tv_description)
+    TextView tvDescription;
 
-    private PhucVuPresenter phucVuPresenter;
+    private OnClickOk onClickOk;
 
-
-    public OrderMonDialog(Context context) {
+    public OrderDialog(Context context, String deskName, Drink drink) {
         super(context, R.layout.dialog_order_mon);
-
-        this.phucVuPresenter = phucVuPresenter;
-
-
-        tvDonViTinh.setMovementMethod(new ScrollingMovementMethod());
 
         tvTenMon.setMovementMethod(new ScrollingMovementMethod());
 
         btnCong.setOnClickListener(this);
         btnTru.setOnClickListener(this);
-    }
 
-    public void setContent(String tenBan, Mon mon) {
-        ratingBar.setRating(mon.getRating() / mon.getPersonRating());
-        tvPointRating.setText(mon.getRatingPoint());
+        ratingBar.setRating(4.5f);
+        tvPointRating.setText("50");
         edtSoLuong.setText("1");
-        tvTitle.setText(tenBan);
-        tvTenMon.setText(mon.getTenMon());
-        tvDonViTinh.setText(mon.getDonViTinh());
-        Glide.with(getContext())
-                .load(mon.getHinhAnh())
-                .placeholder(R.drawable.ic_food)
-                .error(R.drawable.ic_food)
-                .into(ivMon);
-        show();
+        tvTitle.setText(deskName);
+        tvTenMon.setText(drink.getName());
+        tvDescription.setText(drink.getDescription());
+//        Glide.with(getContext())
+//                .load(drink.getHinhAnh())
+//                .placeholder(R.drawable.ic_food)
+//                .error(R.drawable.ic_food)
+//                .into(ivMon);
     }
 
     @Override
@@ -77,14 +66,8 @@ public class OrderMonDialog extends BaseDialog {
         switch (v.getId()) {
             case R.id.btn_ok:
                 if (!TextUtils.isEmpty(edtSoLuong.getText())) {
-                    try {
-                        phucVuPresenter.orderMon(Integer.parseInt(edtSoLuong.getText().toString()));
-
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-
                     dismiss();
+                    onClickOk.OnClick(Integer.parseInt(edtSoLuong.getText().toString().trim()));
                 }
                 break;
             case R.id.btn_cong:
@@ -112,6 +95,14 @@ public class OrderMonDialog extends BaseDialog {
             default:
                 break;
         }
+    }
+
+    public void setOnClickOk(OnClickOk onClickOk) {
+        this.onClickOk = onClickOk;
+    }
+
+    public interface OnClickOk {
+        void OnClick(int count);
     }
 
 }

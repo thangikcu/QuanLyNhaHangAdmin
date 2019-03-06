@@ -4,6 +4,7 @@ public class User {
     private String avatarData;
     private String dob;
     private String fullName;
+    private String password;
     private String id;
     private String phoneNumber;
     private String rule;
@@ -74,7 +75,15 @@ public class User {
         this.status = value;
     }
 
-    public boolean isAdmin(){
-        return rule.equals("ADMIN");
+    public boolean isAdmin() {
+        return rule.equals("MANAGER");
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

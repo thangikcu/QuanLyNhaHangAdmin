@@ -164,7 +164,7 @@
 
             <include
                 layout="@layout/layout_ban_phuc_vu"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
         </LinearLayout>
     </LinearLayout>

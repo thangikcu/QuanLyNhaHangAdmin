@@ -20,7 +20,7 @@
             android:text="@string/ban_hang" />
 
         <Button
-            android:id="@+id/btn_dat_ban"
+            android:id="@+id/btn_cham_cong"
             style="@style/CommonButton"
             android:background="@drawable/menu_main_button_background"
             android:drawableLeft="@drawable/ic_dat_truoc"

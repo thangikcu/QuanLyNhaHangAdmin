@@ -40,7 +40,7 @@ public class DeskAdapter extends RecyclerView.Adapter<DeskAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Desk ban = banList.get(position);
 
-        holder.tvBan.setText(ban.getTenBan());
+        holder.tvBan.setText(ban.getDeskName());
 
         holder.tvBan.setBackgroundResource(ban.getIdResBgBan());
 
@@ -78,7 +78,7 @@ public class DeskAdapter extends RecyclerView.Adapter<DeskAdapter.ViewHolder> {
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            tvBan = (TextView) itemView.findViewById(R.id.tv_title);
+            tvBan = itemView.findViewById(R.id.tv_title);
             tvBan.setMovementMethod(new ScrollingMovementMethod());
             tvBan.setOnClickListener(v -> {
                 Desk ban = banList.get(getAdapterPosition());

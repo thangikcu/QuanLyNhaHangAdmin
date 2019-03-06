@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.coffeehouse.R;
 import com.coffeehouse.model.entity.DrinkType;
+
+import java.util.List;
 
 /**
  * Created by Thanggun99 on 19/11/2016.
@@ -50,7 +50,7 @@ public class NhomMonAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nhom_mon, parent, false);
 
-            viewHolder.tvTenNhom = (TextView) convertView.findViewById(R.id.tv_title);
+            viewHolder.tvTenNhom = convertView.findViewById(R.id.tv_title);
 
             convertView.setTag(viewHolder);
         } else {
@@ -62,7 +62,12 @@ public class NhomMonAdapter extends BaseAdapter {
             onClickDrinkType.onClick(nhomMonList.get(position));
         });
         viewHolder.tvTenNhom.setText(nhomMonList.get(position).getName());
-//        viewHolder.tvTenNhom.setBackgroundColor(nhomMonList.get(position).getMauSac());
+
+        if (position % 2 == 0) {
+            viewHolder.tvTenNhom.setBackgroundResource(android.R.color.holo_blue_dark);
+        } else {
+            viewHolder.tvTenNhom.setBackgroundResource(android.R.color.holo_orange_dark);
+        }
         return convertView;
     }
 

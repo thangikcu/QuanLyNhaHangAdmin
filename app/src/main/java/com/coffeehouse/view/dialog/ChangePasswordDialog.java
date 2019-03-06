@@ -2,20 +2,32 @@ package com.coffeehouse.view.dialog;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.view.View;
 import android.widget.EditText;
 
-import butterknife.BindView;
+import com.coffeehouse.AppInstance;
 import com.coffeehouse.R;
-import com.coffeehouse.presenter.MainPresenter;
+import com.coffeehouse.interfaces.MainView;
+import com.coffeehouse.model.entity.User;
+import com.coffeehouse.restapi.ResfulApi;
+import com.coffeehouse.restapi.ResponseData;
+import com.coffeehouse.restapi.TheCoffeeService;
+import com.coffeehouse.util.CoffeeStorage;
 import com.coffeehouse.util.Utils;
+
+import butterknife.BindView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
  * Created by Thanggun99 on 28/02/2017.
  */
 
-public class ChangePasswordDialog extends BaseDialog implements MainPresenter.ChangepasswordView {
+public class ChangePasswordDialog extends BaseDialog {
+    private MainView mainView;
     @BindView(R.id.edt_password)
     EditText edtPassword;
     @BindView(R.id.edt_new_password)
@@ -24,8 +36,9 @@ public class ChangePasswordDialog extends BaseDialog implements MainPresenter.Ch
     EditText edtRePassword;
 
 
-    public ChangePasswordDialog(Context context) {
+    public ChangePasswordDialog(Context context, MainView mainView) {
         super(context, R.layout.dialog_change_password);
+        this.mainView = mainView;
         setCancelable(true);
     }
 
@@ -34,7 +47,45 @@ public class ChangePasswordDialog extends BaseDialog implements MainPresenter.Ch
         super.onClick(v);
         if (v.getId() == R.id.btn_ok) {
             if (checkForm()) {
+                User loginUser = AppInstance.getLoginUser();
 
+                if (!loginUser.getPassword().equals(edtPassword.getText().toString().trim())) {
+                    edtPassword.setError(Utils.getStringByRes(R.string.mat_khau_khong_dung));
+                    edtPassword.requestFocus();
+                    return;
+                }
+
+                mainView.showLoading();
+
+
+                ArrayMap<String, Object> requestBody = new ArrayMap<>();
+
+                requestBody.put("employeeId", loginUser.getID());
+                requestBody.put("password", edtNewPassword.getText().toString().trim());
+                requestBody.put("confirmPassword", edtRePassword.getText().toString().trim());
+
+
+                ResfulApi.getInstance().getService(TheCoffeeService.class).changePassword(ResfulApi.createJsonRequestBody(requestBody)).enqueue(new Callback<ResponseData<String>>() {
+                    @Override
+                    public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
+                        mainView.hideLoading();
+                        assert response.body() != null;
+                        if (response.body().getContent().equals("Successful")) {
+                            dismiss();
+                            CoffeeStorage.getInstance().saveLoginUser(null);
+                            loginUser.setPassword(edtNewPassword.getText().toString().trim());
+                            mainView.showMessage(Utils.getStringByRes(R.string.thay_doi_mat_khau_thanh_cong));
+                        } else {
+                            mainView.showMessage(response.body().getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseData<String>> call, Throwable t) {
+                        mainView.hideLoading();
+                        mainView.showMessage(t.getMessage());
+                    }
+                });
             }
         }
     }
@@ -70,25 +121,4 @@ public class ChangePasswordDialog extends BaseDialog implements MainPresenter.Ch
         return true;
     }
 
-    @Override
-    public void showOnsuccess() {
-        Utils.notifiOnDialog(Utils.getStringByRes(R.string.thay_doi_mat_khau_thanh_cong));
-        dismiss();
-    }
-
-    @Override
-    public void showPasswordWrong() {
-        edtPassword.setError(Utils.getStringByRes(R.string.mat_khau_khong_dung));
-        edtPassword.requestFocus();
-        edtNewPassword.setText("");
-        edtRePassword.setText("");
-    }
-
-    @Override
-    public void showOnFail() {
-        Utils.notifiOnDialog(Utils.getStringByRes(R.string.thay_doi_mat_khau_that_bai));
-        edtPassword.setText("");
-        edtNewPassword.setText("");
-        edtRePassword.setText("");
-    }
 }

@@ -1,13 +1,15 @@
 package com.coffeehouse.model.entity;
 
-import com.google.gson.annotations.SerializedName;
-
 import com.coffeehouse.R;
+import com.coffeehouse.util.Utils;
+import com.google.gson.annotations.SerializedName;
 
 public class Desk {
     private String id;
     @SerializedName("status")
     private boolean serving;
+    @SerializedName("isRemove")
+    private boolean remove;
 
     private boolean selected;
 
@@ -27,7 +29,7 @@ public class Desk {
         this.serving = serving;
     }
 
-    public String getTenBan() {
+    public String getDeskName() {
         return "Bàn " + id;
     }
 
@@ -45,5 +47,18 @@ public class Desk {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public String getStringTrangThai() {
+        if (serving) return Utils.getStringByRes(R.string.dang_phuc_vu);
+        else return Utils.getStringByRes(R.string.trong);
+    }
+
+    public boolean isRemove() {
+        return remove;
+    }
+
+    public void setRemove(boolean remove) {
+        this.remove = remove;
     }
 }

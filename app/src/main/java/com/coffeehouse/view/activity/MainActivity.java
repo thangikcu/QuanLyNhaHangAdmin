@@ -14,10 +14,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.coffeehouse.AppInstance;
 import com.coffeehouse.R;
 import com.coffeehouse.interfaces.MainView;
@@ -25,18 +21,23 @@ import com.coffeehouse.util.Utils;
 import com.coffeehouse.view.dialog.ChangePasswordDialog;
 import com.coffeehouse.view.dialog.ErrorDialog;
 import com.coffeehouse.view.dialog.NotifiDialog;
-import com.coffeehouse.view.fragment.DatBanFragment;
+import com.coffeehouse.view.fragment.ChamCongFragment;
 import com.coffeehouse.view.fragment.ManagerFragment;
 import com.coffeehouse.view.fragment.PhucVuFragment;
 import com.coffeehouse.view.fragment.SettingFragment;
 import com.coffeehouse.view.fragment.ThongKeFragment;
 
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, MainView {
 
     @BindView(R.id.btn_phuc_vu)
     Button btnPhucVu;
-    @BindView(R.id.btn_dat_ban)
-    Button btnDatBan;
+    @BindView(R.id.btn_cham_cong)
+    Button btnChamCong;
     @BindView(R.id.btn_manager)
     Button btnManager;
     @BindView(R.id.btn_thong_ke)
@@ -57,15 +58,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private PhucVuFragment phucVuFragment;
     private SettingFragment settingFragment;
-    private DatBanFragment datBanFragment;
+    private ChamCongFragment chamCongFragment;
     private ManagerFragment managerFragment;
     private ThongKeFragment thongKeFragment;
     private Fragment fragmentIsShow;
 
     private ProgressDialog progressDialog;
     private ErrorDialog errorDialog;
-    private NotifiDialog notifiDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,29 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (progressDialog != null) {
             progressDialog.cancel();
         }
-        cancelDialog();
         super.onDestroy();
     }
 
-    private void cancelDialog() {
-
-        if (notifiDialog != null) {
-            notifiDialog.cancel();
-        }
-        if (errorDialog != null) {
-            errorDialog.cancel();
-        }
-    }
-
-
     public void initComponents() {
         btnSelected = new Button(this);
-
-        notifiDialog = new NotifiDialog(this);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(Utils.getStringByRes(R.string.loading));
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
 
         popupMenu = new PopupMenu(this, btnDropDown);
         popupMenu.getMenuInflater().inflate(R.menu.account_menu, popupMenu.getMenu());
@@ -125,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.btn_change_pass:
+                        showChangePasswordDialog();
                         return true;
                     case R.id.btn_logout:
                         AppInstance.clearLoginSection();
@@ -139,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPhucVu.setOnClickListener(this);
         btnManager.setOnClickListener(this);
         btnThongKe.setOnClickListener(this);
-        btnDatBan.setOnClickListener(this);
+        btnChamCong.setOnClickListener(this);
         btnSetting.setOnClickListener(this);
     }
 
@@ -148,11 +130,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvRule.setText(AppInstance.getLoginUser().getRule());
 
         if (AppInstance.getLoginUser().isAdmin()) {
-            btnManager.setEnabled(true);
-            btnThongKe.setEnabled(true);
+            btnManager.setVisibility(View.VISIBLE);
+            btnThongKe.setVisibility(View.VISIBLE);
+            btnChamCong.setVisibility(View.GONE);
         } else {
-            btnManager.setEnabled(false);
-            btnThongKe.setEnabled(false);
+            btnManager.setVisibility(View.GONE);
+            btnThongKe.setVisibility(View.GONE);
+            btnChamCong.setVisibility(View.VISIBLE);
         }
     }
 
@@ -176,9 +160,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 fillFrame(thongKeFragment, btnThongKe);
                 break;
-            case R.id.btn_dat_ban:
-                if (datBanFragment == null) datBanFragment = new DatBanFragment();
-                fillFrame(datBanFragment, btnDatBan);
+            case R.id.btn_cham_cong:
+                if (chamCongFragment == null) chamCongFragment = new ChamCongFragment();
+                fillFrame(chamCongFragment, btnChamCong);
                 break;
             case R.id.btn_setting:
                 if (settingFragment == null) settingFragment = new SettingFragment();
@@ -207,18 +191,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             transaction.commit();
         }
-        cancelDialog();
         btnSelected.setSelected(false);
         fragmentIsShow = null;
         phucVuFragment = null;
-        datBanFragment = null;
+        chamCongFragment = null;
         managerFragment = null;
         thongKeFragment = null;
     }
 
 
     public void showChangePasswordDialog() {
-        ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(this);
+        ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(this, this);
         changePasswordDialog.show();
     }
 
@@ -257,28 +240,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showGetDatasFailDialog() {
-        errorDialog.cancel();
         errorDialog.show();
     }
 
     @Override
     public void showLoading() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(Utils.getStringByRes(R.string.loading));
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
-        progressDialog.hide();
+        if (progressDialog != null) {
+            progressDialog.hide();
+        }
     }
 
     @Override
     public void showMessage(String message) {
-        notifiDialog.notifi(message);
-    }
-
-    public void showNotifyDialog(String message) {
-        notifiDialog.notifi(message);
+        new NotifiDialog(this).notifi(message);
     }
 
 }

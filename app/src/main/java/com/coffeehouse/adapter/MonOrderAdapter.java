@@ -1,6 +1,5 @@
 package com.coffeehouse.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -11,14 +10,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-
 import com.coffeehouse.R;
-import com.coffeehouse.model.entity.MonOrder;
-import com.coffeehouse.presenter.PhucVuPresenter;
+import com.coffeehouse.model.entity.OrderDetail;
 import com.coffeehouse.util.Utils;
+
+import java.util.List;
 
 
 /**
@@ -26,15 +22,12 @@ import com.coffeehouse.util.Utils;
  */
 
 public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHolder> {
-    private ArrayList<MonOrder> monOrderList;
-    private PhucVuPresenter phucVuPresenter;
+    private List<OrderDetail> orderDetailList;
     private int currentPosition;
-    private Context context;
+    private OnClickDrinkOrder onClickDrinkOrder;
 
-    public MonOrderAdapter(Context context) {
-        this.context = context;
-        this.phucVuPresenter = phucVuPresenter;
-
+    public MonOrderAdapter(OnClickDrinkOrder onClickDrinkOrder) {
+        this.onClickDrinkOrder = onClickDrinkOrder;
     }
 
     @Override
@@ -45,38 +38,38 @@ public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        MonOrder monOrder = monOrderList.get(position);
+        OrderDetail monOrder = orderDetailList.get(position);
 
-        holder.tvTenMon.setText(monOrder.getTenMon());
-        holder.tvSoLuong.setText(monOrder.getSoLuong() + monOrder.getDonViTinh());
-        holder.tvThanhTien.setText(Utils.formatMoney(monOrder.getTongTien()));
-        holder.ratingBar.setRating(monOrder.getRating() / monOrder.getPersonRating());
-        holder.tvRatingPoint.setText(monOrder.getRatingPoint());
-        Glide.with(context)
-                .load(monOrder.getHinhAnh())
-                .placeholder(R.drawable.ic_food)
-                .error(R.drawable.ic_food)
-                .into(holder.ivMon);
+        holder.tvTenMon.setText(monOrder.getDrinkName());
+        holder.tvSoLuong.setText(monOrder.getCount() + "");
+        holder.tvThanhTien.setText(Utils.formatMoney(monOrder.getPrice() * monOrder.getCount()));
+        holder.ratingBar.setRating(4.5f);
+        holder.tvRatingPoint.setText(50 + "");
+//        Glide.with(context)
+//                .load(monOrder.getHinhAnh())
+//                .placeholder(R.drawable.ic_food)
+//                .error(R.drawable.ic_food)
+//                .into(holder.ivMon);
 
     }
 
     @Override
     public int getItemCount() {
-        if (monOrderList == null) return 0;
-        return monOrderList.size();
+        if (orderDetailList == null) return 0;
+        return orderDetailList.size();
     }
 
-    public void changeData(ArrayList<MonOrder> data) {
-        monOrderList = data;
+    public void changeData(List<OrderDetail> data) {
+        orderDetailList = data;
         notifyDataSetChanged();
     }
 
-    public MonOrder getItem(int position) {
-        return monOrderList.get(position);
+    public OrderDetail getItem(int position) {
+        return orderDetailList.get(position);
     }
 
-    public void updateMonOrder(MonOrder currentMonOrder) {
-        notifyItemChanged(monOrderList.indexOf(currentMonOrder));
+    public void updateMonOrder(OrderDetail currentMonOrder) {
+        notifyItemChanged(orderDetailList.indexOf(currentMonOrder));
     }
 
     public void deleteMonOrder() {
@@ -87,11 +80,14 @@ public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHo
         return currentPosition;
     }
 
-    public int getPositionOf(MonOrder monOrder) {
-        return monOrderList.indexOf(monOrder);
+    public int getPositionOf(OrderDetail monOrder) {
+        return orderDetailList.indexOf(monOrder);
     }
 
 
+    public interface OnClickDrinkOrder {
+        void onClick(OrderDetail orderDetail);
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvTenMon;
@@ -104,34 +100,26 @@ public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHo
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            tvRatingPoint = (TextView) itemView.findViewById(R.id.tv_point_rating);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
-            tvThanhTien = (TextView) itemView.findViewById(R.id.tv_don_gia);
-            tvSoLuong = (TextView) itemView.findViewById(R.id.tv_so_luong);
-            ivMon = (ImageView) itemView.findViewById(R.id.iv_mon);
-            btnDelete = (ImageButton) itemView.findViewById(R.id.btn_delete_mon_order);
-            tvTenMon = (TextView) itemView.findViewById(R.id.tv_ten_mon);
+            tvRatingPoint = itemView.findViewById(R.id.tv_point_rating);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
+            tvThanhTien = itemView.findViewById(R.id.tv_don_gia);
+            tvSoLuong = itemView.findViewById(R.id.tv_so_luong);
+            ivMon = itemView.findViewById(R.id.iv_mon);
+            btnDelete = itemView.findViewById(R.id.btn_delete_mon_order);
+            btnDelete.setVisibility(View.GONE);
+            tvTenMon = itemView.findViewById(R.id.tv_ten_mon);
 
             tvTenMon.setMovementMethod(new ScrollingMovementMethod());
             tvTenMon.setOnClickListener(this);
 
-            btnDelete.setOnClickListener(this);
             itemView.setOnClickListener(this);
-
         }
 
         @Override
         public void onClick(View v) {
-            currentPosition = getAdapterPosition();
 
-            switch (v.getId()) {
-                case R.id.btn_delete_mon_order:
-                    phucVuPresenter.onClickDeleteMonOrder(getItem(currentPosition));
-                    break;
-                default:
-                    phucVuPresenter.onClickMonOrder(getItem(currentPosition));
-                    break;
-            }
+            onClickDrinkOrder.onClick(orderDetailList.get(getAdapterPosition()));
         }
     }
+
 }

@@ -1,6 +1,5 @@
 package com.coffeehouse.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -10,13 +9,14 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.coffeehouse.R;
+import com.coffeehouse.model.entity.Drink;
+import com.coffeehouse.util.Utils;
+
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.coffeehouse.R;
-import com.coffeehouse.model.entity.Drink;
-import com.coffeehouse.util.Utils;
 
 
 /**
@@ -26,11 +26,8 @@ import com.coffeehouse.util.Utils;
 public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.ViewHolder> {
     private List<Drink> drinkList;
     private OnClickDrink onClickDrink;
-    private Context context;
 
-    public DrinkAdapter(Context context, List<Drink> drinkList, OnClickDrink onClickDrink) {
-        this.context = context;
-        this.drinkList = drinkList;
+    public DrinkAdapter(OnClickDrink onClickDrink) {
         this.onClickDrink = onClickDrink;
     }
 
@@ -45,7 +42,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.ViewHolder> 
 
         holder.tvTenMon.setText(mon.getName());
         holder.tvTenMon.scrollTo(0, 0);
-        holder.tvDonGia.setText(Utils.formatMoney(mon.getPrice()) + "/ly");
+        holder.tvDonGia.setText(Utils.formatMoney(mon.getPrice()));
         holder.ratingBar.setRating(4.5f);
         holder.tvPointRating.setText("50");
        /* Glide.with(context)

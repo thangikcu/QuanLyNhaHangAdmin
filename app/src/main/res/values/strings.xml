@@ -160,4 +160,5 @@
     <string name="info_so_luong_dat_ban">Số lượng đặt trước:</string>
     <string name="info_so_luong_tin_tuc">Số tin tức:</string>
     <string name="mat_ket_noi_toi_may_chu">Mất kết nối tới máy chủ !</string>
+    <string name="cham_cong">Chấm công</string>
 </resources>
