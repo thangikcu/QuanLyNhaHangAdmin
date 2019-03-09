@@ -1,18 +1,21 @@
 package com.coffeehouse.model.entity;
 
+import android.util.Base64;
+
 public class Drink {
-    private long beverageID;
+    private long beverageId;
     private String description;
     private long id;
     private String name;
     private long price;
+    private String image;
 
-    public long getBeverageID() {
-        return beverageID;
+    public long getBeverageId() {
+        return beverageId;
     }
 
-    public void setBeverageID(long value) {
-        this.beverageID = value;
+    public void setBeverageId(long value) {
+        this.beverageId = value;
     }
 
     public String getDescription() {
@@ -45,5 +48,17 @@ public class Drink {
 
     public void setPrice(long value) {
         this.price = value;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public byte[] getImageToShow() {
+        return Base64.decode(image, Base64.DEFAULT);
     }
 }

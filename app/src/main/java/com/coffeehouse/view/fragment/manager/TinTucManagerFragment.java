@@ -2,10 +2,6 @@ package com.coffeehouse.view.fragment.manager;
 
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,8 +16,6 @@ import com.coffeehouse.presenter.MainPresenter;
 import com.coffeehouse.util.Utils;
 import com.coffeehouse.view.dialog.ThemTinTucDialog;
 import com.coffeehouse.view.fragment.BaseFragment;
-
-import static android.app.Activity.RESULT_OK;
 
 @SuppressLint("ValidFragment")
 public class TinTucManagerFragment extends BaseFragment implements TinTucManager.TinTucManagerView, View.OnClickListener {
@@ -48,9 +42,9 @@ public class TinTucManagerFragment extends BaseFragment implements TinTucManager
 
     @Override
     public void findViews(View view) {
-        edtTimKiemTinTuc = (SearchView) view.findViewById(R.id.edt_tim_kiem_tin_tuc);
-        tinTucRecyclerView = (RecyclerView) view.findViewById(R.id.list_tin_tuc);
-        btnThemMoi = (Button) view.findViewById(R.id.btn_them_tin_tuc);
+        edtTimKiemTinTuc = view.findViewById(R.id.edt_tim_kiem_tin_tuc);
+        tinTucRecyclerView = view.findViewById(R.id.list_tin_tuc);
+        btnThemMoi = view.findViewById(R.id.btn_them_tin_tuc);
     }
 
     @Override
@@ -110,7 +104,7 @@ public class TinTucManagerFragment extends BaseFragment implements TinTucManager
         Utils.notifiOnDialog(Utils.getStringByRes(R.string.tai_danh_sach_tin_tuc_that_bai));
     }
 
-    @Override
+/*    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -127,7 +121,7 @@ public class TinTucManagerFragment extends BaseFragment implements TinTucManager
             cursor.close();
         }
 
-    }
+    }*/
 
     @Override
     public void onFinishUpdateTinTuc() {

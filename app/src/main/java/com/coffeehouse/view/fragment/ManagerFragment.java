@@ -8,10 +8,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.coffeehouse.R;
+import com.coffeehouse.interfaces.MainView;
 import com.coffeehouse.view.fragment.manager.BanManagerFragment;
 import com.coffeehouse.view.fragment.manager.LoaiMonManagerFragment;
 import com.coffeehouse.view.fragment.manager.MonManagerFragment;
 import com.coffeehouse.view.fragment.manager.NhanVienManagerFragment;
+
+import java.util.Objects;
 
 @SuppressLint("ValidFragment")
 public class ManagerFragment extends BaseFragment implements View.OnClickListener {
@@ -22,9 +25,11 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
     private BanManagerFragment banManagerFragment;
     private NhanVienManagerFragment nhanVienManagerFragment;
     private LoaiMonManagerFragment loaiMonManagerFragment;
+    private MainView mainView;
 
-    public ManagerFragment() {
+    public ManagerFragment(MainView mainView) {
         super(R.layout.fragment_manager);
+        this.mainView = mainView;
     }
 
     @Override
@@ -53,13 +58,17 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
         btnQlLoaiMon.setOnClickListener(this);
         btnQlBan.setOnClickListener(this);
         btnQlKhachHang.setOnClickListener(this);
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.btn_ql_thuc_don:
+                if (monManagerFragment == null) {
+                    monManagerFragment = new MonManagerFragment(mainView);
+                }
+                fillFrame(monManagerFragment, btnQlMon);
+                break;
             default:
                 break;
         }
@@ -72,7 +81,7 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
         button.setSelected(true);
         btnSelected = button;
 
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
 
         if (fragmentIsShow != null && fragmentIsShow.isVisible()) {
 
@@ -81,6 +90,7 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
         }
         if (fragment.isAdded()) {
             transaction.show(fragment);
+            fragment.onResume();
         } else {
             transaction.add(R.id.manager_frame, fragment);
         }

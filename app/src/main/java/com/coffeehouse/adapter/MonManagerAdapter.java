@@ -1,6 +1,5 @@
 package com.coffeehouse.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +8,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-
 import com.coffeehouse.R;
-import com.coffeehouse.model.MonManager;
-import com.coffeehouse.model.entity.Mon;
+import com.coffeehouse.model.entity.Drink;
 import com.coffeehouse.util.Utils;
-import com.coffeehouse.view.dialog.ConfirmDialog;
-import com.coffeehouse.view.dialog.ThemMonDialog;
+
+import java.util.List;
 
 /**
  * Created by Thanggun99 on 11/03/2017.
@@ -26,16 +20,15 @@ import com.coffeehouse.view.dialog.ThemMonDialog;
 
 public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.ViewHolder> {
 
-    private ArrayList<Mon> monList;
+    private List<Drink> allDrinkList;
+    private List<Drink> drinkList;
+    private OnClickDrink onClickDrink;
     private int currentPosition;
-    private MonManager monManager;
-    private Context context;
 
-    public MonManagerAdapter(Context context, MonManager monManager) {
-        this.context = context;
-        this.monManager = monManager;
-        monList = monManager.getMonList();
-
+    public MonManagerAdapter(List<Drink> allDrinkList, OnClickDrink onClickDrink) {
+        this.allDrinkList = allDrinkList;
+        drinkList = allDrinkList;
+        this.onClickDrink = onClickDrink;
     }
 
     @Override
@@ -45,18 +38,18 @@ public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Mon mon = monList.get(position);
+        Drink mon = drinkList.get(position);
 
-        holder.tvTenMon.setText(mon.getTenMon());
-        holder.tvDonGia.setText(Utils.formatMoney(mon.getDonGia()) + "/" + mon.getDonViTinh());
-        holder.tvRatingPoint.setText(mon.getRatingPoint());
-        holder.ratingBar.setRating(mon.getRating() / mon.getPersonRating());
-
+        holder.tvTenMon.setText(mon.getName());
+        holder.tvDonGia.setText(Utils.formatMoney(mon.getPrice()));
+        holder.tvRatingPoint.setText(50 + "");
+        holder.ratingBar.setRating(4.5f);
+/*
         Glide.with(context)
                 .load(mon.getHinhAnh())
                 .placeholder(R.drawable.ic_food)
                 .error(R.drawable.ic_food)
-                .into(holder.ivHinhAnh);
+                .into(holder.ivHinhAnh);*/
 
     }
 
@@ -66,25 +59,25 @@ public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.Vi
 
     @Override
     public int getItemCount() {
-        if (monList != null) {
-            return monList.size();
+        if (drinkList != null) {
+            return drinkList.size();
         }
         return 0;
     }
 
-    public void notifyItemRemoved(Mon mon) {
+    public void notifyItemRemoved(Drink mon) {
         if (mon != null) {
 
-            notifyItemRemoved(monList.indexOf(mon));
+            notifyItemRemoved(drinkList.indexOf(mon));
         } else {
 
             notifyItemRemoved(currentPosition);
         }
     }
 
-    public void notifyItemChanged(Mon mon) {
+    public void notifyItemChanged(Drink mon) {
         if (mon != null) {
-            notifyItemChanged(monList.indexOf(mon));
+            notifyItemChanged(drinkList.indexOf(mon));
         } else {
 
             notifyItemChanged(currentPosition);
@@ -92,22 +85,28 @@ public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.Vi
     }
 
 
-    public void setDatas(ArrayList<Mon> datas) {
-        this.monList = datas;
+    public void setDatas(List<Drink> datas) {
+        this.drinkList = datas;
     }
 
     public void showAllData() {
-        this.monList = monManager.getMonList();
+        this.drinkList = allDrinkList;
         notifyDataSetChanged();
     }
 
-    public void changeData(ArrayList<Mon> monList) {
-        this.monList = monList;
+    public void changeData(List<Drink> monList) {
+        this.drinkList = monList;
         notifyDataSetChanged();
     }
 
     public void removeMon() {
         notifyItemRemoved(currentPosition);
+    }
+
+    public interface OnClickDrink {
+        void onClickDelete(Drink drink);
+
+        void onClickUpdate(Drink drink);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -120,13 +119,13 @@ public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
 
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
-            tvRatingPoint = (TextView) itemView.findViewById(R.id.tv_point_rating);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
+            tvRatingPoint = itemView.findViewById(R.id.tv_point_rating);
 
-            ivHinhAnh = (ImageView) itemView.findViewById(R.id.iv_mon);
+            ivHinhAnh = itemView.findViewById(R.id.iv_mon);
 
-            tvDonGia = (TextView) itemView.findViewById(R.id.tv_don_gia);
-            tvTenMon = (TextView) itemView.findViewById(R.id.tv_ten_mon);
+            tvDonGia = itemView.findViewById(R.id.tv_don_gia);
+            tvTenMon = itemView.findViewById(R.id.tv_ten_mon);
 
             itemView.findViewById(R.id.btn_update).setOnClickListener(this);
             itemView.findViewById(R.id.btn_delete).setOnClickListener(this);
@@ -137,26 +136,10 @@ public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.Vi
             currentPosition = getAdapterPosition();
             switch (v.getId()) {
                 case R.id.btn_delete:
-                    final ConfirmDialog confirmDialog = new ConfirmDialog(monManager.getFragment().getContext());
-                    confirmDialog.setContent(Utils.getStringByRes(R.string.xac_nhan),
-                            Utils.getStringByRes(R.string.xac_nhan_xoa_mon) + " " + monList.get(currentPosition).getTenMon() + " ?");
-
-                    confirmDialog.setOnClickOkListener(new ConfirmDialog.OnClickOkListener() {
-                        @Override
-                        public void onClickOk() {
-                            monManager.deleteMon(monList.get(currentPosition));
-                            confirmDialog.dismiss();
-
-                        }
-                    });
-
+                    onClickDrink.onClickDelete(drinkList.get(getAdapterPosition()));
                     break;
                 case R.id.btn_update:
-                    ThemMonDialog themMonDialog = monManager.getThemMonDialog();
-                    monManager.setCurrentMon(monList.get(currentPosition));
-                    themMonDialog.clear();
-                    themMonDialog.fillContent(monList.get(currentPosition));
-                    themMonDialog.show();
+                    onClickDrink.onClickUpdate(drinkList.get(getAdapterPosition()));
                     break;
                 default:
                     break;
@@ -164,4 +147,5 @@ public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.Vi
 
         }
     }
+
 }

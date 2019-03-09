@@ -161,4 +161,6 @@
     <string name="info_so_luong_tin_tuc">Số tin tức:</string>
     <string name="mat_ket_noi_toi_may_chu">Mất kết nối tới máy chủ !</string>
     <string name="cham_cong">Chấm công</string>
+    <string name="mieu_ta">Miêu tả</string>
+    <string name="ban_can_cap_quyen_de_truy_cap_thu_vien_anh">Bạn cần cấp quyền để truy cập thư viện ảnh</string>
 </resources>

@@ -1,9 +1,7 @@
 package com.coffeehouse.view.dialog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,19 +12,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-
-import butterknife.BindView;
 import com.coffeehouse.R;
-import com.coffeehouse.model.MonManager;
-import com.coffeehouse.model.entity.Mon;
-import com.coffeehouse.model.entity.NhomMon;
+import com.coffeehouse.model.entity.Drink;
+import com.coffeehouse.model.entity.DrinkType;
 import com.coffeehouse.util.Utils;
 
-public class ThemMonDialog extends BaseDialog {
-    public static final int SELECT_PHOTO = 1;
+import java.util.List;
 
+import butterknife.BindView;
+
+public class ThemMonDialog extends BaseDialog {
     @BindView(R.id.btn_chon_hinh)
     TextView btnChonHinh;
     @BindView(R.id.iv_hinh_anh)
@@ -35,30 +30,28 @@ public class ThemMonDialog extends BaseDialog {
     EditText edtTenMon;
     @BindView(R.id.edt_don_gia)
     EditText edtDonGia;
-    @BindView(R.id.edt_don_vi_tinh)
-    EditText edtDonViTinh;
+    private final List<DrinkType> listDrinkType;
     @BindView(R.id.spn_nhom_mon)
     Spinner spnNhomMon;
     @BindView(R.id.ckb_hien_thi)
     CheckBox ckbHienThi;
+    @BindView(R.id.edt_description)
+    EditText edtDescription;
 
-    private String action = "";
-
-    private MonManager monManager;
-
-    private ArrayList<NhomMon> nhomMonList;
     private ArrayAdapter<String> nhomMonAdapter;
     private byte[] hinhAnhByte;
+    private PickImageRequest pickImageRequest;
+    private OnClickOkListener onClickOkListener;
 
-
-    public ThemMonDialog(Context context, MonManager monManager) {
+    public ThemMonDialog(Context context, List<DrinkType> listDrinkType) {
         super(context, R.layout.dialog_them_mon);
-        this.monManager = monManager;
         setCancelable(true);
 
-        nhomMonList = monManager.getNhomMonList();
+        ckbHienThi.setVisibility(View.GONE);
 
-        nhomMonAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, nhomMonList);
+        this.listDrinkType = listDrinkType;
+
+        nhomMonAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, listDrinkType);
 
         nhomMonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -73,37 +66,23 @@ public class ThemMonDialog extends BaseDialog {
         super.onClick(v);
         if (v.getId() == R.id.btn_ok) {
             if (checkForm()) {
-
                 int hienThi = 0;
                 if (ckbHienThi.isChecked()) {
                     hienThi = 1;
                 }
-                Mon mon = new Mon();
-                mon.setHinhAnhString(Utils.getStringImage(hinhAnhByte));
-                mon.setHienThi(hienThi);
-                mon.setHinhAnh(hinhAnhByte);
-                mon.setTenMon(edtTenMon.getText().toString().trim());
-                mon.setDonViTinh(edtDonViTinh.getText().toString().trim());
-                mon.setDonGia(Integer.parseInt(edtDonGia.getText().toString().trim()));
-                mon.setMaLoai(nhomMonList.get(spnNhomMon.getSelectedItemPosition()).getMaLoai());
-                mon.setPersonRating(1);
-                mon.setRating((float) 3.5);
 
-                if (action.equals("update")) {
-                    monManager.updateMon(mon);
-                } else {
+                Drink drink = new Drink();
+                drink.setImage(Utils.getStringImage(hinhAnhByte));
+                drink.setName(edtTenMon.getText().toString().trim());
+                drink.setDescription(edtDescription.getText().toString().trim());
+                drink.setPrice(Integer.parseInt(edtDonGia.getText().toString().trim()));
+                drink.setBeverageId(listDrinkType.get(spnNhomMon.getSelectedItemPosition()).getID());
 
-                    monManager.addMon(mon);
-                }
                 dismiss();
-
+                onClickOkListener.onClickOk(drink);
             }
-        }
-        if (v.getId() == R.id.btn_chon_hinh) {
-
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            monManager.getFragment().startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        } else if (v.getId() == R.id.btn_chon_hinh) {
+            pickImageRequest.pickImage(this::showImage);
         }
     }
 
@@ -116,10 +95,10 @@ public class ThemMonDialog extends BaseDialog {
             focusView = edtDonGia;
             edtDonGia.setError(Utils.getStringByRes(R.string.nhap_so_luong));
         }
-        if (TextUtils.isEmpty(edtDonViTinh.getText())) {
+        if (TextUtils.isEmpty(edtDescription.getText())) {
             cancel = true;
-            focusView = edtDonViTinh;
-            edtDonViTinh.setError(Utils.getStringByRes(R.string.nhap_don_vi_tinh));
+            focusView = edtDescription;
+            edtDescription.setError(Utils.getStringByRes(R.string.nhap_don_vi_tinh));
         }
         if (TextUtils.isEmpty(edtTenMon.getText())) {
             cancel = true;
@@ -139,8 +118,8 @@ public class ThemMonDialog extends BaseDialog {
         return true;
     }
 
-    public void showImage(String imagePath) {
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+    private void showImage(Bitmap bitmap) {
+        //Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
 
         if (bitmap != null) {
             hinhAnhByte = Utils.getByteImage(bitmap);
@@ -155,40 +134,58 @@ public class ThemMonDialog extends BaseDialog {
     public void clear() {
         ivHinhAnh.setImageBitmap(null);
         hinhAnhByte = null;
-        action = "";
-        edtDonViTinh.setText(null);
+        edtDescription.setText(null);
         edtTenMon.setText(null);
         edtDonGia.setText(null);
 
         edtDonGia.setError(null);
         edtTenMon.setError(null);
         btnChonHinh.setError(null);
-        edtDonViTinh.setError(null);
+        edtDescription.setError(null);
 
     }
 
-    public void fillContent(Mon mon) {
-        action = "update";
-        hinhAnhByte = mon.getHinhAnh();
+    public void fillContent(Drink mon) {
+        //hinhAnhByte = mon.getHinhAnh();
         Glide.with(getContext())
                 .load(hinhAnhByte)
                 .placeholder(R.drawable.ic_food)
                 .error(R.drawable.ic_food)
                 .into(ivHinhAnh);
-        edtTenMon.setText(mon.getTenMon());
-        edtDonViTinh.setText(mon.getDonViTinh());
-        edtDonGia.setText(mon.getDonGia() + "");
+        edtTenMon.setText(mon.getName());
+        edtDescription.setText(mon.getDescription());
+        edtDonGia.setText(mon.getPrice() + "");
 
-        for (NhomMon nhomMon : nhomMonList) {
-            if (nhomMon.getMaLoai() == mon.getMaLoai()) {
-                spnNhomMon.setSelection(nhomMonList.indexOf(nhomMon));
+        for (DrinkType nhomMon : listDrinkType) {
+            if (nhomMon.getID() == mon.getBeverageId()) {
+                spnNhomMon.setSelection(listDrinkType.indexOf(nhomMon));
             }
         }
+//
+//        if (mon.getHienThi() == 0) {
+//            ckbHienThi.setChecked(false);
+//        } else {
+//            ckbHienThi.setChecked(true);
+//        }
+    }
 
-        if (mon.getHienThi() == 0) {
-            ckbHienThi.setChecked(false);
-        } else {
-            ckbHienThi.setChecked(true);
-        }
+    public void setPickImageRequest(PickImageRequest pickImageRequest) {
+        this.pickImageRequest = pickImageRequest;
+    }
+
+    public void setOnClickOkListener(OnClickOkListener onClickOkListener) {
+        this.onClickOkListener = onClickOkListener;
+    }
+
+    public interface OnClickOkListener {
+        void onClickOk(Drink drink);
+    }
+
+    public interface PickImageRequest {
+        void pickImage(OnPickImageResult onResult);
+    }
+
+    public interface OnPickImageResult {
+        void onResult(Bitmap result);
     }
 }

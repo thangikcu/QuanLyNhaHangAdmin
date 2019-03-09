@@ -18,8 +18,13 @@ public class NotifiDialog extends BaseDialog {
         setCancelable(false);
     }
 
-    public void notifi(String message) {
+    public void notify(String message) {
         tvNotifi.setText(message);
+        show();
+    }
+
+    public void notify(int residMessage) {
+        tvNotifi.setText(residMessage);
         show();
     }
 }

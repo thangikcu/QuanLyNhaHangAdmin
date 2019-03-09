@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (Utils.isConnectingToInternet()) {
             return true;
         } else {
-            notifiDialog.notifi(Utils.getStringByRes(R.string.kiem_tra_ket_noi_mang));
+            notifiDialog.notify(Utils.getStringByRes(R.string.kiem_tra_ket_noi_mang));
             return false;
         }
     }
@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     if (loginUser == null) {
                                         onFinishTask();
                                         new NotifiDialog(LoginActivity.this)
-                                                .notifi("Incorrect username or password!");
+                                                .notify("Incorrect username or password!");
                                     } else {
                                         loginUser.setPassword(admin.getMatKhau());
                                         AppInstance.saveLoginUser(loginUser, admin.isGhiNho());
@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 public void onFailure(Call<ResponseData<User>> call, Throwable t) {
                                     onFinishTask();
 
-                                    new NotifiDialog(LoginActivity.this).notifi(t.getMessage());
+                                    new NotifiDialog(LoginActivity.this).notify(t.getMessage());
                                 }
                             });
                 }

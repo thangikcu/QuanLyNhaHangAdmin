@@ -39,5 +39,11 @@ public interface TheCoffeeService {
 
     @POST("api/order-history/paid-bill")
     Call<ResponseData<String>> payment(@Query("orderId") String orderId);
+
+    @GET("api/beverage/get-all")
+    Call<ResponseData<List<DrinkType>>> getAllDrinkType();
+
+    @POST("api/drink/save")
+    Call<ResponseData<String>> addDrink(@Body RequestBody requestBody);
 }
 

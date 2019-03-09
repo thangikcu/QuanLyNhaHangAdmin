@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -70,10 +71,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ButterKnife.bind(this);
 
+        showLoading();
         initComponents();
         setEvents();
+
+        getWindow().getDecorView().postDelayed(this::showPhucVu, 500);
     }
 
     @Override
@@ -91,10 +97,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popupMenu.getMenuInflater().inflate(R.menu.account_menu, popupMenu.getMenu());
 
         errorDialog = new ErrorDialog(this);
-
-        phucVuFragment = new PhucVuFragment(this);
-
-        showPhucVu();
     }
 
     public void setEvents() {
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fillFrame(phucVuFragment, btnPhucVu);
                 break;
             case R.id.btn_manager:
-                if (managerFragment == null) managerFragment = new ManagerFragment();
+                if (managerFragment == null) managerFragment = new ManagerFragment(this);
                 fillFrame(managerFragment, btnManager);
                 break;
             case R.id.btn_thong_ke:
@@ -211,7 +213,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showPhucVu() {
-        if (phucVuFragment == null) phucVuFragment = new PhucVuFragment(this);
+        if (phucVuFragment == null) {
+            phucVuFragment = new PhucVuFragment(this);
+        } else {
+
+        }
         fillFrame(phucVuFragment, btnPhucVu);
     }
 
@@ -230,13 +236,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (fragment.isAdded()) {
             transaction.show(fragment);
+            fragment.onResume();
         } else {
             transaction.add(R.id.frame, fragment);
         }
         transaction.commitAllowingStateLoss();
         fragmentIsShow = fragment;
-        fragmentIsShow.onResume();
-
     }
 
     public void showGetDatasFailDialog() {
@@ -265,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void showMessage(String message) {
-        new NotifiDialog(this).notifi(message);
+        new NotifiDialog(this).notify(message);
     }
 
 }

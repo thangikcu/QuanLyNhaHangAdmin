@@ -21,6 +21,7 @@
 
         <activity
             android:name="com.coffeehouse.view.activity.MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="landscape">
 
         </activity>
@@ -58,6 +59,10 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0571f7773aef6785aa06900fd408d40c895c489f" />
     </application>
 
 </manifest>

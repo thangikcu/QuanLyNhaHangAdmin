@@ -1,7 +1,6 @@
 package com.coffeehouse.view.dialog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
@@ -13,17 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import java.util.Calendar;
-
-import butterknife.BindView;
 import com.coffeehouse.R;
 import com.coffeehouse.model.TinTucManager;
 import com.coffeehouse.model.entity.TinTuc;
 import com.coffeehouse.util.Utils;
 
+import java.util.Calendar;
+
+import butterknife.BindView;
+
 public class ThemTinTucDialog extends BaseDialog {
-    public static final int SELECT_PHOTO = 1;
     @BindView(R.id.btn_chon_hinh)
     TextView btnChonHinh;
     @BindView(R.id.iv_hinh_anh)
@@ -94,9 +92,6 @@ public class ThemTinTucDialog extends BaseDialog {
         }
         if (v.getId() == R.id.btn_chon_hinh) {
 
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            tinTucManager.getFragment().startActivityForResult(photoPickerIntent, SELECT_PHOTO);
         }
     }
 

@@ -65,11 +65,11 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/edt_don_vi_tinh"
+            android:id="@+id/edt_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="8dp"
-            android:hint="@string/don_vi_tinh"
+            android:hint="@string/mieu_ta"
             android:lines="1"
             android:maxLength="20"
             android:maxLines="1"

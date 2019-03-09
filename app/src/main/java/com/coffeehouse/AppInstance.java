@@ -5,6 +5,9 @@ import android.content.Context;
 
 import com.coffeehouse.model.entity.User;
 import com.coffeehouse.util.CoffeeStorage;
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Thanggun99 on 19/11/2016.
@@ -31,6 +34,7 @@ public class AppInstance extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         context = this;
 
         loginUser = CoffeeStorage.getInstance().getLoginUser();

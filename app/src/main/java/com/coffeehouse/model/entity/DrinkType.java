@@ -1,5 +1,7 @@
 package com.coffeehouse.model.entity;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -42,5 +44,11 @@ public class DrinkType {
 
     public void setName(String value) {
         this.name = value;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

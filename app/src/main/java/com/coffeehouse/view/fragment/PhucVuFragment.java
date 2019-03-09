@@ -2,9 +2,6 @@ package com.coffeehouse.view.fragment;
 
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -108,8 +105,6 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
     private Animation animationZoom;
     private Animation animationBounce;
 
-    private Handler handler;
-    private Runnable runnable;
     private MainView mainView;
     private Bill currentBill;
     private Desk currentDesk;
@@ -122,17 +117,20 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
-        getListDesk();
-        getMenu();
+        view.postDelayed(() -> {
+            getListDesk();
+            getMenu();
+        }, 500);
     }
 
     private void getMenu() {
         mainView.showLoading();
         ResfulApi.getInstance().getService(TheCoffeeService.class)
                 .getListDrink().enqueue(new Callback<ResponseData<List<DrinkType>>>() {
+            @SuppressLint("NewApi")
             @Override
             public void onResponse(Call<ResponseData<List<DrinkType>>> call, Response<ResponseData<List<DrinkType>>> response) {
                 mainView.hideLoading();
@@ -339,7 +337,6 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void initComponents() {
-        handler = new Handler();
         //initDialogs
         //tinhTienDialog = new TinhTienDialog();
 
@@ -402,13 +399,6 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
 
             @Override
             public boolean onQueryTextChange(final String newText) {
-                handler.removeCallbacks(runnable);
-
-                runnable = () -> {
-
-                };
-                handler.postDelayed(runnable, 200);
-
                 return true;
             }
         });
