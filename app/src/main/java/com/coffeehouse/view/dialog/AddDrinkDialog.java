@@ -21,7 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class ThemMonDialog extends BaseDialog {
+public class AddDrinkDialog extends BaseDialog {
     @BindView(R.id.btn_chon_hinh)
     TextView btnChonHinh;
     @BindView(R.id.iv_hinh_anh)
@@ -38,12 +38,13 @@ public class ThemMonDialog extends BaseDialog {
     @BindView(R.id.edt_description)
     EditText edtDescription;
 
+    private Drink drink;
     private ArrayAdapter<String> nhomMonAdapter;
     private byte[] hinhAnhByte;
     private PickImageRequest pickImageRequest;
     private OnClickOkListener onClickOkListener;
 
-    public ThemMonDialog(Context context, List<DrinkType> listDrinkType) {
+    public AddDrinkDialog(Context context, List<DrinkType> listDrinkType) {
         super(context, R.layout.dialog_them_mon);
         setCancelable(true);
 
@@ -61,6 +62,29 @@ public class ThemMonDialog extends BaseDialog {
 
     }
 
+    public AddDrinkDialog(Context context, Drink drink, List<DrinkType> listDrinkType) {
+        this(context, listDrinkType);
+        this.drink = drink;
+
+        spnNhomMon.setEnabled(false);
+
+        Glide.with(getContext())
+                .load(drink.getImageToShow())
+                .placeholder(R.drawable.ic_food)
+                .error(R.drawable.ic_food)
+                .into(ivHinhAnh);
+
+        edtTenMon.setText(drink.getName());
+        edtDescription.setText(drink.getDescription());
+        edtDonGia.setText(drink.getPrice() + "");
+
+        for (DrinkType nhomMon : listDrinkType) {
+            if (nhomMon.getID() == drink.getBeverageId()) {
+                spnNhomMon.setSelection(listDrinkType.indexOf(nhomMon));
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
         super.onClick(v);
@@ -72,6 +96,7 @@ public class ThemMonDialog extends BaseDialog {
                 }
 
                 Drink drink = new Drink();
+                drink.setID(this.drink.getID());
                 drink.setImage(Utils.getStringImage(hinhAnhByte));
                 drink.setName(edtTenMon.getText().toString().trim());
                 drink.setDescription(edtDescription.getText().toString().trim());
@@ -129,44 +154,6 @@ public class ThemMonDialog extends BaseDialog {
                     .into(ivHinhAnh);
         }
 
-    }
-
-    public void clear() {
-        ivHinhAnh.setImageBitmap(null);
-        hinhAnhByte = null;
-        edtDescription.setText(null);
-        edtTenMon.setText(null);
-        edtDonGia.setText(null);
-
-        edtDonGia.setError(null);
-        edtTenMon.setError(null);
-        btnChonHinh.setError(null);
-        edtDescription.setError(null);
-
-    }
-
-    public void fillContent(Drink mon) {
-        //hinhAnhByte = mon.getHinhAnh();
-        Glide.with(getContext())
-                .load(hinhAnhByte)
-                .placeholder(R.drawable.ic_food)
-                .error(R.drawable.ic_food)
-                .into(ivHinhAnh);
-        edtTenMon.setText(mon.getName());
-        edtDescription.setText(mon.getDescription());
-        edtDonGia.setText(mon.getPrice() + "");
-
-        for (DrinkType nhomMon : listDrinkType) {
-            if (nhomMon.getID() == mon.getBeverageId()) {
-                spnNhomMon.setSelection(listDrinkType.indexOf(nhomMon));
-            }
-        }
-//
-//        if (mon.getHienThi() == 0) {
-//            ckbHienThi.setChecked(false);
-//        } else {
-//            ckbHienThi.setChecked(true);
-//        }
     }
 
     public void setPickImageRequest(PickImageRequest pickImageRequest) {

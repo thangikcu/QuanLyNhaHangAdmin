@@ -71,7 +71,7 @@
             android:drawablePadding="8dp"
             android:hint="@string/mieu_ta"
             android:lines="1"
-            android:maxLength="20"
+            android:maxLength="500"
             android:maxLines="1"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -79,8 +79,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
 
             <TextView
                 style="@style/CommonTextView"

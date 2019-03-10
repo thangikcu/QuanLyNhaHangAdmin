@@ -4,11 +4,12 @@
     package="com.coffeehouse">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.coffeehouse.AppInstance"
+        android:hardwareAccelerated="true"
         android:allowBackup="false"
         android:appComponentFactory="whateverString"
         android:icon="@mipmap/ic_launcher"
@@ -21,8 +22,8 @@
 
         <activity
             android:name="com.coffeehouse.view.activity.MainActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize">
 
         </activity>
 

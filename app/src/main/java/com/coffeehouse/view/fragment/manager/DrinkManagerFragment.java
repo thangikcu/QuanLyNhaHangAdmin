@@ -23,7 +23,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 
 import com.coffeehouse.R;
-import com.coffeehouse.adapter.MonManagerAdapter;
+import com.coffeehouse.adapter.DrinkManagerAdapter;
 import com.coffeehouse.interfaces.MainView;
 import com.coffeehouse.model.entity.Drink;
 import com.coffeehouse.model.entity.DrinkType;
@@ -32,8 +32,8 @@ import com.coffeehouse.restapi.ResponseData;
 import com.coffeehouse.restapi.TheCoffeeService;
 import com.coffeehouse.util.MyPermission;
 import com.coffeehouse.util.Utils;
+import com.coffeehouse.view.dialog.AddDrinkDialog;
 import com.coffeehouse.view.dialog.ConfirmDialog;
-import com.coffeehouse.view.dialog.ThemMonDialog;
 import com.coffeehouse.view.fragment.BaseFragment;
 
 import java.io.IOException;
@@ -48,25 +48,25 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 
 @SuppressLint("ValidFragment")
-public class MonManagerFragment extends BaseFragment implements View.OnClickListener, MonManagerAdapter.OnClickDrink {
+public class DrinkManagerFragment extends BaseFragment implements View.OnClickListener, DrinkManagerAdapter.OnClickDrink {
     public static final int SELECT_PHOTO = 1;
 
     private Button btnThemMoi;
     private SearchView edtTimKiemMon;
     private RecyclerView monRecyclerView;
-    private MonManagerAdapter monManagerAdapter;
-    private ThemMonDialog themMonDialog;
+    private DrinkManagerAdapter drinkManagerAdapter;
+    private AddDrinkDialog addDrinkDialog;
 
     private Spinner spnNhomMon;
-    private List<DrinkType> nhomMonList;
+    private List<DrinkType> listDrinkType;
     private ArrayAdapter<String> nhomMonAdapter;
     private Animation animationZoom;
     private MainView mainView;
     private ArrayList<Drink> drinkList;
-    private ThemMonDialog.OnPickImageResult onPickImageResult;
+    private AddDrinkDialog.OnPickImageResult onPickImageResult;
 
 
-    public MonManagerFragment(MainView mainView) {
+    public DrinkManagerFragment(MainView mainView) {
         super(R.layout.fragment_mon_manager);
         this.mainView = mainView;
     }
@@ -85,13 +85,13 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onResponse(Call<ResponseData<List<DrinkType>>> call, Response<ResponseData<List<DrinkType>>> response) {
                 if (response.body() != null) {
-                    nhomMonList = response.body().getContent();
+                    listDrinkType = response.body().getContent();
 
                     ArrayList<DrinkType> drinkTypes = new ArrayList<>();
                     DrinkType element = new DrinkType();
                     element.setName("All");
                     drinkTypes.add(0, element);
-                    drinkTypes.addAll(nhomMonList);
+                    drinkTypes.addAll(listDrinkType);
 
                     nhomMonAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, drinkTypes);
 
@@ -123,8 +123,8 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
                     drinkList = new ArrayList<>();
                     drinkTypeList.forEach(drinkType -> drinkList.addAll(drinkType.getListDrinks()));
 
-                    monManagerAdapter = new MonManagerAdapter(drinkList, MonManagerFragment.this);
-                    monRecyclerView.setAdapter(monManagerAdapter);
+                    drinkManagerAdapter = new DrinkManagerAdapter(drinkList, DrinkManagerFragment.this);
+                    monRecyclerView.setAdapter(drinkManagerAdapter);
                 }
             }
 
@@ -168,11 +168,11 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 monRecyclerView.startAnimation(animationZoom);
 
-                if (monManagerAdapter != null) {
+                if (drinkManagerAdapter != null) {
                     if (position == 0) {
-                        monManagerAdapter.changeData(drinkList);
+                        drinkManagerAdapter.changeData(drinkList);
                     } else {
-                        monManagerAdapter.changeData(getListDrinkByDrinkTypeId(nhomMonList.get(position - 1).getID()));
+                        drinkManagerAdapter.changeData(getListDrinkByDrinkTypeId(listDrinkType.get(position - 1).getID()));
                     }
                 }
             }
@@ -199,8 +199,8 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
                     }
                 }
 
-                if (monManagerAdapter != null) {
-                    monManagerAdapter.changeData(monTimKiem);
+                if (drinkManagerAdapter != null) {
+                    drinkManagerAdapter.changeData(monTimKiem);
                 }
                 return false;
             }
@@ -242,8 +242,6 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
                 }
             }
 /*
-
-
             if(imagePath == null && uri != null){
                 imagePath = uri.toString();
             }
@@ -269,15 +267,15 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_them_thuc_don) {
-            ThemMonDialog themMonDialog = new ThemMonDialog(getContext(), nhomMonList);
-            themMonDialog.setPickImageRequest(onResult -> {
+            AddDrinkDialog addDrinkDialog = new AddDrinkDialog(getContext(), listDrinkType);
+            addDrinkDialog.setPickImageRequest(onResult -> {
                 this.onPickImageResult = onResult;
                 if (MyPermission.requirePermission(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         MyPermission.PERMISSION_ACCESS_LIBRARY)) {
                     startPickImage();
                 }
             });
-            themMonDialog.setOnClickOkListener(drink -> {
+            addDrinkDialog.setOnClickOkListener(drink -> {
                 mainView.showLoading();
                 ResfulApi.getInstance().getService(TheCoffeeService.class)
                         .addDrink(ResfulApi.createJsonRequestBody(drink))
@@ -286,7 +284,7 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
                             public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
                                 mainView.hideLoading();
                                 if (response.body() != null && response.body().getContent().equals("Successful")) {
-                                    mainView.showMessage("Thêm món mới thành công!");
+                                    mainView.showMessage("Thêm mới thành công!");
                                     getDrinkTypeList();
                                 } else {
                                     mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error!");
@@ -300,7 +298,7 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
                             }
                         });
             });
-            themMonDialog.show();
+            addDrinkDialog.show();
         }
     }
 
@@ -327,10 +325,37 @@ public class MonManagerFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void onClickUpdate(Drink drink) {
-/*
-        ThemMonDialog themMonDialog = new ThemMonDialog(getContext());
-        themMonDialog.show();
-*/
+        AddDrinkDialog updateDrinkDialog = new AddDrinkDialog(getContext(), drink, listDrinkType);
+        updateDrinkDialog.setPickImageRequest(onResult -> {
+            this.onPickImageResult = onResult;
+            if (MyPermission.requirePermission(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MyPermission.PERMISSION_ACCESS_LIBRARY)) {
+                startPickImage();
+            }
+        });
+        updateDrinkDialog.setOnClickOkListener(drinkUpdate -> {
+            mainView.showLoading();
+            ResfulApi.getInstance().getService(TheCoffeeService.class)
+                    .updateDrink(ResfulApi.createJsonRequestBody(drinkUpdate))
+                    .enqueue(new Callback<ResponseData<String>>() {
+                        @Override
+                        public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
+                            mainView.hideLoading();
+                            if (response.body() != null && response.body().getContent().equals("Successful")) {
+                                mainView.showMessage("Cập nhật thành công!");
+                                getDrinkTypeList();
+                            } else {
+                                mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error!");
+                            }
+                        }
 
+                        @Override
+                        public void onFailure(Call<ResponseData<String>> call, Throwable t) {
+                            mainView.hideLoading();
+                            mainView.showMessage(t.getMessage());
+                        }
+                    });
+        });
+        updateDrinkDialog.show();
     }
 }

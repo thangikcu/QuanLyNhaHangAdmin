@@ -10,8 +10,8 @@ import android.widget.Button;
 import com.coffeehouse.R;
 import com.coffeehouse.interfaces.MainView;
 import com.coffeehouse.view.fragment.manager.BanManagerFragment;
+import com.coffeehouse.view.fragment.manager.DrinkManagerFragment;
 import com.coffeehouse.view.fragment.manager.LoaiMonManagerFragment;
-import com.coffeehouse.view.fragment.manager.MonManagerFragment;
 import com.coffeehouse.view.fragment.manager.NhanVienManagerFragment;
 
 import java.util.Objects;
@@ -21,7 +21,7 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
     private Button btnSelected, btnQlTinTuc, btnQlBan, btnQlMon, btnQlLoaiMon, btnQlNhanVien, btnQlKhachHang;
 
     private Fragment fragmentIsShow;
-    private MonManagerFragment monManagerFragment;
+    private DrinkManagerFragment drinkManagerFragment;
     private BanManagerFragment banManagerFragment;
     private NhanVienManagerFragment nhanVienManagerFragment;
     private LoaiMonManagerFragment loaiMonManagerFragment;
@@ -64,10 +64,10 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_ql_thuc_don:
-                if (monManagerFragment == null) {
-                    monManagerFragment = new MonManagerFragment(mainView);
+                if (drinkManagerFragment == null) {
+                    drinkManagerFragment = new DrinkManagerFragment(mainView);
                 }
-                fillFrame(monManagerFragment, btnQlMon);
+                fillFrame(drinkManagerFragment, btnQlMon);
                 break;
             default:
                 break;

@@ -1,5 +1,6 @@
 package com.coffeehouse.model.entity;
 
+import android.text.TextUtils;
 import android.util.Base64;
 
 public class Drink {
@@ -59,6 +60,9 @@ public class Drink {
     }
 
     public byte[] getImageToShow() {
-        return Base64.decode(image, Base64.DEFAULT);
+        if (!TextUtils.isEmpty(image)) {
+            return Base64.decode(image, Base64.DEFAULT);
+        }
+        return null;
     }
 }

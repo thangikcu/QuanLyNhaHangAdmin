@@ -45,5 +45,11 @@ public interface TheCoffeeService {
 
     @POST("api/drink/save")
     Call<ResponseData<String>> addDrink(@Body RequestBody requestBody);
+
+    @POST("api/drink/update")
+    Call<ResponseData<String>> updateDrink(@Body RequestBody requestBody);
+
+    @GET("api/employee/generate-qr-code")
+    Call<ResponseData<String>> generateQrcode();
 }
 

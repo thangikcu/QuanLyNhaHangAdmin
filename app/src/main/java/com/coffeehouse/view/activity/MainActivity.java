@@ -20,7 +20,6 @@ import com.coffeehouse.R;
 import com.coffeehouse.interfaces.MainView;
 import com.coffeehouse.util.Utils;
 import com.coffeehouse.view.dialog.ChangePasswordDialog;
-import com.coffeehouse.view.dialog.ErrorDialog;
 import com.coffeehouse.view.dialog.NotifiDialog;
 import com.coffeehouse.view.fragment.ChamCongFragment;
 import com.coffeehouse.view.fragment.ManagerFragment;
@@ -65,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Fragment fragmentIsShow;
 
     private ProgressDialog progressDialog;
-    private ErrorDialog errorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         popupMenu = new PopupMenu(this, btnDropDown);
         popupMenu.getMenuInflater().inflate(R.menu.account_menu, popupMenu.getMenu());
-
-        errorDialog = new ErrorDialog(this);
     }
 
     public void setEvents() {
@@ -134,11 +130,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (AppInstance.getLoginUser().isAdmin()) {
             btnManager.setVisibility(View.VISIBLE);
             btnThongKe.setVisibility(View.VISIBLE);
-            btnChamCong.setVisibility(View.GONE);
         } else {
             btnManager.setVisibility(View.GONE);
             btnThongKe.setVisibility(View.GONE);
-            btnChamCong.setVisibility(View.VISIBLE);
         }
     }
 
@@ -155,15 +149,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_thong_ke:
                 if (thongKeFragment == null) {
-
                     thongKeFragment = new ThongKeFragment();
-                } else {
-                    thongKeFragment.showInfo();
                 }
                 fillFrame(thongKeFragment, btnThongKe);
                 break;
             case R.id.btn_cham_cong:
-                if (chamCongFragment == null) chamCongFragment = new ChamCongFragment();
+                if (chamCongFragment == null) chamCongFragment = new ChamCongFragment(this);
                 fillFrame(chamCongFragment, btnChamCong);
                 break;
             case R.id.btn_setting:
@@ -242,10 +233,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         transaction.commitAllowingStateLoss();
         fragmentIsShow = fragment;
-    }
-
-    public void showGetDatasFailDialog() {
-        errorDialog.show();
     }
 
     @Override

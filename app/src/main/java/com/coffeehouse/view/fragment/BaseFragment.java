@@ -9,11 +9,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import com.coffeehouse.AppInstance;
 import com.coffeehouse.R;
 import com.coffeehouse.interfaces.CommondActionForView;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by Thanggun99 on 16/03/2017.
@@ -57,7 +58,9 @@ public abstract class BaseFragment extends Fragment implements CommondActionForV
     }
 
     @Override
-    public abstract void findViews(View view);
+    public void findViews(View view) {
+
+    }
 
     @Override
     public abstract void initComponents();

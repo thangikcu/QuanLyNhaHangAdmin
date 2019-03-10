@@ -3,6 +3,12 @@ package com.coffeehouse.service;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.coffeehouse.model.entity.Admin;
+import com.coffeehouse.model.entity.Ban;
+import com.coffeehouse.model.entity.DatBan;
+import com.coffeehouse.model.entity.KhachHang;
+import com.coffeehouse.model.entity.YeuCau;
+import com.coffeehouse.util.Utils;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -11,14 +17,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import com.coffeehouse.model.entity.Admin;
-import com.coffeehouse.model.entity.Ban;
-import com.coffeehouse.model.entity.DatBan;
-import com.coffeehouse.model.entity.KhachHang;
-import com.coffeehouse.model.entity.YeuCau;
-import com.coffeehouse.util.API;
-import com.coffeehouse.util.Utils;
 
 /**
  * Created by Thanggun99 on 14/02/2017.
@@ -48,7 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         map.put("type", "1");
         map.put("token", s);
 
-        API.callService(API.REGISTER_TOKEN_URL, null, map);
+        //API.callService(API.REGISTER_TOKEN_URL, null, map);
     }
 
     @Override

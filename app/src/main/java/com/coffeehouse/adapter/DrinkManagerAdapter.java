@@ -18,14 +18,14 @@ import java.util.List;
  * Created by Thanggun99 on 11/03/2017.
  */
 
-public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.ViewHolder> {
+public class DrinkManagerAdapter extends RecyclerView.Adapter<DrinkManagerAdapter.ViewHolder> {
 
     private List<Drink> allDrinkList;
     private List<Drink> drinkList;
     private OnClickDrink onClickDrink;
     private int currentPosition;
 
-    public MonManagerAdapter(List<Drink> allDrinkList, OnClickDrink onClickDrink) {
+    public DrinkManagerAdapter(List<Drink> allDrinkList, OnClickDrink onClickDrink) {
         this.allDrinkList = allDrinkList;
         drinkList = allDrinkList;
         this.onClickDrink = onClickDrink;
@@ -128,7 +128,8 @@ public class MonManagerAdapter extends RecyclerView.Adapter<MonManagerAdapter.Vi
             tvTenMon = itemView.findViewById(R.id.tv_ten_mon);
 
             itemView.findViewById(R.id.btn_update).setOnClickListener(this);
-            itemView.findViewById(R.id.btn_delete).setOnClickListener(this);
+//            itemView.findViewById(R.id.btn_delete).setOnClickListener(this);
+            itemView.findViewById(R.id.btn_delete).setVisibility(View.GONE);
         }
 
         @Override

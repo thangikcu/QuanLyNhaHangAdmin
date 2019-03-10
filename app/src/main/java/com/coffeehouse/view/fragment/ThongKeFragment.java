@@ -4,10 +4,12 @@ package com.coffeehouse.view.fragment;
 import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coffeehouse.R;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import butterknife.BindView;
 
@@ -31,8 +33,8 @@ public class ThongKeFragment extends BaseFragment {
     TextView tvSoLuongNhomMon;
     @BindView(R.id.tv_so_luong_mon)
     TextView tvSoLuongMon;
-    @BindView(R.id.layout_thong_tin_dat_ban)
-    LinearLayout layoutThongTinDatBan;
+    @BindView(R.id.graph)
+    GraphView graph;
 
     public ThongKeFragment() {
         super(R.layout.fragment_thong_ke);
@@ -50,19 +52,16 @@ public class ThongKeFragment extends BaseFragment {
 
     @Override
     public void setEvents() {
-        showInfo();
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        graph.addSeries(series);
     }
 
-    public void showInfo() {
-     /*   tvSoLuongHoaDonChuaTinhTien.setText(database.getHoaDonChuaTinhTienList().size() + " hoá đơn");
-        tvSoLuongHoaDonTinhTien.setText(hoaDonList.size() + " hoá đơn");
-        tvSoLuongKhachHang.setText(database.getKhachHangList().size() + " khách hàng");
-        tvSoLuongMon.setText(database.getMonList().size() + " món");
-        tvSoLuongNhomMon.setText(database.getNhomMonList().size() + " nhóm");
-        tvSoLuongDatBan.setText((database.getDatBanChuaSetBanList().size() + database.getDatBanChuaTinhTienList().size()) + " đặt trước");*/
-
-//        tvTongTien.setText(Utils.formatMoney(tongTien));
-    }
 
 
 }

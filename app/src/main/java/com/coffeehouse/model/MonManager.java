@@ -2,13 +2,13 @@ package com.coffeehouse.model;
 
 import android.os.AsyncTask;
 
-import java.util.ArrayList;
-
 import com.coffeehouse.model.entity.Mon;
 import com.coffeehouse.model.entity.NhomMon;
 import com.coffeehouse.presenter.MainPresenter;
-import com.coffeehouse.view.dialog.ThemMonDialog;
-import com.coffeehouse.view.fragment.manager.MonManagerFragment;
+import com.coffeehouse.view.dialog.AddDrinkDialog;
+import com.coffeehouse.view.fragment.manager.DrinkManagerFragment;
+
+import java.util.ArrayList;
 
 /**
  * Created by Thanggun99 on 23/03/2017.
@@ -19,9 +19,9 @@ public class MonManager {
     private Database database;
     private MainPresenter mainPresenter;
     private MonManagerView monManagerView;
-    private MonManagerFragment fragment;
+    private DrinkManagerFragment fragment;
     private Mon currentMon;
-    private ThemMonDialog themMonDialog;
+    private AddDrinkDialog addDrinkDialog;
 
     public MonManager(MainPresenter mainPresenter) {
 
@@ -45,12 +45,12 @@ public class MonManager {
         return database.getListMonByTenMon(keyWord);
     }
 
-    public void setFragment(MonManagerFragment fragment) {
-        this.fragment = fragment;
+    public DrinkManagerFragment getFragment() {
+        return fragment;
     }
 
-    public MonManagerFragment getFragment() {
-        return fragment;
+    public void setFragment(DrinkManagerFragment fragment) {
+        this.fragment = fragment;
     }
 
     public void addMon(final Mon mon) {
@@ -159,13 +159,13 @@ public class MonManager {
         return currentMon;
     }
 
-    public ThemMonDialog getThemMonDialog() {
-        return themMonDialog;
+    public AddDrinkDialog getAddDrinkDialog() {
+        return addDrinkDialog;
     }
 
 
-    public void setThemMonDialog(ThemMonDialog themMonDialog) {
-        this.themMonDialog = themMonDialog;
+    public void setAddDrinkDialog(AddDrinkDialog addDrinkDialog) {
+        this.addDrinkDialog = addDrinkDialog;
     }
 
     public ArrayList<Mon> getMonList() {
