@@ -2,6 +2,8 @@ package com.coffeehouse.view.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
@@ -38,6 +40,16 @@ public class ThongKeFragment extends BaseFragment {
 
     public ThongKeFragment() {
         super(R.layout.fragment_thong_ke);
+
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void loadData() {
 
     }
 

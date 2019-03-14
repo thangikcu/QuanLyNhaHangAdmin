@@ -45,7 +45,7 @@ public class AddDrinkDialog extends BaseDialog {
     private OnClickOkListener onClickOkListener;
 
     public AddDrinkDialog(Context context, List<DrinkType> listDrinkType) {
-        super(context, R.layout.dialog_them_mon);
+        super(context, R.layout.dialog_add_drink);
         setCancelable(true);
 
         ckbHienThi.setVisibility(View.GONE);
@@ -67,6 +67,8 @@ public class AddDrinkDialog extends BaseDialog {
         this.drink = drink;
 
         spnNhomMon.setEnabled(false);
+
+        hinhAnhByte = drink.getImageToShow();
 
         Glide.with(getContext())
                 .load(drink.getImageToShow())
@@ -96,8 +98,12 @@ public class AddDrinkDialog extends BaseDialog {
                 }
 
                 Drink drink = new Drink();
-                drink.setID(this.drink.getID());
-                drink.setImage(Utils.getStringImage(hinhAnhByte));
+
+                if (this.drink != null) {
+                    drink.setID(this.drink.getID());
+                }
+
+                drink.setDrinkImage(Utils.getStringImage(hinhAnhByte));
                 drink.setName(edtTenMon.getText().toString().trim());
                 drink.setDescription(edtDescription.getText().toString().trim());
                 drink.setPrice(Integer.parseInt(edtDonGia.getText().toString().trim()));
@@ -118,12 +124,12 @@ public class AddDrinkDialog extends BaseDialog {
         if (TextUtils.isEmpty(edtDonGia.getText())) {
             cancel = true;
             focusView = edtDonGia;
-            edtDonGia.setError(Utils.getStringByRes(R.string.nhap_so_luong));
+            edtDonGia.setError("Nhập đơn giá");
         }
         if (TextUtils.isEmpty(edtDescription.getText())) {
             cancel = true;
             focusView = edtDescription;
-            edtDescription.setError(Utils.getStringByRes(R.string.nhap_don_vi_tinh));
+            edtDescription.setError("Nhập miêu tả");
         }
         if (TextUtils.isEmpty(edtTenMon.getText())) {
             cancel = true;

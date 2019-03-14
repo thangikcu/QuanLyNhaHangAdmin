@@ -25,6 +25,12 @@ public interface TheCoffeeService {
     @GET("api/desk/get-all")
     Call<ResponseData<List<Desk>>> getListDesk();
 
+    @GET("api/desk/save-desk")
+    Call<ResponseData<String>> addDesk(@Query("deskId") String deskId);
+
+    @GET("api/desk/delete-desk-by-id")
+    Call<ResponseData<String>> deleteDesk(@Query("deskId") String deskId);
+
     @GET("api/drink/menu")
     Call<ResponseData<List<DrinkType>>> getListDrink();
 
@@ -49,7 +55,19 @@ public interface TheCoffeeService {
     @POST("api/drink/update")
     Call<ResponseData<String>> updateDrink(@Body RequestBody requestBody);
 
+    @POST("api/beverage/save")
+    Call<ResponseData<String>> addDrinkType(@Body RequestBody requestBody);
+
+    @POST("api/beverage/update-beverage")
+    Call<ResponseData<String>> updateDrinkType(@Body RequestBody requestBody);
+
     @GET("api/employee/generate-qr-code")
     Call<ResponseData<String>> generateQrcode();
+
+    @GET("api/employee/get-employees")
+    Call<ResponseData<List<User>>> getListEmployee();
+
+    @POST("api/employee/register")
+    Call<ResponseData<User>> addEmployee(@Body RequestBody requestBody);
 }
 

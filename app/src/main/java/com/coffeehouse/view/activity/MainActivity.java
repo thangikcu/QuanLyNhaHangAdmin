@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import com.coffeehouse.interfaces.MainView;
 import com.coffeehouse.util.Utils;
 import com.coffeehouse.view.dialog.ChangePasswordDialog;
 import com.coffeehouse.view.dialog.NotifiDialog;
+import com.coffeehouse.view.fragment.BaseFragment;
 import com.coffeehouse.view.fragment.ChamCongFragment;
 import com.coffeehouse.view.fragment.ManagerFragment;
 import com.coffeehouse.view.fragment.PhucVuFragment;
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ButterKnife.bind(this);
 
         showLoading();
@@ -86,6 +85,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             progressDialog.cancel();
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
+        if (outState != null) {
+            outState.clear();
+        }
     }
 
     public void initComponents() {
@@ -206,13 +213,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void showPhucVu() {
         if (phucVuFragment == null) {
             phucVuFragment = new PhucVuFragment(this);
-        } else {
-
         }
         fillFrame(phucVuFragment, btnPhucVu);
     }
 
-    private void fillFrame(final Fragment fragment, Button button) {
+    private void fillFrame(final BaseFragment fragment, Button button) {
         if (button.isSelected()) return;
 
         btnSelected.setSelected(false);
@@ -228,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (fragment.isAdded()) {
             transaction.show(fragment);
             fragment.onResume();
+            fragment.loadData();
         } else {
             transaction.add(R.id.frame, fragment);
         }

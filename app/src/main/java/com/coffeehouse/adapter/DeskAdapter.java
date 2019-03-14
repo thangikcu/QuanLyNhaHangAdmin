@@ -40,7 +40,7 @@ public class DeskAdapter extends RecyclerView.Adapter<DeskAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Desk ban = banList.get(position);
 
-        holder.tvBan.setText(ban.getDeskName());
+        holder.tvBan.setText(ban.getId());
 
         holder.tvBan.setBackgroundResource(ban.getIdResBgBan());
 

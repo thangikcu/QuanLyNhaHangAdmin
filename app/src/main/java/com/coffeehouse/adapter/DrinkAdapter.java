@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.coffeehouse.R;
 import com.coffeehouse.model.entity.Drink;
 import com.coffeehouse.util.Utils;
@@ -45,11 +46,12 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.ViewHolder> 
         holder.tvDonGia.setText(Utils.formatMoney(mon.getPrice()));
         holder.ratingBar.setRating(4.5f);
         holder.tvPointRating.setText("50");
-       /* Glide.with(context)
-                .load(mon.getHinhAnh())
+
+        Glide.with(holder.itemView.getContext())
+                .load(mon.getImageToShow())
                 .error(R.drawable.ic_food)
                 .placeholder(R.drawable.ic_food)
-                .into(holder.ivMon);*/
+                .into(holder.ivMon);
     }
 
     @Override

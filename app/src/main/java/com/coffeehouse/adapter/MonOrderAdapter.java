@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.coffeehouse.R;
 import com.coffeehouse.model.entity.OrderDetail;
 import com.coffeehouse.util.Utils;
@@ -23,7 +24,6 @@ import java.util.List;
 
 public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHolder> {
     private List<OrderDetail> orderDetailList;
-    private int currentPosition;
     private OnClickDrinkOrder onClickDrinkOrder;
 
     public MonOrderAdapter(OnClickDrinkOrder onClickDrinkOrder) {
@@ -45,11 +45,12 @@ public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHo
         holder.tvThanhTien.setText(Utils.formatMoney(monOrder.getPrice() * monOrder.getCount()));
         holder.ratingBar.setRating(4.5f);
         holder.tvRatingPoint.setText(50 + "");
-//        Glide.with(context)
-//                .load(monOrder.getHinhAnh())
-//                .placeholder(R.drawable.ic_food)
-//                .error(R.drawable.ic_food)
-//                .into(holder.ivMon);
+
+        Glide.with(holder.itemView.getContext())
+                .load(monOrder.getDrinkImageData())
+                .placeholder(R.drawable.ic_food)
+                .error(R.drawable.ic_food)
+                .into(holder.ivMon);
 
     }
 
@@ -63,27 +64,6 @@ public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHo
         orderDetailList = data;
         notifyDataSetChanged();
     }
-
-    public OrderDetail getItem(int position) {
-        return orderDetailList.get(position);
-    }
-
-    public void updateMonOrder(OrderDetail currentMonOrder) {
-        notifyItemChanged(orderDetailList.indexOf(currentMonOrder));
-    }
-
-    public void deleteMonOrder() {
-        notifyItemRemoved(currentPosition);
-    }
-
-    public int getCurrentPosition() {
-        return currentPosition;
-    }
-
-    public int getPositionOf(OrderDetail monOrder) {
-        return orderDetailList.indexOf(monOrder);
-    }
-
 
     public interface OnClickDrinkOrder {
         void onClick(OrderDetail orderDetail);

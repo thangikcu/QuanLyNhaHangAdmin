@@ -9,7 +9,7 @@ public class Drink {
     private long id;
     private String name;
     private long price;
-    private String image;
+    private String drinkImage;
 
     public long getBeverageId() {
         return beverageId;
@@ -51,17 +51,17 @@ public class Drink {
         this.price = value;
     }
 
-    public String getImage() {
-        return image;
+    public String getDrinkImage() {
+        return drinkImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setDrinkImage(String drinkImage) {
+        this.drinkImage = drinkImage;
     }
 
     public byte[] getImageToShow() {
-        if (!TextUtils.isEmpty(image)) {
-            return Base64.decode(image, Base64.DEFAULT);
+        if (!TextUtils.isEmpty(drinkImage)) {
+            return Base64.decode(drinkImage, Base64.DEFAULT);
         }
         return null;
     }

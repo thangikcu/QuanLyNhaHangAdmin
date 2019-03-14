@@ -29,9 +29,9 @@ public class Desk {
         this.serving = serving;
     }
 
-    public String getDeskName() {
-        return "Bàn " + id;
-    }
+//    public String getDeskName() {
+//        return "Bàn " + id;
+//    }
 
     public int getIdResBgBan() {
         if (serving) {

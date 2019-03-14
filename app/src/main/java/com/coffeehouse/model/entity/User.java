@@ -1,6 +1,12 @@
 package com.coffeehouse.model.entity;
 
+import android.text.TextUtils;
+import android.util.Base64;
+
 public class User {
+    public static final String MANAGER = "MANAGER";
+    public static final String EMPLOYEE = "EMPLOYEE";
+
     private String avatarData;
     private String dob;
     private String fullName;
@@ -10,6 +16,8 @@ public class User {
     private String rule;
     private long salary;
     private String status;
+//    private String personId = TextUtils.isEmpty(id)
+//            ? id : UUID.randomUUID().toString().substring(0, 19);
 
     public String getAvatarData() {
         return avatarData;
@@ -86,4 +94,21 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public byte[] getImageToShow() {
+        if (!TextUtils.isEmpty(avatarData)) {
+            return Base64.decode(avatarData, Base64.DEFAULT);
+        }
+        return null;
+    }
+/*
+    public Date getDobInDate() {
+        try {
+            return SimpleDateFormat.getTimeInstance().parse(dob);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return Calendar.getInstance().getTime();
+    }*/
 }

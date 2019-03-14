@@ -52,4 +52,5 @@ public class AppInstance extends Application {
     public static boolean isLogin(){
         return loginUser != null;
     }
+
 }

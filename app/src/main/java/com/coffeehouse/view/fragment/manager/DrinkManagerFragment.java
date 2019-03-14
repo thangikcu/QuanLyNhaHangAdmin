@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -75,7 +76,13 @@ public class DrinkManagerFragment extends BaseFragment implements View.OnClickLi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        loadData();
+    }
+
+    @Override
+    public void loadData() {
         view.postDelayed(this::getDrinkTypeList, 500);
+
     }
 
     private void getDrinkTypeList() {
@@ -186,7 +193,8 @@ public class DrinkManagerFragment extends BaseFragment implements View.OnClickLi
         edtTimKiemMon.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                edtTimKiemMon.onActionViewCollapsed();
+//                edtTimKiemMon.onActionViewCollapsed();
+                edtTimKiemMon.clearFocus();
 
                 ArrayList<Drink> monTimKiem = new ArrayList<>();
 
@@ -207,6 +215,9 @@ public class DrinkManagerFragment extends BaseFragment implements View.OnClickLi
 
             @Override
             public boolean onQueryTextChange(String keyWord) {
+                if (drinkManagerAdapter != null && TextUtils.isEmpty(keyWord)) {
+                    drinkManagerAdapter.showAllData();
+                }
                 return true;
             }
         });
@@ -267,6 +278,10 @@ public class DrinkManagerFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_them_thuc_don) {
+            if (listDrinkType == null) {
+                return;
+            }
+
             AddDrinkDialog addDrinkDialog = new AddDrinkDialog(getContext(), listDrinkType);
             addDrinkDialog.setPickImageRequest(onResult -> {
                 this.onPickImageResult = onResult;

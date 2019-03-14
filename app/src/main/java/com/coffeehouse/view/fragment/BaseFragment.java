@@ -1,6 +1,7 @@
 package com.coffeehouse.view.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -41,6 +42,12 @@ public abstract class BaseFragment extends Fragment implements CommondActionForV
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+        outState.clear();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         this.view = inflater.inflate(layoutResource, container, false);
@@ -59,6 +66,10 @@ public abstract class BaseFragment extends Fragment implements CommondActionForV
 
     @Override
     public void findViews(View view) {
+
+    }
+
+    public void loadData() {
 
     }
 

@@ -135,7 +135,6 @@ public class Utils {
     }
 
 
-
     //bo dau tieng viet
     private static char[] SOURCE_CHARACTERS = {'À', 'Á', 'Â', 'Ã', 'È', 'É',
             'Ê', 'Ì', 'Í', 'Ò', 'Ó', 'Ô', 'Õ', 'Ù', 'Ú', 'Ý', 'à', 'á', 'â',
@@ -179,16 +178,16 @@ public class Utils {
         return sb.toString();
     }
 
-    public static String getStringImage(byte[] bytes){
+    public static String getStringImage(byte[] bytes) {
 
         String encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
         return encodedImage;
     }
 
-    public static byte[] getByteImage(Bitmap bmp){
+    public static byte[] getByteImage(Bitmap bmp) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.PNG, 30, baos);
         return baos.toByteArray();
     }
 

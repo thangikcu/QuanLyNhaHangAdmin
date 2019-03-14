@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="360dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/bg_dialog"
+    android:orientation="vertical"
+    android:padding="@dimen/margin"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <RelativeLayout
+                android:id="@+id/btn_chon_hinh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary">
+
+                <TextView
+                    android:id="@+id/tv_chon_hinh"
+                    style="@style/CommonTextView"
+                    android:layout_centerInParent="true"
+                    android:text="@string/chon_hinh"
+                    android:textColor="@color/white" />
+
+                <ImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="120dp"
+                    android:layout_height="80dp" />
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/edt_fullname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:drawablePadding="8dp"
+                android:hint="Tên đầy đủ"
+                android:isScrollContainer="true"
+                android:lines="1"
+                android:maxLength="100"
+                android:maxLines="1"
+                android:scrollbars="horizontal"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edt_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:hint="Ngày sinh"
+                android:inputType="text"
+                android:maxLength="15"
+                android:maxLines="1"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tuổi:"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/edt_so_dien_thoai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Số điện thoại"
+            android:inputType="phone"
+            android:maxLength="15"
+            android:maxLines="1"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edt_salary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:hint="Mức lương"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="9"
+            android:maxLines="1"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!--    <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/CommonTextView"
+                    android:text="Vai trò: "
+                    android:textColor="@color/colorTextField"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spn_rule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </TableRow>-->
+    </LinearLayout>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp">
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_radius"
+            android:text="@string/dong_y"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_radius"
+            android:text="@string/huy"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+    </TableRow>
+</LinearLayout>

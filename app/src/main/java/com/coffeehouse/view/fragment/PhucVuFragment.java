@@ -2,6 +2,8 @@ package com.coffeehouse.view.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -117,9 +119,14 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        loadData();
+    }
+
+    @Override
+    public void loadData() {
         view.postDelayed(() -> {
             getListDesk();
             getMenu();
@@ -199,7 +206,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
                             mainView.hideLoading();
                             if (response.body() != null && response.body().getContent().equals("Successful")) {
                                 getDeskInfo(currentDesk);
-                                showSnackbar(currentDesk.getDeskName() + ": + " + count + drink.getName());
+                                showSnackbar(currentDesk.getId() + ": + " + count + drink.getName());
                             } else {
                                 mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error");
                             }
@@ -236,7 +243,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
                                 deskAdapter.updateBan(currentDesk);
                                 showDeskInfo(currentDesk);
                                 showBanPhucVu(response.body().getContent());
-                                showSnackbar("+Hóa đơn mới " + currentDesk.getDeskName());
+                                showSnackbar("+Hóa đơn mới " + currentDesk.getId());
                             } else {
                                 mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error");
                             }
@@ -311,7 +318,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
 
     private void showDeskInfo(Desk desk) {
         currentDesk = desk;
-        tvTenBan.setText(desk.getDeskName());
+        tvTenBan.setText(desk.getId());
         tvTrangThai.setText(desk.getStringTrangThai());
 
         tvTenBan.startAnimation(animationZoom);
@@ -326,6 +333,17 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
         tvTongTien.setText(Utils.formatMoney(bill.getTotalPrice()));
         tvTongTien.startAnimation(animationAlpha);
         tvGioDen.setText(bill.getCreateDate());
+
+        if (drinkList != null) {
+            bill.getOrderDetails().forEach(drinkOrder -> {
+                for (int i = 0; i < drinkList.size(); i++) {
+                    if (drinkOrder.getDrinkId() == drinkList.get(i).getID()) {
+                        drinkOrder.setDrinkImageData(drinkList.get(i).getImageToShow());
+                        break;
+                    }
+                }
+            });
+        }
 
         monOrderAdapter.changeData(bill.getOrderDetails());
     }
@@ -358,7 +376,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
 
         listMon.setLayoutManager(new LinearLayoutManager(getContext()));
         listMon.setAdapter(drinkAdapter = new DrinkAdapter(drink -> {
-            OrderDialog orderDialog = new OrderDialog(getContext(), currentDesk.getDeskName(),
+            OrderDialog orderDialog = new OrderDialog(getContext(), currentDesk.getId(),
                     drink);
             orderDialog.setOnClickOk(count -> {
                 OrderDrink(drink, count);
@@ -430,7 +448,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
         }
 
         if (drink.get() != null) {
-            OrderDialog orderDialog = new OrderDialog(getContext(), currentDesk.getDeskName(),
+            OrderDialog orderDialog = new OrderDialog(getContext(), currentDesk.getId(),
                     drink.get());
             orderDialog.setOnClickOk(count -> {
                 OrderDrink(drink.get(), count);
@@ -490,7 +508,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
                                     currentDesk.setServing(false);
                                     deskAdapter.updateBan(currentDesk);
                                     showDeskInfo(currentDesk);
-                                    showSnackbar(currentDesk.getDeskName() + " thanh toán +" + Utils.formatMoney(currentBill.getTotalPrice()));
+                                    showSnackbar(currentDesk.getId() + " thanh toán +" + Utils.formatMoney(currentBill.getTotalPrice()));
                                     currentBill = null;
                                 } else {
                                     mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error");

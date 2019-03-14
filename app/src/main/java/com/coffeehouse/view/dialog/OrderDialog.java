@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.coffeehouse.R;
 import com.coffeehouse.model.entity.Drink;
 
@@ -53,11 +54,12 @@ public class OrderDialog extends BaseDialog {
         tvTitle.setText(deskName);
         tvTenMon.setText(drink.getName());
         tvDescription.setText(drink.getDescription());
-//        Glide.with(getContext())
-//                .load(drink.getHinhAnh())
-//                .placeholder(R.drawable.ic_food)
-//                .error(R.drawable.ic_food)
-//                .into(ivMon);
+
+        Glide.with(getContext())
+                .load(drink.getImageToShow())
+                .placeholder(R.drawable.ic_food)
+                .error(R.drawable.ic_food)
+                .into(ivMon);
     }
 
     @Override

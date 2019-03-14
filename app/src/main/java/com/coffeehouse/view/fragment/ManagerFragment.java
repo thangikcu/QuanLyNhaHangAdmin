@@ -2,6 +2,8 @@ package com.coffeehouse.view.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -9,9 +11,9 @@ import android.widget.Button;
 
 import com.coffeehouse.R;
 import com.coffeehouse.interfaces.MainView;
-import com.coffeehouse.view.fragment.manager.BanManagerFragment;
+import com.coffeehouse.view.fragment.manager.DeskManagerFragment;
 import com.coffeehouse.view.fragment.manager.DrinkManagerFragment;
-import com.coffeehouse.view.fragment.manager.LoaiMonManagerFragment;
+import com.coffeehouse.view.fragment.manager.DrinkTypeManagerFragment;
 import com.coffeehouse.view.fragment.manager.NhanVienManagerFragment;
 
 import java.util.Objects;
@@ -22,14 +24,22 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
 
     private Fragment fragmentIsShow;
     private DrinkManagerFragment drinkManagerFragment;
-    private BanManagerFragment banManagerFragment;
+    private DeskManagerFragment deskManagerFragment;
     private NhanVienManagerFragment nhanVienManagerFragment;
-    private LoaiMonManagerFragment loaiMonManagerFragment;
+    private DrinkTypeManagerFragment drinkTypeManagerFragment;
     private MainView mainView;
 
     public ManagerFragment(MainView mainView) {
         super(R.layout.fragment_manager);
         this.mainView = mainView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mainView.showLoading();
+        view.postDelayed(() -> btnQlMon.performClick(), 500);
     }
 
     @Override
@@ -69,12 +79,30 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
                 }
                 fillFrame(drinkManagerFragment, btnQlMon);
                 break;
+            case R.id.btn_ql_loai_mon:
+                if (drinkTypeManagerFragment == null) {
+                    drinkTypeManagerFragment = new DrinkTypeManagerFragment(mainView);
+                }
+                fillFrame(drinkTypeManagerFragment, btnQlLoaiMon);
+                break;
+            case R.id.btn_ql_ban:
+                if (deskManagerFragment == null) {
+                    deskManagerFragment = new DeskManagerFragment(mainView);
+                }
+                fillFrame(deskManagerFragment, btnQlBan);
+                break;
+            case R.id.btn_ql_nhan_vien:
+                if (nhanVienManagerFragment == null) {
+                    nhanVienManagerFragment = new NhanVienManagerFragment(mainView);
+                }
+                fillFrame(nhanVienManagerFragment, btnQlNhanVien);
+                break;
             default:
                 break;
         }
     }
 
-    private void fillFrame(final Fragment fragment, Button button) {
+    private void fillFrame(final BaseFragment fragment, Button button) {
         if (button.isSelected()) return;
 
         btnSelected.setSelected(false);
@@ -91,6 +119,7 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
         if (fragment.isAdded()) {
             transaction.show(fragment);
             fragment.onResume();
+            fragment.loadData();
         } else {
             transaction.add(R.id.manager_frame, fragment);
         }

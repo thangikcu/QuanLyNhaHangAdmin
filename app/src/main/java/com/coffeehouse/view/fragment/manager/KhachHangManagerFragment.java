@@ -32,8 +32,6 @@ public class KhachHangManagerFragment extends BaseFragment {
 
     @Override
     public void findViews(View view) {
-        tinTucrecyclerView = (RecyclerView) view.findViewById(R.id.list_nhan_vien);
-        btnThemMoi = (Button) view.findViewById(R.id.btn_them_nhan_vien);
     }
 
     @Override

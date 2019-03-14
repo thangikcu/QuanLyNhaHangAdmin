@@ -6,6 +6,7 @@ public class OrderDetail {
     private long id;
     private long price;
     private long count;
+    private byte[] drinkImageData;
 
     public long getDrinkId() {
         return drinkId;
@@ -45,5 +46,13 @@ public class OrderDetail {
 
     public void setCount(long count) {
         this.count = count;
+    }
+
+    public byte[] getDrinkImageData() {
+        return drinkImageData;
+    }
+
+    public void setDrinkImageData(byte[] drinkImageData) {
+        this.drinkImageData = drinkImageData;
     }
 }
