@@ -64,10 +64,17 @@ public interface TheCoffeeService {
     @GET("api/employee/generate-qr-code")
     Call<ResponseData<String>> generateQrcode();
 
+    @POST("api/employee/decrypt-qr-code")
+    Call<ResponseData<String>> decryptQrcode(@Body RequestBody requestBody);
+
     @GET("api/employee/get-employees")
     Call<ResponseData<List<User>>> getListEmployee();
 
     @POST("api/employee/register")
     Call<ResponseData<User>> addEmployee(@Body RequestBody requestBody);
+
+    @GET("api/employee/get-employee-by-id")
+    Call<ResponseData<User>> getWorkingTimeReport(@Query("employeeId") String employeeId,
+                                                  @Query("month") String month);
 }
 

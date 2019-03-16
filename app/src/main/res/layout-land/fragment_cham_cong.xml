@@ -1,41 +1,157 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:layout_margin="8dp"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tháng:"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spn_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Năm:"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spn_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" />
+
+            <Button
+                android:id="@+id/btn_view"
+                style="@style/Base.TextAppearance.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_search_black_24dp"
+                android:src="@drawable/ic_btn_sell"
+                android:text="Tìm kiếm"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_generate_qrcode"
+                style="@style/Base.TextAppearance.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Hiển thị mã qrcode"
+                android:textAllCaps="false"
+                android:visibility="visible" />
+
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical|end">
+
+                <Button
+                    android:id="@+id/btn_check_in"
+                    style="@style/Base.TextAppearance.AppCompat.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/login"
+                    android:text="CheckIn"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_check_out"
+                    style="@style/Base.TextAppearance.AppCompat.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:drawableStart="@drawable/logout"
+                    android:text="CheckOut"
+                    android:textAllCaps="false" />
+            </TableRow>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+    <com.evrencoskun.tableview.TableView
+        android:id="@+id/table_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:background="@color/unselected_background_color"
+        app:column_header_height="@dimen/table_view_cell_height"
+        app:row_header_width="@dimen/table_view_row_header_width"
+        app:selected_color="@color/selected_background_color"
+        app:separator_color="@color/separator_color"
+        app:shadow_color="@color/shadow_background_color"
+        app:unselected_color="@color/unselected_background_color" />
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center_vertical">
 
-        <Button
-            android:id="@+id/btn_check_in"
-            style="@style/Base.TextAppearance.AppCompat.Button"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CheckIn"
-            android:textAllCaps="false" />
+            android:text="Tổng số công:"
+            android:textColor="@color/black" />
 
-        <Button
-            android:id="@+id/btn_check_out"
-            style="@style/Base.TextAppearance.AppCompat.Button"
+        <TextView
+            android:id="@+id/tv_so_cong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CheckOut"
-            android:textAllCaps="false" />
+            android:layout_marginStart="8dp"
+            android:text="_"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng số giờ làm:"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_so_gio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="_"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </TableRow>
-
-
-    <Button
-        android:id="@+id/btn_generate_qrcode"
-        style="@style/Base.TextAppearance.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Hiển thị mã qrcode"
-        android:textAllCaps="false" />
-
 </LinearLayout>

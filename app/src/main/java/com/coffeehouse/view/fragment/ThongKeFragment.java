@@ -59,7 +59,6 @@ public class ThongKeFragment extends BaseFragment {
 
     @Override
     public void initComponents() {
-
     }
 
     @Override

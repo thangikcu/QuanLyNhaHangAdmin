@@ -4,21 +4,36 @@ package com.coffeehouse.view.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.ArrayMap;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.coffeehouse.AppInstance;
 import com.coffeehouse.R;
+import com.coffeehouse.adapter.WorkingReportAdapter;
 import com.coffeehouse.interfaces.MainView;
+import com.coffeehouse.model.entity.User;
+import com.coffeehouse.model.entity.WorkingReport;
 import com.coffeehouse.restapi.ResfulApi;
 import com.coffeehouse.restapi.ResponseData;
 import com.coffeehouse.restapi.TheCoffeeService;
 import com.coffeehouse.util.MyPermission;
+import com.coffeehouse.util.Utils;
 import com.coffeehouse.view.dialog.QRCodeDialog;
+import com.evrencoskun.tableview.TableView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import retrofit2.Call;
@@ -36,8 +51,25 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
     Button btnCheckOut;
     @BindView(R.id.btn_generate_qrcode)
     Button btnGenerateQrcode;
+    @BindView(R.id.spn_month)
+    Spinner spnMonth;
+    @BindView(R.id.spn_year)
+    Spinner spnYear;
+    @BindView(R.id.btn_view)
+    Button btnView;
+    @BindView(R.id.table_view)
+    TableView tableView;
+    @BindView(R.id.tv_so_cong)
+    TextView tvSoCong;
+    @BindView(R.id.tv_so_gio)
+    TextView tvSoGio;
+
     private MainView mainView;
+    private boolean isCheckIn;
     private String titleScanQRCode;
+    private WorkingReportAdapter workingReportAdapter;
+    private List<String> listMonth;
+    private List<String> listYear;
 
     @SuppressLint("ValidFragment")
     public ChamCongFragment(MainView mainView) {
@@ -46,8 +78,90 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void initComponents() {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        mainView.showLoading();
+
+        setCurrentMonth();
+        view.postDelayed(this::getWorkingReport, 500);
+    }
+
+    private void getWorkingReport() {
+        mainView.showLoading();
+        int month = Integer.parseInt(listMonth.get(spnMonth.getSelectedItemPosition()));
+        int year = Integer.parseInt(listYear.get(spnYear.getSelectedItemPosition()));
+
+        ResfulApi.getInstance().getService(TheCoffeeService.class)
+                .getWorkingTimeReport(AppInstance.getLoginUser().getID(),
+                        month + "")
+                .enqueue(new Callback<ResponseData<User>>() {
+                    @Override
+                    public void onResponse(Call<ResponseData<User>> call, Response<ResponseData<User>> response) {
+                        mainView.hideLoading();
+                        if (response.body() != null && response.body().getContent() != null) {
+                            List<WorkingReport> listWorkingReport = response.body().getContent().getListWorkingReport();
+                            workingReportAdapter.setData(listWorkingReport);
+
+                            int soCong = 0;
+                            float soGio = 0;
+
+                            for (int i = 0; i < listWorkingReport.size(); i++) {
+                                WorkingReport workingReport = listWorkingReport.get(i);
+
+                                if (workingReport.isValidate()) {
+                                    ++soCong;
+                                    soGio += Utils.getDifferenceTime(workingReport.getStartDate(),
+                                            workingReport.getEndDate());
+                                }
+                            }
+
+                            tvSoCong.setText(soCong + " Công");
+                            tvSoGio.setText(soGio + " Giờ");
+                        } else {
+                            workingReportAdapter.setData(null);
+                            tvSoCong.setText("_");
+                            tvSoGio.setText("_");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseData<User>> call, Throwable t) {
+                        mainView.hideLoading();
+                        mainView.showMessage("Error!");
+                        workingReportAdapter.setData(null);
+                        tvSoCong.setText("_");
+                        tvSoGio.setText("_");
+                    }
+                });
+    }
+
+    @Override
+    public void initComponents() {
+        listMonth = new ArrayList<>();
+
+        for (int i = 1; i <= 12; i++) {
+            listMonth.add(i + "");
+        }
+
+        ArrayAdapter monthAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item,
+                listMonth);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnMonth.setAdapter(monthAdapter);
+
+
+        listYear = new ArrayList<>();
+
+        int startYear = 2017;
+        int endYear = 2024;
+        for (int i = startYear; i <= endYear; i++) {
+            listYear.add(i + "");
+        }
+
+        ArrayAdapter yearAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item,
+                listYear);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnYear.setAdapter(yearAdapter);
     }
 
     @Override
@@ -55,11 +169,25 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
         btnGenerateQrcode.setOnClickListener(this);
         btnCheckIn.setOnClickListener(this);
         btnCheckOut.setOnClickListener(this);
+        btnView.setOnClickListener(this);
+
+        workingReportAdapter = new WorkingReportAdapter(getContext());
+        tableView.setAdapter(workingReportAdapter);
+        workingReportAdapter.setData(null);
+    }
+
+    private void setCurrentMonth() {
+        Calendar calendar = Calendar.getInstance();
+        spnMonth.setSelection(listMonth.indexOf((calendar.get(Calendar.MONTH) + 1) + ""));
+        spnYear.setSelection(listYear.indexOf(calendar.get(Calendar.YEAR) + ""));
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_view:
+                getWorkingReport();
+                break;
             case R.id.btn_generate_qrcode:
                 mainView.showLoading();
                 ResfulApi.getInstance().getService(TheCoffeeService.class)
@@ -83,21 +211,22 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
                 });
                 break;
             case R.id.btn_check_in:
-                startScanQRCode("CheckIn");
+                startScanQRCode(true);
                 break;
             case R.id.btn_check_out:
-                startScanQRCode("CheckOut");
+                startScanQRCode(false);
                 break;
         }
     }
 
-    private void startScanQRCode(String title) {
-        this.titleScanQRCode = title;
+    private void startScanQRCode(boolean checkIn) {
+        this.isCheckIn = checkIn;
+        this.titleScanQRCode = checkIn ? "CheckIn" : "CheckOut";
         if (MyPermission.requirePermission(this, new String[]{Manifest.permission.CAMERA},
                 MyPermission.PERMISSION_USE_CAMERA)) {
             IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-            integrator.setPrompt(title);
+            integrator.setPrompt(titleScanQRCode);
             integrator.setCameraId(0);
             integrator.setBeepEnabled(true);
             integrator.setBarcodeImageEnabled(true);
@@ -106,14 +235,44 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    private void decryptQRcode(String qrcodeData) {
+        mainView.showLoading();
+
+        ArrayMap<String, Object> requestBody = new ArrayMap<>();
+
+        requestBody.put("employeeId", AppInstance.getLoginUser().getID());
+        requestBody.put("isCheckIn", isCheckIn);
+        requestBody.put("qrCode", qrcodeData);
+
+        ResfulApi.getInstance().getService(TheCoffeeService.class)
+                .decryptQrcode(ResfulApi.createJsonRequestBody(requestBody))
+                .enqueue(new Callback<ResponseData<String>>() {
+                    @Override
+                    public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
+                        mainView.hideLoading();
+                        if (response.body() != null && response.body().getContent().equals("Successful")) {
+                            mainView.showMessage("Hoàn thành!");
+                            setCurrentMonth();
+                            getWorkingReport();
+                        } else {
+                            mainView.showMessage(response.body() != null ? response.body().getContent() : "Error!");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseData<String>> call, Throwable t) {
+                        mainView.hideLoading();
+                        mainView.showMessage("Error!");
+                    }
+                });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
-            if (result.getContents() == null) {
-                Toast.makeText(getContext(), "Scan fail!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), result.getContents(), Toast.LENGTH_SHORT).show();
+            if (result.getContents() != null) {
+                decryptQRcode(result.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -127,10 +286,11 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
             case MyPermission.PERMISSION_USE_CAMERA:
                 if (MyPermission.onRequestResult(getContext(), grantResults,
                         R.string.ban_can_cap_quyen_de_su_dung_camera)) {
-                    startScanQRCode(titleScanQRCode);
+                    startScanQRCode(isCheckIn);
                 }
                 break;
             default:
         }
     }
+
 }

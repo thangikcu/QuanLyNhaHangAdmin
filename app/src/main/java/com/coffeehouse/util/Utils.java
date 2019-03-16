@@ -41,6 +41,39 @@ import java.util.Map;
  */
 
 public class Utils {
+
+    //1 minute = 60 seconds
+    //1 hour = 60 x 60 = 3600
+    //1 day = 3600 x 24 = 86400
+    public static float getDifferenceTime(Date startDate, Date endDate) {
+
+        //milliseconds
+        long different = endDate.getTime() - startDate.getTime();
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+//        long elapsedDays = different / daysInMilli;
+//        different = different % daysInMilli;
+
+        float elapsedHours = (float) different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+//
+//        System.out.printf(
+//                "%d days, %d hours, %d minutes, %d seconds%n",
+//                elapsedDays,
+//                elapsedHours, elapsedMinutes, elapsedSeconds);
+
+        return (float) Math.round(elapsedHours * 100) / 100;
+    }
+
     private static int id = 0;
 
     public static String formatMoney(long s) {

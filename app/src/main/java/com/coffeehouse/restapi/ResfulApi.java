@@ -36,7 +36,9 @@ public class ResfulApi {
                         .port(8080)
                         .build())
                 .client(new OkHttpClient.Builder().build())
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                        .create()))
                 .build();
     }
 

@@ -3,6 +3,10 @@ package com.coffeehouse.model.entity;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class User {
     public static final String MANAGER = "MANAGER";
     public static final String EMPLOYEE = "EMPLOYEE";
@@ -16,8 +20,8 @@ public class User {
     private String rule;
     private long salary;
     private String status;
-//    private String personId = TextUtils.isEmpty(id)
-//            ? id : UUID.randomUUID().toString().substring(0, 19);
+    @SerializedName("dtos")
+    private List<WorkingReport> listWorkingReport;
 
     public String getAvatarData() {
         return avatarData;
@@ -85,6 +89,14 @@ public class User {
 
     public boolean isAdmin() {
         return rule.equals("MANAGER");
+    }
+
+    public List<WorkingReport> getListWorkingReport() {
+        return listWorkingReport;
+    }
+
+    public void setListWorkingReport(List<WorkingReport> listWorkingReport) {
+        this.listWorkingReport = listWorkingReport;
     }
 
     public String getPassword() {

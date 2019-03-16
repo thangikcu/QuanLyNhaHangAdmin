@@ -4,7 +4,6 @@ package com.coffeehouse.view.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +21,7 @@ import java.util.Objects;
 public class ManagerFragment extends BaseFragment implements View.OnClickListener {
     private Button btnSelected, btnQlTinTuc, btnQlBan, btnQlMon, btnQlLoaiMon, btnQlNhanVien, btnQlKhachHang;
 
-    private Fragment fragmentIsShow;
+    private BaseFragment fragmentIsShow;
     private DrinkManagerFragment drinkManagerFragment;
     private DeskManagerFragment deskManagerFragment;
     private NhanVienManagerFragment nhanVienManagerFragment;
@@ -40,6 +39,13 @@ public class ManagerFragment extends BaseFragment implements View.OnClickListene
 
         mainView.showLoading();
         view.postDelayed(() -> btnQlMon.performClick(), 500);
+    }
+
+    @Override
+    public void loadData() {
+        if (fragmentIsShow != null) {
+            fragmentIsShow.loadData();
+        }
     }
 
     @Override
