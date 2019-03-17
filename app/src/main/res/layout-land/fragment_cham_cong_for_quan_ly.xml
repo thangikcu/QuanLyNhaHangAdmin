@@ -1,0 +1,71 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackgroudFrame"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <TableRow
+            android:id="@+id/tbr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/unselected_background_color"
+            android:gravity="end|center_vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/CommonTextView"
+                android:paddingLeft="@dimen/margin"
+                android:text="Danh sách nhân viên"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:isScrollContainer="true"
+                android:maxLines="1"
+                android:queryHint="@string/tim_kiem"
+                android:scrollbars="vertical"
+                android:textSize="12sp" />
+
+
+            <Button
+                android:id="@+id/btn_generate_qrcode"
+                style="@style/Base.TextAppearance.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:drawableStart="@drawable/qrcode"
+                android:drawablePadding="8dp"
+                android:text="Chấm công"
+                android:textAllCaps="false"
+                android:visibility="visible" />
+
+        </TableRow>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/layout_padding">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_list"
+                android:scrollbars="vertical" />
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>
+

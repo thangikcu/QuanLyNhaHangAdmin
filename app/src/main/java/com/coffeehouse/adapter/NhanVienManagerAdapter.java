@@ -25,6 +25,7 @@ public class NhanVienManagerAdapter extends RecyclerView.Adapter<NhanVienManager
     private List<User> allNhanVienList;
     private List<User> nhanVienList;
     private OnClickUpdateUser onClickUpdateUser;
+    private boolean disableUpdate = false;
 
     public NhanVienManagerAdapter(List<User> allNhanVienList, OnClickUpdateUser onClickUpdateUser) {
         this.allNhanVienList = allNhanVienList;
@@ -32,9 +33,13 @@ public class NhanVienManagerAdapter extends RecyclerView.Adapter<NhanVienManager
         this.onClickUpdateUser = onClickUpdateUser;
     }
 
+    public void setDisableUpdate(boolean disableUpdate) {
+        this.disableUpdate = disableUpdate;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nhan_vien_manager, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nhan_vien_manager, parent, false), disableUpdate);
     }
 
     @Override
@@ -86,10 +91,14 @@ public class NhanVienManagerAdapter extends RecyclerView.Adapter<NhanVienManager
         TextView tvStatus;
         @BindView(R.id.btn_update)
         View btnUpdate;
+        private boolean disableUpdate;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, boolean disableUpdate) {
             super(itemView);
+            this.disableUpdate = disableUpdate;
             ButterKnife.bind(this, itemView);
+
+            btnUpdate.setVisibility(disableUpdate ? View.GONE : View.VISIBLE);
         }
 
         public void bindData(User user, OnClickUpdateUser onClickUpdateUser) {
@@ -104,7 +113,12 @@ public class NhanVienManagerAdapter extends RecyclerView.Adapter<NhanVienManager
             tvSoDienThoai.setText(user.getPhoneNumber());
             tvStatus.setText(user.getStatus());
 
-            btnUpdate.setOnClickListener(view -> onClickUpdateUser.onClick(user));
+
+            if (disableUpdate) {
+                itemView.setOnClickListener(view -> onClickUpdateUser.onClick(user));
+            } else {
+                btnUpdate.setOnClickListener(view -> onClickUpdateUser.onClick(user));
+            }
         }
     }
 

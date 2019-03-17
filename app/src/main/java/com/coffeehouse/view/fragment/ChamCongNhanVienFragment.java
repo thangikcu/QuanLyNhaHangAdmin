@@ -12,6 +12,7 @@ import android.util.ArrayMap;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -26,7 +27,6 @@ import com.coffeehouse.restapi.ResponseData;
 import com.coffeehouse.restapi.TheCoffeeService;
 import com.coffeehouse.util.MyPermission;
 import com.coffeehouse.util.Utils;
-import com.coffeehouse.view.dialog.QRCodeDialog;
 import com.evrencoskun.tableview.TableView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,13 +45,11 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 @SuppressLint("ValidFragment")
-public class ChamCongFragment extends BaseFragment implements View.OnClickListener {
+public class ChamCongNhanVienFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.btn_check_in)
     Button btnCheckIn;
     @BindView(R.id.btn_check_out)
     Button btnCheckOut;
-    @BindView(R.id.btn_generate_qrcode)
-    Button btnGenerateQrcode;
     @BindView(R.id.spn_month)
     Spinner spnMonth;
     @BindView(R.id.spn_year)
@@ -63,8 +62,15 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
     TextView tvSoCong;
     @BindView(R.id.tv_so_gio)
     TextView tvSoGio;
+    @BindView(R.id.tv_nhan_vien)
+    TextView tvNhanVien;
+    @BindView(R.id.btn_back)
+    ImageView btnBack;
 
     private MainView mainView;
+    private boolean viewFromNhanVien = true;
+    private User user = AppInstance.getLoginUser();
+    private OnClickBackListener onClickBackListener;
     private boolean isCheckIn;
     private String titleScanQRCode;
     private WorkingReportAdapter workingReportAdapter;
@@ -72,19 +78,17 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
     private List<String> listYear;
 
     @SuppressLint("ValidFragment")
-    public ChamCongFragment(MainView mainView) {
-        super(R.layout.fragment_cham_cong);
+    public ChamCongNhanVienFragment(MainView mainView) {
+        super(R.layout.fragment_cham_cong_nhan_vien);
         this.mainView = mainView;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mainView.showLoading();
-
-        setCurrentMonth();
-        view.postDelayed(this::getWorkingReport, 500);
+    @SuppressLint("ValidFragment")
+    public ChamCongNhanVienFragment(MainView mainView, User user, OnClickBackListener onClickBackListener) {
+        this(mainView);
+        viewFromNhanVien = false;
+        this.user = user;
+        this.onClickBackListener = onClickBackListener;
     }
 
     private void getWorkingReport() {
@@ -93,8 +97,8 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
         int year = Integer.parseInt(listYear.get(spnYear.getSelectedItemPosition()));
 
         ResfulApi.getInstance().getService(TheCoffeeService.class)
-                .getWorkingTimeReport(AppInstance.getLoginUser().getID(),
-                        month + "")
+                .getWorkingTimeReport(user.getID(),
+                        month + "/" + year)
                 .enqueue(new Callback<ResponseData<User>>() {
                     @Override
                     public void onResponse(Call<ResponseData<User>> call, Response<ResponseData<User>> response) {
@@ -137,6 +141,35 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mainView.showLoading();
+
+        setCurrentMonth();
+        view.postDelayed(this::getWorkingReport, 500);
+    }
+
+    @Override
+    public void setEvents() {
+        btnCheckIn.setOnClickListener(this);
+        btnCheckOut.setOnClickListener(this);
+        btnView.setOnClickListener(this);
+
+        workingReportAdapter = new WorkingReportAdapter(getContext());
+        tableView.setAdapter(workingReportAdapter);
+        workingReportAdapter.setData(null);
+
+
+        btnBack.setVisibility(viewFromNhanVien ? View.GONE : View.VISIBLE);
+        tvNhanVien.setVisibility(viewFromNhanVien ? View.GONE : View.VISIBLE);
+        btnCheckIn.setVisibility(viewFromNhanVien ? View.VISIBLE : View.GONE);
+        btnCheckOut.setVisibility(viewFromNhanVien ? View.VISIBLE : View.GONE);
+
+        tvNhanVien.setText(String.format("Nhân viên: %s", user.getFullName()));
+    }
+
+    @Override
     public void initComponents() {
         listMonth = new ArrayList<>();
 
@@ -164,16 +197,36 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
         spnYear.setAdapter(yearAdapter);
     }
 
-    @Override
-    public void setEvents() {
-        btnGenerateQrcode.setOnClickListener(this);
-        btnCheckIn.setOnClickListener(this);
-        btnCheckOut.setOnClickListener(this);
-        btnView.setOnClickListener(this);
+    private void decryptQRcode(String qrcodeData) {
+        mainView.showLoading();
 
-        workingReportAdapter = new WorkingReportAdapter(getContext());
-        tableView.setAdapter(workingReportAdapter);
-        workingReportAdapter.setData(null);
+        ArrayMap<String, Object> requestBody = new ArrayMap<>();
+
+        requestBody.put("employeeId", user.getID());
+        requestBody.put("isCheckIn", isCheckIn);
+        requestBody.put("qrCode", qrcodeData);
+
+        ResfulApi.getInstance().getService(TheCoffeeService.class)
+                .decryptQrcode(ResfulApi.createJsonRequestBody(requestBody))
+                .enqueue(new Callback<ResponseData<String>>() {
+                    @Override
+                    public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
+                        mainView.hideLoading();
+                        if (response.body() != null && response.body().getContent().equals("Successful")) {
+                            mainView.showMessage("Hoàn thành!");
+                            setCurrentMonth();
+                            getWorkingReport();
+                        } else {
+                            mainView.showMessage(response.body() != null ? response.body().getContent() : "Error!");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseData<String>> call, Throwable t) {
+                        mainView.hideLoading();
+                        mainView.showMessage("Error!");
+                    }
+                });
     }
 
     private void setCurrentMonth() {
@@ -187,28 +240,6 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
         switch (view.getId()) {
             case R.id.btn_view:
                 getWorkingReport();
-                break;
-            case R.id.btn_generate_qrcode:
-                mainView.showLoading();
-                ResfulApi.getInstance().getService(TheCoffeeService.class)
-                        .generateQrcode().enqueue(new Callback<ResponseData<String>>() {
-                    @Override
-                    public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
-                        mainView.hideLoading();
-                        if (response.body() != null && response.body().getContent() != null) {
-                            new QRCodeDialog(getContext(), response.body().getContent())
-                                    .show();
-                        } else {
-                            mainView.showMessage("Error!");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseData<String>> call, Throwable t) {
-                        mainView.hideLoading();
-                        mainView.showMessage(t.getMessage());
-                    }
-                });
                 break;
             case R.id.btn_check_in:
                 startScanQRCode(true);
@@ -235,36 +266,9 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private void decryptQRcode(String qrcodeData) {
-        mainView.showLoading();
-
-        ArrayMap<String, Object> requestBody = new ArrayMap<>();
-
-        requestBody.put("employeeId", AppInstance.getLoginUser().getID());
-        requestBody.put("isCheckIn", isCheckIn);
-        requestBody.put("qrCode", qrcodeData);
-
-        ResfulApi.getInstance().getService(TheCoffeeService.class)
-                .decryptQrcode(ResfulApi.createJsonRequestBody(requestBody))
-                .enqueue(new Callback<ResponseData<String>>() {
-                    @Override
-                    public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
-                        mainView.hideLoading();
-                        if (response.body() != null && response.body().getContent().equals("Successful")) {
-                            mainView.showMessage("Hoàn thành!");
-                            setCurrentMonth();
-                            getWorkingReport();
-                        } else {
-                            mainView.showMessage(response.body() != null ? response.body().getContent() : "Error!");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseData<String>> call, Throwable t) {
-                        mainView.hideLoading();
-                        mainView.showMessage("Error!");
-                    }
-                });
+    @OnClick(R.id.btn_back)
+    public void onViewClicked() {
+        onClickBackListener.onClickBack();
     }
 
     @Override
@@ -293,4 +297,7 @@ public class ChamCongFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    public interface OnClickBackListener {
+        void onClickBack();
+    }
 }

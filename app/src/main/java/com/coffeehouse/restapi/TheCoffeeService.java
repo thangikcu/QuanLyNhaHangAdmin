@@ -3,6 +3,7 @@ package com.coffeehouse.restapi;
 import com.coffeehouse.model.entity.Bill;
 import com.coffeehouse.model.entity.Desk;
 import com.coffeehouse.model.entity.DrinkType;
+import com.coffeehouse.model.entity.TurnOver;
 import com.coffeehouse.model.entity.User;
 
 import java.util.List;
@@ -76,5 +77,9 @@ public interface TheCoffeeService {
     @GET("api/employee/get-employee-by-id")
     Call<ResponseData<User>> getWorkingTimeReport(@Query("employeeId") String employeeId,
                                                   @Query("month") String month);
+
+    @GET("api/order-history/turn-over")
+    Call<ResponseData<List<TurnOver>>> getTurnOver(@Query("yearOrMonth") String yearOrMonth,
+                                                   @Query("turnOverStatus") String turnOverStatus);
 }
 

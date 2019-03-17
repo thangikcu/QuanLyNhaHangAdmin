@@ -13,8 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.coffeehouse.AppInstance;
 import com.coffeehouse.R;
 import com.coffeehouse.interfaces.MainView;
@@ -22,7 +24,8 @@ import com.coffeehouse.util.Utils;
 import com.coffeehouse.view.dialog.ChangePasswordDialog;
 import com.coffeehouse.view.dialog.NotifiDialog;
 import com.coffeehouse.view.fragment.BaseFragment;
-import com.coffeehouse.view.fragment.ChamCongFragment;
+import com.coffeehouse.view.fragment.ChamCongForQuanLyFragment;
+import com.coffeehouse.view.fragment.ChamCongNhanVienFragment;
 import com.coffeehouse.view.fragment.ManagerFragment;
 import com.coffeehouse.view.fragment.PhucVuFragment;
 import com.coffeehouse.view.fragment.SettingFragment;
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvRule;
     @BindView(R.id.btn_drop_down)
     ImageButton btnDropDown;
+    @BindView(R.id.iv_avatar)
+    ImageView ivAvatar;
 
     private TextView tvNumber;
     private Button btnSelected;
@@ -59,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private PhucVuFragment phucVuFragment;
     private SettingFragment settingFragment;
-    private ChamCongFragment chamCongFragment;
+    private ChamCongNhanVienFragment chamCongNhanVienFragment;
+    private ChamCongForQuanLyFragment chamCongForQuanLyFragment;
     private ManagerFragment managerFragment;
     private ThongKeFragment thongKeFragment;
     private Fragment fragmentIsShow;
@@ -140,6 +146,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setAdmin() {
+        Glide.with(this)
+                .load(AppInstance.getLoginUser().getImageToShow())
+                .placeholder(R.drawable.ic_account)
+                .error(R.drawable.ic_account)
+                .into(ivAvatar);
+
         tvName.setText(AppInstance.getLoginUser().getFullName());
         tvRule.setText(AppInstance.getLoginUser().getRule());
 
@@ -165,13 +177,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_thong_ke:
                 if (thongKeFragment == null) {
-                    thongKeFragment = new ThongKeFragment();
+                    thongKeFragment = new ThongKeFragment(this);
                 }
                 fillFrame(thongKeFragment, btnThongKe);
                 break;
             case R.id.btn_cham_cong:
-                if (chamCongFragment == null) chamCongFragment = new ChamCongFragment(this);
-                fillFrame(chamCongFragment, btnChamCong);
+                if (AppInstance.getLoginUser().isAdmin()) {
+                    if (chamCongForQuanLyFragment == null) {
+                        chamCongForQuanLyFragment = new ChamCongForQuanLyFragment(this);
+                    }
+                    fillFrame(chamCongForQuanLyFragment, btnChamCong);
+                } else {
+                    if (chamCongNhanVienFragment == null) {
+                        chamCongNhanVienFragment = new ChamCongNhanVienFragment(this);
+                    }
+                    fillFrame(chamCongNhanVienFragment, btnChamCong);
+                }
                 break;
             case R.id.btn_setting:
                 if (settingFragment == null) settingFragment = new SettingFragment();
@@ -203,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSelected.setSelected(false);
         fragmentIsShow = null;
         phucVuFragment = null;
-        chamCongFragment = null;
+        chamCongNhanVienFragment = null;
         managerFragment = null;
         thongKeFragment = null;
     }
