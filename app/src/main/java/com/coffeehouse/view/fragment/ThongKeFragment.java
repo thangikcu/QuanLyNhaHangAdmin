@@ -97,19 +97,12 @@ public class ThongKeFragment extends BaseFragment {
                             }
 
                             DataPoint[] points = dataPointList.toArray(new DataPoint[0]);
-//
-//                            DataPoint temp;
-//                            for (int i = 0; i < points.length; i++) {
-//                                for (int j = i + 1; j < points.length; j++) {
-//                                    if (points[i].getX() > points[j].getX()) {
-//                                        temp = points[i];
-//                                        points[i] = points[j];
-//                                        points[j] = temp;
-//                                    }
-//                                }
-//                            }
 
                             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
+                            series.setDrawDataPoints(true);
+                            series.setDrawBackground(true);
+                            series.setAnimated(true);
+
                             graph.removeAllSeries();
                             graph.addSeries(series);
                         } else {
