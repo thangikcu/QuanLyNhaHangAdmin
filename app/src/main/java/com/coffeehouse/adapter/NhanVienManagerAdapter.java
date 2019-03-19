@@ -87,6 +87,8 @@ public class NhanVienManagerAdapter extends RecyclerView.Adapter<NhanVienManager
         TextView tvRule;
         @BindView(R.id.tv_so_dien_thoai)
         TextView tvSoDienThoai;
+        @BindView(R.id.tv_work_hours)
+        TextView tvWorkHours;
         @BindView(R.id.tv_status)
         TextView tvStatus;
         @BindView(R.id.btn_update)
@@ -111,12 +113,14 @@ public class NhanVienManagerAdapter extends RecyclerView.Adapter<NhanVienManager
             tvName.setText(user.getFullName());
             tvRule.setText(user.getRule());
             tvSoDienThoai.setText(user.getPhoneNumber());
+            tvWorkHours.setText("Giờ làm mỗi ngày: " + user.getWorkingHours() + "h");
             tvStatus.setText(user.getStatus());
 
-
             if (disableUpdate) {
+                tvWorkHours.setVisibility(View.VISIBLE);
                 itemView.setOnClickListener(view -> onClickUpdateUser.onClick(user));
             } else {
+                tvWorkHours.setVisibility(View.GONE);
                 btnUpdate.setOnClickListener(view -> onClickUpdateUser.onClick(user));
             }
         }

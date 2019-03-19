@@ -66,7 +66,9 @@ public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHo
     }
 
     public interface OnClickDrinkOrder {
-        void onClick(OrderDetail orderDetail);
+        void onClickDrinkOrder(OrderDetail orderDetail);
+
+        void onClickDelete(OrderDetail orderDetail);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -86,19 +88,26 @@ public class MonOrderAdapter extends RecyclerView.Adapter<MonOrderAdapter.ViewHo
             tvSoLuong = itemView.findViewById(R.id.tv_so_luong);
             ivMon = itemView.findViewById(R.id.iv_mon);
             btnDelete = itemView.findViewById(R.id.btn_delete_mon_order);
-            btnDelete.setVisibility(View.GONE);
             tvTenMon = itemView.findViewById(R.id.tv_ten_mon);
 
             tvTenMon.setMovementMethod(new ScrollingMovementMethod());
             tvTenMon.setOnClickListener(this);
 
             itemView.setOnClickListener(this);
+            btnDelete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
 
-            onClickDrinkOrder.onClick(orderDetailList.get(getAdapterPosition()));
+            switch (v.getId()) {
+                case R.id.btn_delete_mon_order:
+                    onClickDrinkOrder.onClickDelete(orderDetailList.get(getAdapterPosition()));
+                    break;
+                default:
+                    onClickDrinkOrder.onClickDrinkOrder(orderDetailList.get(getAdapterPosition()));
+                    break;
+            }
         }
     }
 

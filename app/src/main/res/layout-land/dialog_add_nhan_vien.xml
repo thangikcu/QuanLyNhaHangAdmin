@@ -98,6 +98,19 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/edt_work_hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:hint="Giờ làm mỗi ngày"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="9"
+            android:maxLines="1"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <EditText
             android:id="@+id/edt_salary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

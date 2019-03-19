@@ -20,6 +20,7 @@ import com.coffeehouse.restapi.ResponseData;
 import com.coffeehouse.restapi.TheCoffeeService;
 import com.coffeehouse.util.Utils;
 import com.coffeehouse.view.dialog.AddDrinkTypeDialog;
+import com.coffeehouse.view.dialog.ConfirmDialog;
 import com.coffeehouse.view.fragment.BaseFragment;
 
 import java.util.ArrayList;
@@ -161,7 +162,34 @@ public class DrinkTypeManagerFragment extends BaseFragment implements DrinkTypeM
 
     @Override
     public void onClickDelete(DrinkType drinkType) {
+        ConfirmDialog confirmDialog = new ConfirmDialog(getContext());
+        confirmDialog.setContent(Utils.getStringByRes(R.string.xac_nhan),
+                "Xóa " + drinkType.getName() + "?");
 
+        confirmDialog.setOnClickOkListener(() -> {
+            confirmDialog.dismiss();
+            mainView.showLoading();
+            ResfulApi.getInstance().getService(TheCoffeeService.class)
+                    .deleteDrinkType(drinkType.getID())
+                    .enqueue(new Callback<ResponseData<String>>() {
+                        @Override
+                        public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
+                            mainView.hideLoading();
+                            if (response.body() != null && response.body().getContent().equals("Successful")) {
+                                mainView.showMessage("Xóa thành công!");
+                                getDrinkTypeList();
+                            } else {
+                                mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error!");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseData<String>> call, Throwable t) {
+                            mainView.hideLoading();
+                            mainView.showMessage(t.getMessage());
+                        }
+                    });
+        });
     }
 
     @Override

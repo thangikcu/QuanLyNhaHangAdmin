@@ -91,7 +91,7 @@ public class DrinkManagerFragment extends BaseFragment implements View.OnClickLi
                 .getAllDrinkType().enqueue(new Callback<ResponseData<List<DrinkType>>>() {
             @Override
             public void onResponse(Call<ResponseData<List<DrinkType>>> call, Response<ResponseData<List<DrinkType>>> response) {
-                if (response.body() != null) {
+                if (response.body() != null && response.body().getContent() != null) {
                     listDrinkType = response.body().getContent();
 
                     ArrayList<DrinkType> drinkTypes = new ArrayList<>();
@@ -106,6 +106,8 @@ public class DrinkManagerFragment extends BaseFragment implements View.OnClickLi
                     spnNhomMon.setAdapter(nhomMonAdapter);
 
                     getAllDrink();
+                } else {
+                    mainView.hideLoading();
                 }
             }
 
@@ -279,6 +281,7 @@ public class DrinkManagerFragment extends BaseFragment implements View.OnClickLi
     public void onClick(View v) {
         if (v.getId() == R.id.btn_them_thuc_don) {
             if (listDrinkType == null) {
+                mainView.showMessage("Bạn cần tạo loại đồ uống trước");
                 return;
             }
 
@@ -327,13 +330,33 @@ public class DrinkManagerFragment extends BaseFragment implements View.OnClickLi
     public void onClickDelete(Drink drink) {
         ConfirmDialog confirmDialog = new ConfirmDialog(getContext());
         confirmDialog.setContent(Utils.getStringByRes(R.string.xac_nhan),
-                Utils.getStringByRes(R.string.xac_nhan_xoa_mon) + " " + drink.getName() + "?");
+                "Xóa " + drink.getName() + "?");
 
         confirmDialog.setOnClickOkListener(new ConfirmDialog.OnClickOkListener() {
             @Override
             public void onClickOk() {
                 confirmDialog.dismiss();
-                // TODO: 09/03/2019 remove drink
+                mainView.showLoading();
+                ResfulApi.getInstance().getService(TheCoffeeService.class)
+                        .deleteDrink(drink.getID())
+                        .enqueue(new Callback<ResponseData<String>>() {
+                            @Override
+                            public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
+                                mainView.hideLoading();
+                                if (response.body() != null && response.body().getContent().equals("Successful")) {
+                                    mainView.showMessage("Xóa thành công!");
+                                    getDrinkTypeList();
+                                } else {
+                                    mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error!");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseData<String>> call, Throwable t) {
+                                mainView.hideLoading();
+                                mainView.showMessage(t.getMessage());
+                            }
+                        });
             }
         });
     }

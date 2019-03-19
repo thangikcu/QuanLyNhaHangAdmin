@@ -39,6 +39,8 @@ public class AddNhanVienDialog extends BaseDialog implements DatePickerDialog.On
     EditText edtSoDienThoai;
     @BindView(R.id.edt_salary)
     EditText edtSalary;
+    @BindView(R.id.edt_work_hours)
+    EditText edtWorkHours;
     @BindView(R.id.tv_chon_hinh)
     TextView tvChonHinh;
     @BindView(R.id.tv_age)
@@ -103,6 +105,7 @@ public class AddNhanVienDialog extends BaseDialog implements DatePickerDialog.On
         edtFullname.setText(user.getFullName());
         edtDob.setText(user.getDob());
         edtSoDienThoai.setText(user.getPhoneNumber());
+        edtWorkHours.setText(user.getWorkingHours() + "");
         edtSalary.setText(user.getSalary() + "");
 
     }
@@ -125,6 +128,7 @@ public class AddNhanVienDialog extends BaseDialog implements DatePickerDialog.On
                 user.setAvatarData(Utils.getStringImage(hinhAnhByte));
                 user.setFullName(edtFullname.getText().toString().trim());
                 user.setPhoneNumber(edtSoDienThoai.getText().toString().trim());
+                user.setWorkingHours(Integer.parseInt(edtWorkHours.getText().toString().trim()));
                 user.setSalary(Integer.parseInt(edtSalary.getText().toString().trim()));
 //                user.setRule(ruleList.get(spnRule.getSelectedItemPosition()));
 
@@ -142,6 +146,11 @@ public class AddNhanVienDialog extends BaseDialog implements DatePickerDialog.On
             cancel = true;
             focusView = edtSalary;
             edtSalary.setError("Nhập mức lương");
+        }
+        if (TextUtils.isEmpty(edtWorkHours.getText())) {
+            cancel = true;
+            focusView = edtWorkHours;
+            edtWorkHours.setError("Nhập Số giờ làm việc mỗi ngày");
         }
         if (TextUtils.isEmpty(edtSoDienThoai.getText())) {
             cancel = true;

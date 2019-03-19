@@ -23,7 +23,7 @@
                 android:id="@+id/tv_title"
                 style="@style/CommonTextView"
                 android:paddingLeft="@dimen/margin"
-                android:text="@string/danh_sach_thuc_don"
+                android:text="Danh sách đồ uống"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 

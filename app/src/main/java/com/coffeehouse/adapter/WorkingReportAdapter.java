@@ -2,6 +2,8 @@ package com.coffeehouse.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,8 +112,17 @@ public class WorkingReportAdapter extends AbstractTableAdapter<String, String, S
         MyColumnHeaderViewHolder columnHeaderViewHolder = (MyColumnHeaderViewHolder) holder;
         columnHeaderViewHolder.column_header_textview.setText(columnHeaderItemModel.toString());
 
-        columnHeaderViewHolder.column_header_container.getLayoutParams().width = LinearLayout
-                .LayoutParams.WRAP_CONTENT;
+        if (columnPosition == 3) {
+            Resources r = holder.itemView.getContext().getResources();
+            columnHeaderViewHolder.column_header_container.getLayoutParams().width = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    72,
+                    r.getDisplayMetrics()
+            );
+        } else {
+            columnHeaderViewHolder.column_header_container.getLayoutParams().width = LinearLayout
+                    .LayoutParams.WRAP_CONTENT;
+        }
         columnHeaderViewHolder.column_header_textview.requestLayout();
     }
 

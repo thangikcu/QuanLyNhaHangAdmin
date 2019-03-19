@@ -19,6 +19,8 @@ public class User {
     private String phoneNumber;
     private String rule;
     private long salary;
+    private int workingHours;
+    private double salaryPerMonth;
     private String status;
     @SerializedName("dtos")
     private List<WorkingReport> listWorkingReport;
@@ -112,6 +114,22 @@ public class User {
             return Base64.decode(avatarData, Base64.DEFAULT);
         }
         return null;
+    }
+
+    public int getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(int workingHours) {
+        this.workingHours = workingHours;
+    }
+
+    public double getSalaryPerMonth() {
+        return salaryPerMonth;
+    }
+
+    public void setSalaryPerMonth(double salaryPerMonth) {
+        this.salaryPerMonth = salaryPerMonth;
     }
 /*
     public Date getDobInDate() {

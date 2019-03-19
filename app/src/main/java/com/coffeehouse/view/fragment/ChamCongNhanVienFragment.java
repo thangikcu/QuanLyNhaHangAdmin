@@ -28,9 +28,11 @@ import com.coffeehouse.restapi.TheCoffeeService;
 import com.coffeehouse.util.MyPermission;
 import com.coffeehouse.util.Utils;
 import com.evrencoskun.tableview.TableView;
+import com.google.android.gms.common.util.CollectionUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -58,6 +60,8 @@ public class ChamCongNhanVienFragment extends BaseFragment implements View.OnCli
     Button btnView;
     @BindView(R.id.table_view)
     TableView tableView;
+    @BindView(R.id.tv_salary)
+    TextView tvSalary;
     @BindView(R.id.tv_so_cong)
     TextView tvSoCong;
     @BindView(R.id.tv_so_gio)
@@ -104,22 +108,28 @@ public class ChamCongNhanVienFragment extends BaseFragment implements View.OnCli
                     public void onResponse(Call<ResponseData<User>> call, Response<ResponseData<User>> response) {
                         mainView.hideLoading();
                         if (response.body() != null && response.body().getContent() != null) {
-                            List<WorkingReport> listWorkingReport = response.body().getContent().getListWorkingReport();
+                            User userWorking = response.body().getContent();
+                            List<WorkingReport> listWorkingReport = userWorking.getListWorkingReport();
                             workingReportAdapter.setData(listWorkingReport);
 
                             int soCong = 0;
                             float soGio = 0;
 
-                            for (int i = 0; i < listWorkingReport.size(); i++) {
-                                WorkingReport workingReport = listWorkingReport.get(i);
+                            if (!CollectionUtils.isEmpty(listWorkingReport)) {
+                                for (int i = 0; i < listWorkingReport.size(); i++) {
+                                    WorkingReport workingReport = listWorkingReport.get(i);
 
-                                if (workingReport.isValidate()) {
-                                    ++soCong;
-                                    soGio += Utils.getDifferenceTime(workingReport.getStartDate(),
-                                            workingReport.getEndDate());
+                                    if (workingReport.isValidate()) {
+                                        ++soCong;
+                                        soGio += Utils.getDifferenceTime(workingReport.getStartDate(),
+                                                workingReport.getEndDate());
+                                    }
                                 }
                             }
 
+                            DecimalFormat formatter = new DecimalFormat("###,###,###");
+
+                            tvSalary.setText(formatter.format(userWorking.getSalaryPerMonth()) + " VNĐ");
                             tvSoCong.setText(soCong + " Công");
                             tvSoGio.setText(soGio + " Giờ");
                         } else {

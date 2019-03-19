@@ -62,8 +62,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin.setOnClickListener(this);
 
         if (BuildConfig.DEBUG) {
-            edtUsername.setText("tran20190304");
-            edtPassword.setText("chienthan123");
+            edtUsername.setText("tran1");
+            edtPassword.setText("tran096");
         }
     }
 

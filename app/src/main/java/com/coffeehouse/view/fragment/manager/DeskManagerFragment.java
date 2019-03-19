@@ -40,7 +40,7 @@ public class DeskManagerFragment extends BaseFragment implements DeskManagerAdap
 
 
     public DeskManagerFragment(MainView mainView) {
-        super(R.layout.fragment_loai_mon_manager);
+        super(R.layout.fragment_ban_manager);
         this.mainView = mainView;
     }
 
@@ -77,9 +77,9 @@ public class DeskManagerFragment extends BaseFragment implements DeskManagerAdap
 
     @Override
     public void findViews(View view) {
-        recyclerView = view.findViewById(R.id.list_loai_mon);
-        edtTimKiem = view.findViewById(R.id.edt_tim_kiem_loai_mon);
-        btnThemMoi = view.findViewById(R.id.btn_them_loai_mon);
+        recyclerView = view.findViewById(R.id.list_ban);
+        edtTimKiem = view.findViewById(R.id.edt_tim_kiem_ban);
+        btnThemMoi = view.findViewById(R.id.btn_them_ban);
     }
 
     @Override

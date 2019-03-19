@@ -53,6 +53,14 @@
         android:textColor="@color/colorTextMoney" />
 
     <TextView
+        android:id="@+id/tv_work_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Thời gian làm việc: 8h"
+        android:textColor="#098" />
+
+    <TextView
         android:id="@+id/tv_status"
         android:layout_width="110dp"
         android:layout_height="wrap_content"

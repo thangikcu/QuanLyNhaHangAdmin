@@ -33,6 +33,7 @@ public class ResfulApi {
                         .scheme("http")
                         .host("192.168.1.246")
 //                        .host("192.168.1.13")
+//                        .host("192.168.42.245")
                         .port(8080)
                         .build())
                 .client(new OkHttpClient.Builder().build())

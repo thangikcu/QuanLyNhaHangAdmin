@@ -2,6 +2,7 @@ package com.coffeehouse.view.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.coffeehouse.restapi.ResfulApi;
 import com.coffeehouse.restapi.ResponseData;
 import com.coffeehouse.restapi.TheCoffeeService;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -90,21 +92,34 @@ public class ThongKeFragment extends BaseFragment {
                             List<TurnOver> turnOverList = response.body().getContent();
 
                             List<DataPoint> dataPointList = new ArrayList<>();
+                            List<DataPoint> dataPointList2 = new ArrayList<>();
 
                             for (int i = 0; i < turnOverList.size(); i++) {
                                 TurnOver turnOver = turnOverList.get(i);
                                 dataPointList.add(new DataPoint(turnOver.getName(), turnOver.getTurnOver()));
+                                if (turnOver.getTurnOver() > 0) {
+                                    dataPointList2.add(new DataPoint(turnOver.getName(), turnOver.getTurnOver()));
+                                }
                             }
 
                             DataPoint[] points = dataPointList.toArray(new DataPoint[0]);
 
-                            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
-                            series.setDrawDataPoints(true);
-                            series.setDrawBackground(true);
-                            series.setAnimated(true);
+                            LineGraphSeries<DataPoint> lineGraphSeries = new LineGraphSeries<>(points);
+                            lineGraphSeries.setDrawDataPoints(true);
+                            lineGraphSeries.setDrawBackground(true);
+                            lineGraphSeries.setAnimated(true);
+
+
+                            BarGraphSeries<DataPoint> barGraphSeries = new BarGraphSeries<>(dataPointList2.toArray(new DataPoint[0]));
+                            barGraphSeries.setDrawValuesOnTop(true);
+                            barGraphSeries.setValuesOnTopColor(Color.BLACK);
+                            barGraphSeries.setDataWidth(0.1f);
+                            barGraphSeries.setColor(Color.TRANSPARENT);
 
                             graph.removeAllSeries();
-                            graph.addSeries(series);
+                            graph.setCursorMode(true);
+                            graph.addSeries(lineGraphSeries);
+//                            graph.addSeries(barGraphSeries);
                         } else {
                             graph.removeAllSeries();
                         }

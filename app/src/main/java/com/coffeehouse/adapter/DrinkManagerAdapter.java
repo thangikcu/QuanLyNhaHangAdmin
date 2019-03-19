@@ -129,8 +129,7 @@ public class DrinkManagerAdapter extends RecyclerView.Adapter<DrinkManagerAdapte
             tvTenMon = itemView.findViewById(R.id.tv_ten_mon);
 
             itemView.findViewById(R.id.btn_update).setOnClickListener(this);
-//            itemView.findViewById(R.id.btn_delete).setOnClickListener(this);
-            itemView.findViewById(R.id.btn_delete).setVisibility(View.GONE);
+            itemView.findViewById(R.id.btn_delete).setOnClickListener(this);
         }
 
         @Override

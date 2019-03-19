@@ -41,6 +41,7 @@ import com.coffeehouse.restapi.ResfulApi;
 import com.coffeehouse.restapi.ResponseData;
 import com.coffeehouse.restapi.TheCoffeeService;
 import com.coffeehouse.util.Utils;
+import com.coffeehouse.view.dialog.ConfirmDialog;
 import com.coffeehouse.view.dialog.OrderDialog;
 import com.coffeehouse.view.dialog.TinhTienDialog;
 
@@ -57,7 +58,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 @SuppressLint("ValidFragment")
-public class PhucVuFragment extends BaseFragment implements View.OnClickListener {
+public class PhucVuFragment extends BaseFragment implements View.OnClickListener, MonOrderAdapter.OnClickDrinkOrder {
 
     @BindView(R.id.list_ban)
     RecyclerView listBan;
@@ -100,12 +101,10 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
     private DeskAdapter deskAdapter;
     private MonOrderAdapter monOrderAdapter;
     private DrinkAdapter drinkAdapter;
-    private NhomMonAdapter nhomMonAdapter;
 
     //animationAlpha
     private Animation animationAlpha;
     private Animation animationZoom;
-    private Animation animationBounce;
 
     private MainView mainView;
     private Bill currentBill;
@@ -147,7 +146,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
                     drinkList = new ArrayList<>();
                     drinkTypeList.forEach(drinkType -> drinkList.addAll(drinkType.getListDrinks()));
 
-                    listNhomMon.setAdapter(nhomMonAdapter = new NhomMonAdapter(drinkTypeList, drinkType -> {
+                    listNhomMon.setAdapter(new NhomMonAdapter(drinkTypeList, drinkType -> {
                         showListDrink(drinkType);
                     }));
 
@@ -170,6 +169,9 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
 
 //          tbr.setBackgroundColor(drinkType.getMauSac());
             drinkAdapter.changeData(drinkType.getListDrinks());
+        } else {
+            tvTenLoai.setText("");
+            drinkAdapter.changeData(null);
         }
     }
 
@@ -219,7 +221,10 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
                         }
                     });
         } else {
-
+            if (currentDesk == null) {
+                mainView.showMessage("Chưa có bàn nào!");
+                return;
+            }
             OrderRequest orderRequest = new OrderRequest();
 
             orderRequest.setDeskId(currentDesk.getId());
@@ -361,7 +366,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
         //initAnimation
         animationAlpha = AnimationUtils.loadAnimation(getContext(), R.anim.alpha);
         animationZoom = AnimationUtils.loadAnimation(getContext(), R.anim.zoom);
-        animationBounce = AnimationUtils.loadAnimation(AppInstance.getContext(), R.anim.bounce);
+        Animation animationBounce = AnimationUtils.loadAnimation(AppInstance.getContext(), R.anim.bounce);
 
     }
 
@@ -376,16 +381,20 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
 
         listMon.setLayoutManager(new LinearLayoutManager(getContext()));
         listMon.setAdapter(drinkAdapter = new DrinkAdapter(drink -> {
-            OrderDialog orderDialog = new OrderDialog(getContext(), currentDesk.getId(),
-                    drink);
-            orderDialog.setOnClickOk(count -> {
-                OrderDrink(drink, count);
-            });
-            orderDialog.show();
+            if (currentDesk != null) {
+                OrderDialog orderDialog = new OrderDialog(getContext(), currentDesk.getId(),
+                        drink);
+                orderDialog.setOnClickOk(count -> {
+                    OrderDrink(drink, count);
+                });
+                orderDialog.show();
+            } else {
+                mainView.showMessage("Chưa có bàn nào!");
+            }
         }));
 
         listMonOrder.setLayoutManager(new LinearLayoutManager(getContext()));
-        listMonOrder.setAdapter(monOrderAdapter = new MonOrderAdapter(this::OnClickMonOrder));
+        listMonOrder.setAdapter(monOrderAdapter = new MonOrderAdapter(this));
 
         tvTenLoai.setMovementMethod(new ScrollingMovementMethod());
         tvTenBan.setMovementMethod(new ScrollingMovementMethod());
@@ -434,27 +443,6 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
         });
 
         tvTenBan.setOnClickListener(this);
-    }
-
-    private void OnClickMonOrder(OrderDetail orderDetail) {
-        AtomicReference<Drink> drink = new AtomicReference<>();
-
-        if (drinkList != null) {
-            drinkList.forEach(d -> {
-                if (d.getID() == orderDetail.getDrinkId()) {
-                    drink.set(d);
-                }
-            });
-        }
-
-        if (drink.get() != null) {
-            OrderDialog orderDialog = new OrderDialog(getContext(), currentDesk.getId(),
-                    drink.get());
-            orderDialog.setOnClickOk(count -> {
-                OrderDrink(drink.get(), count);
-            });
-            orderDialog.show();
-        }
     }
 
     public void showSnackbar(String message) {
@@ -529,5 +517,60 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
         if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
             drawerLayout.closeDrawer(GravityCompat.END);
         }
+    }
+
+    @Override
+    public void onClickDrinkOrder(OrderDetail orderDetail) {
+        AtomicReference<Drink> drink = new AtomicReference<>();
+
+        if (drinkList != null) {
+            drinkList.forEach(d -> {
+                if (d.getID() == orderDetail.getDrinkId()) {
+                    drink.set(d);
+                }
+            });
+        }
+
+        if (drink.get() != null) {
+            OrderDialog orderDialog = new OrderDialog(getContext(), currentDesk.getId(),
+                    drink.get());
+            orderDialog.setOnClickOk(count -> {
+                OrderDrink(drink.get(), count);
+            });
+            orderDialog.show();
+        }
+    }
+
+    @Override
+    public void onClickDelete(OrderDetail orderDetail) {
+        ConfirmDialog confirmDialog = new ConfirmDialog(getContext());
+        confirmDialog.setContent(Utils.getStringByRes(R.string.xac_nhan),
+                "Hủy món " + orderDetail.getDrinkName() + "?");
+
+        confirmDialog.setOnClickOkListener(() -> {
+            confirmDialog.dismiss();
+
+            orderDetail.setCount(0);
+
+            ResfulApi.getInstance().getService(TheCoffeeService.class)
+                    .updateBill(ResfulApi.createJsonRequestBody(currentBill))
+                    .enqueue(new Callback<ResponseData<String>>() {
+                        @Override
+                        public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
+                            mainView.hideLoading();
+                            if (response.body() != null && response.body().getContent().equals("Successful")) {
+                                getDeskInfo(currentDesk);
+                            } else {
+                                mainView.showMessage(response.body() != null ? response.body().getMessage() : "Error");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseData<String>> call, Throwable t) {
+                            mainView.hideLoading();
+                            mainView.showMessage(t.getMessage());
+                        }
+                    });
+        });
     }
 }

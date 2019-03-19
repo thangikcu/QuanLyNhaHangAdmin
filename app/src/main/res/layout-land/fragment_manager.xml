@@ -25,7 +25,7 @@
             android:background="@drawable/menu_manager_button_background"
             android:drawableLeft="@drawable/ic_food_and_drink"
             android:paddingLeft="4dp"
-            android:text="@string/quan_ly_thuc_don" />
+            android:text="Quản lý đồ uống" />
 
         <Button
             android:id="@+id/btn_ql_loai_mon"
@@ -36,7 +36,7 @@
             android:background="@drawable/menu_manager_button_background"
             android:drawableLeft="@drawable/ic_loai_mon"
             android:paddingLeft="4dp"
-            android:text="@string/quan_ly_loai_mon" />
+            android:text="Quản lý loại đồ uống" />
 
         <Button
             android:id="@+id/btn_ql_ban"

@@ -56,11 +56,17 @@ public interface TheCoffeeService {
     @POST("api/drink/update")
     Call<ResponseData<String>> updateDrink(@Body RequestBody requestBody);
 
+    @GET("api/drink/delete-by-id")
+    Call<ResponseData<String>> deleteDrink(@Query("beverageId") long drinkId);
+
     @POST("api/beverage/save")
     Call<ResponseData<String>> addDrinkType(@Body RequestBody requestBody);
 
     @POST("api/beverage/update-beverage")
     Call<ResponseData<String>> updateDrinkType(@Body RequestBody requestBody);
+
+    @GET("/api/beverage/delete-beverage-by-id")
+    Call<ResponseData<String>> deleteDrinkType(@Query("beverageId") long drinkTypeId);
 
     @GET("api/employee/generate-qr-code")
     Call<ResponseData<String>> generateQrcode();

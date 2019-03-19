@@ -80,8 +80,7 @@ public class DrinkTypeManagerAdapter extends RecyclerView.Adapter<DrinkTypeManag
             tvDrinkTypeName = itemView.findViewById(R.id.tv_ten_mon);
 
             itemView.findViewById(R.id.btn_update).setOnClickListener(this);
-//            itemView.findViewById(R.id.btn_delete).setOnClickListener(this);
-            itemView.findViewById(R.id.btn_delete).setVisibility(View.GONE);
+            itemView.findViewById(R.id.btn_delete).setOnClickListener(this);
             itemView.findViewById(R.id.iv_mon).setVisibility(View.GONE);
             itemView.findViewById(R.id.ratingBar).setVisibility(View.INVISIBLE);
             itemView.findViewById(R.id.tv_point_rating).setVisibility(View.INVISIBLE);
