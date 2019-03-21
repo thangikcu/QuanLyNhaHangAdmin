@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.coffeehouse.R;
@@ -108,6 +109,9 @@ public class ThongKeFragment extends BaseFragment {
                             lineGraphSeries.setDrawDataPoints(true);
                             lineGraphSeries.setDrawBackground(true);
                             lineGraphSeries.setAnimated(true);
+                            lineGraphSeries.setOnDataPointTapListener((series, dataPoint) -> {
+                                Toast.makeText(getContext(), "" + dataPoint.getY(), Toast.LENGTH_SHORT).show();
+                            });
 
 
                             BarGraphSeries<DataPoint> barGraphSeries = new BarGraphSeries<>(dataPointList2.toArray(new DataPoint[0]));
@@ -117,9 +121,12 @@ public class ThongKeFragment extends BaseFragment {
                             barGraphSeries.setColor(Color.TRANSPARENT);
 
                             graph.removeAllSeries();
-                            graph.setCursorMode(true);
+//                            graph.setCursorMode(true);
                             graph.addSeries(lineGraphSeries);
 //                            graph.addSeries(barGraphSeries);
+
+                            graph.getViewport().setScalable(true);
+                            graph.getViewport().setScalableY(true);
                         } else {
                             graph.removeAllSeries();
                         }
