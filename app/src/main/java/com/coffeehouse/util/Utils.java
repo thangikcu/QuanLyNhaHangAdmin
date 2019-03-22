@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
@@ -78,6 +79,10 @@ public class Utils {
 
     public static String formatMoney(long s) {
         return s / 1000 + "k";
+    }
+
+    public static String formatMoneyToVnd(double price) {
+        return new DecimalFormat("###,###,###").format(price) + " VNĐ";
     }
 
     public static String formatDate(String d) {

@@ -189,12 +189,12 @@ public class NhanVienManagerFragment extends BaseFragment implements NhanVienMan
         updateNhanVienDialog.setOnClickOkListener(userUpdate -> {
             mainView.showLoading();
             ResfulApi.getInstance().getService(TheCoffeeService.class)
-                    .addEmployee(ResfulApi.createJsonRequestBody(userUpdate))
-                    .enqueue(new Callback<ResponseData<User>>() {
+                    .updateEmployee(ResfulApi.createJsonRequestBody(userUpdate))
+                    .enqueue(new Callback<ResponseData<String>>() {
                         @Override
-                        public void onResponse(Call<ResponseData<User>> call, Response<ResponseData<User>> response) {
+                        public void onResponse(Call<ResponseData<String>> call, Response<ResponseData<String>> response) {
                             mainView.hideLoading();
-                            if (response.body() != null && response.body().getContent() != null) {
+                            if (response.body() != null && response.body().getContent().equals("Successful")) {
                                 mainView.showMessage("Cập nhật thành công!");
                                 getEmployeeList();
                             } else {
@@ -203,7 +203,7 @@ public class NhanVienManagerFragment extends BaseFragment implements NhanVienMan
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseData<User>> call, Throwable t) {
+                        public void onFailure(Call<ResponseData<String>> call, Throwable t) {
                             mainView.hideLoading();
                             mainView.showMessage(t.getMessage());
                         }

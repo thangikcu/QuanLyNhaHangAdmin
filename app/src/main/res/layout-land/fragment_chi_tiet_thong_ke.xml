@@ -1,0 +1,112 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="32dp"
+            android:src="@drawable/ic_back"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danh sách hóa đơn trong năm"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_doanh_thu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Doanh thu: 200,000,000 VNĐ"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold|italic" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <TableRow
+        android:id="@+id/tbr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_cell"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/CommonTextView"
+            android:layout_width="150dp"
+            android:padding="8dp"
+            android:text="Mã hóa đơn"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <TextView
+            style="@style/CommonTextView"
+            android:layout_width="150dp"
+            android:padding="8dp"
+            android:text="Thời gian"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <TextView
+            style="@style/CommonTextView"
+            android:layout_width="150dp"
+            android:padding="8dp"
+            android:text="Nhân viên phục vụ"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <TextView
+            style="@style/CommonTextView"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:text="Thành tiền"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/unselected_background_color"
+        android:scrollbars="vertical" />
+</LinearLayout>
+

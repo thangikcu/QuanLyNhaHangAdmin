@@ -1,254 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
     android:padding="8dp"
     tools:ignore="MissingDefaultResource">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tháng:"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/spn_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Năm:"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spn_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp" />
-
-        <Button
-            android:id="@+id/btn_view"
-            style="@style/Base.TextAppearance.AppCompat.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_search_black_24dp"
-            android:src="@drawable/ic_btn_sell"
-            android:text="Tìm kiếm"
-            android:textAllCaps="false" />
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <ToggleButton
-                android:id="@+id/toggle_view_by"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:checked="true"
-                android:textOff="Xem theo năm"
-                android:textOn="Xem theo tháng" />
-        </FrameLayout>
-
-    </LinearLayout>
-    <!--
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:text="@string/thong_tin"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
+                android:text="Tháng:"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimary" />
-    -->
-
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:seriesColor="#117A1C"
-        app:seriesType="line" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <TableRow
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/spn_month"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp">
+                android:layout_marginStart="8dp" />
 
-                <TextView
-                    style="@style/CommonTextView"
-                    android:text="@string/info_so_luong_hoa_don_chua_thanh_toan"
-                    android:textColor="@color/colorTextField"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_so_luong_hoa_don_chua_tinh_tien"
-                    style="@style/CommonTextView"
-                    android:paddingLeft="16dp"
-                    android:text="20"
-                    android:textColor="@color/colorTextInfo" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp">
+                android:text="Năm:"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-                <TextView
-                    style="@style/CommonTextView"
-                    android:text="@string/info_so_luong_hoa_don_thanh_toan"
-                    android:textColor="@color/colorTextField"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_so_luong_hoa_don_tinh_tien"
-                    style="@style/CommonTextView"
-                    android:paddingLeft="16dp"
-                    android:text="20"
-                    android:textColor="@color/colorTextInfo" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/spn_year"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp">
+                android:layout_marginStart="8dp" />
 
-                <TextView
-                    style="@style/CommonTextView"
-                    android:text="@string/info_tong_tien_thu_ve"
-                    android:textColor="@color/colorTextField"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_tong_tien"
-                    style="@style/CommonTextView"
-                    android:paddingLeft="16dp"
-                    android:text="20"
-                    android:textColor="@color/colorTextInfo" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btn_view"
+                style="@style/Base.TextAppearance.AppCompat.Button"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp">
+                android:drawableStart="@drawable/ic_search_black_24dp"
+                android:text="Tìm kiếm"
+                android:textAllCaps="false" />
 
-                <TextView
-                    style="@style/CommonTextView"
+            <TextView
+                android:id="@+id/btn_view_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:padding="4dp"
+                android:text="Xem chi tiết"
+                android:textAllCaps="false"
+                android:textColor="#0039DA"
+                android:textSize="16sp"
+                android:textStyle="italic|bold" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ToggleButton
+                    android:id="@+id/toggle_view_by"
                     android:layout_width="wrap_content"
-                    android:text="@string/info_so_luong_dat_ban"
-                    android:textColor="@color/colorTextField"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_so_luong_ban_dat_truoc"
-                    style="@style/CommonTextView"
-                    android:paddingLeft="16dp"
-                    android:text="9"
-                    android:textColor="@color/colorTextInfo" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp">
-
-                <TextView
-                    style="@style/CommonTextView"
-                    android:layout_width="wrap_content"
-                    android:text="@string/info_so_luong_khach_hang"
-                    android:textColor="@color/colorTextField"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_so_luong_khach_hang"
-                    style="@style/CommonTextView"
-                    android:paddingLeft="16dp"
-                    android:text="9"
-                    android:textColor="@color/colorTextInfo" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp">
-
-                <TextView
-                    style="@style/CommonTextView"
-                    android:text="@string/info_so_luong_nhom_mon"
-                    android:textColor="@color/colorTextField"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_so_luong_nhom_mon"
-                    style="@style/CommonTextView"
-                    android:layout_width="wrap_content"
-                    android:gravity="center_vertical"
-                    android:isScrollContainer="true"
-                    android:maxLines="4"
-                    android:scrollbars="vertical"
-                    android:text="9"
-                    android:textColor="@color/colorTextInfo" />
-
-            </TableRow>
-
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp">
-
-                <TextView
-                    style="@style/CommonTextView"
-                    android:text="@string/info_so_luong_mon"
-                    android:textColor="@color/colorTextField"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_so_luong_mon"
-                    style="@style/CommonTextView"
-                    android:text="50"
-                    android:textColor="@color/colorTextInfo" />
-
-            </TableRow>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:checked="true"
+                    android:textOff="Xem theo năm"
+                    android:textOn="Xem theo tháng" />
+            </FrameLayout>
 
         </LinearLayout>
-    </HorizontalScrollView>
-</LinearLayout>
+        <!--
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:text="@string/thong_tin"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorPrimary" />
+        -->
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:seriesColor="#117A1C"
+            app:seriesType="line" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp">
+
+                    <TextView
+                        style="@style/CommonTextView"
+                        android:text="@string/info_so_luong_hoa_don_chua_thanh_toan"
+                        android:textColor="@color/colorTextField"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_so_luong_hoa_don_chua_tinh_tien"
+                        style="@style/CommonTextView"
+                        android:paddingLeft="16dp"
+                        android:text="20"
+                        android:textColor="@color/colorTextInfo" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp">
+
+                    <TextView
+                        style="@style/CommonTextView"
+                        android:text="@string/info_so_luong_hoa_don_thanh_toan"
+                        android:textColor="@color/colorTextField"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_so_luong_hoa_don_tinh_tien"
+                        style="@style/CommonTextView"
+                        android:paddingLeft="16dp"
+                        android:text="20"
+                        android:textColor="@color/colorTextInfo" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp">
+
+                    <TextView
+                        style="@style/CommonTextView"
+                        android:text="@string/info_tong_tien_thu_ve"
+                        android:textColor="@color/colorTextField"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_tong_tien"
+                        style="@style/CommonTextView"
+                        android:paddingLeft="16dp"
+                        android:text="20"
+                        android:textColor="@color/colorTextInfo" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp">
+
+                    <TextView
+                        style="@style/CommonTextView"
+                        android:layout_width="wrap_content"
+                        android:text="@string/info_so_luong_dat_ban"
+                        android:textColor="@color/colorTextField"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_so_luong_ban_dat_truoc"
+                        style="@style/CommonTextView"
+                        android:paddingLeft="16dp"
+                        android:text="9"
+                        android:textColor="@color/colorTextInfo" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp">
+
+                    <TextView
+                        style="@style/CommonTextView"
+                        android:layout_width="wrap_content"
+                        android:text="@string/info_so_luong_khach_hang"
+                        android:textColor="@color/colorTextField"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_so_luong_khach_hang"
+                        style="@style/CommonTextView"
+                        android:paddingLeft="16dp"
+                        android:text="9"
+                        android:textColor="@color/colorTextInfo" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp">
+
+                    <TextView
+                        style="@style/CommonTextView"
+                        android:text="@string/info_so_luong_nhom_mon"
+                        android:textColor="@color/colorTextField"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_so_luong_nhom_mon"
+                        style="@style/CommonTextView"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_vertical"
+                        android:isScrollContainer="true"
+                        android:maxLines="4"
+                        android:scrollbars="vertical"
+                        android:text="9"
+                        android:textColor="@color/colorTextInfo" />
+
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp">
+
+                    <TextView
+                        style="@style/CommonTextView"
+                        android:text="@string/info_so_luong_mon"
+                        android:textColor="@color/colorTextField"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_so_luong_mon"
+                        style="@style/CommonTextView"
+                        android:text="50"
+                        android:textColor="@color/colorTextInfo" />
+
+                </TableRow>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+</FrameLayout>

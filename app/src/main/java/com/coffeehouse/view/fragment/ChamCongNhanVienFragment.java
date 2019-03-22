@@ -32,7 +32,6 @@ import com.google.android.gms.common.util.CollectionUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -127,9 +126,7 @@ public class ChamCongNhanVienFragment extends BaseFragment implements View.OnCli
                                 }
                             }
 
-                            DecimalFormat formatter = new DecimalFormat("###,###,###");
-
-                            tvSalary.setText(formatter.format(userWorking.getSalaryPerMonth()) + " VNĐ");
+                            tvSalary.setText(Utils.formatMoneyToVnd(userWorking.getSalaryPerMonth()));
                             tvSoCong.setText(soCong + " Công");
                             tvSoGio.setText(soGio + " Giờ");
                         } else {

@@ -132,17 +132,8 @@ public class ChamCongForQuanLyFragment extends BaseFragment implements NhanVienM
     public void onClick(User user) {
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        ChamCongNhanVienFragment chamCongNhanVienFragment = null;
-
-        ChamCongNhanVienFragment finalChamCongNhanVienFragment = chamCongNhanVienFragment;
-        chamCongNhanVienFragment = new ChamCongNhanVienFragment(mainView,
-                user, () -> {
-//            getChildFragmentManager().beginTransaction()
-//                    .remove(finalChamCongNhanVienFragment)
-//                    .commitAllowingStateLoss();
-            getChildFragmentManager().popBackStack();
-        });
-        fragmentTransaction.add(R.id.container, chamCongNhanVienFragment, "cham_cong_detail")
+        fragmentTransaction.add(R.id.container, new ChamCongNhanVienFragment(mainView, user,
+                () -> getChildFragmentManager().popBackStack()), "cham_cong_detail")
                 .commitAllowingStateLoss();
         fragmentTransaction.addToBackStack("cham_cong_detail");
     }

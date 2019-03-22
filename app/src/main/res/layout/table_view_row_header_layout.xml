@@ -20,7 +20,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="@color/unselected_text_color"
+            android:textColor="@color/white"
             android:textSize="@dimen/table_view_default_text_size"
             tools:text="Row Data" />
 

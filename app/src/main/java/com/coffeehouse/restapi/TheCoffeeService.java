@@ -4,6 +4,7 @@ import com.coffeehouse.model.entity.Bill;
 import com.coffeehouse.model.entity.Desk;
 import com.coffeehouse.model.entity.DrinkType;
 import com.coffeehouse.model.entity.TurnOver;
+import com.coffeehouse.model.entity.TurnOverDetail;
 import com.coffeehouse.model.entity.User;
 
 import java.util.List;
@@ -80,6 +81,9 @@ public interface TheCoffeeService {
     @POST("api/employee/register")
     Call<ResponseData<User>> addEmployee(@Body RequestBody requestBody);
 
+    @POST("api/employee/update-employee")
+    Call<ResponseData<String>> updateEmployee(@Body RequestBody requestBody);
+
     @GET("api/employee/get-employee-by-id")
     Call<ResponseData<User>> getWorkingTimeReport(@Query("employeeId") String employeeId,
                                                   @Query("month") String month);
@@ -87,5 +91,10 @@ public interface TheCoffeeService {
     @GET("api/order-history/turn-over")
     Call<ResponseData<List<TurnOver>>> getTurnOver(@Query("yearOrMonth") String yearOrMonth,
                                                    @Query("turnOverStatus") String turnOverStatus);
+
+    @GET("api/order-history/turn-over-details")
+    Call<ResponseData<List<TurnOverDetail>>> getTurnOverDetail(@Query("yearOrMonth") String yearOrMonth,
+                                                               @Query("turnOverStatus") String turnOverStatus,
+                                                               @Query("pageIndex") int pageIndex);
 }
 

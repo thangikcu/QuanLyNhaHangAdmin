@@ -3,13 +3,16 @@ package com.coffeehouse.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -46,11 +49,14 @@ public class ThongKeFragment extends BaseFragment {
     Spinner spnYear;
     @BindView(R.id.btn_view)
     Button btnView;
+    @BindView(R.id.btn_view_detail)
+    TextView btnViewDetail;
     @BindView(R.id.toggle_view_by)
     ToggleButton toggleViewBy;
     @BindView(R.id.graph)
     GraphView graph;
     private MainView mainView;
+    private long tongDoanhThu;
     private ArrayList<String> listMonth;
     private ArrayList<String> listYear;
 
@@ -82,6 +88,7 @@ public class ThongKeFragment extends BaseFragment {
         graph.setTitle(String.format("Doanh thu trong %1s %2s", (toggleViewBy.isChecked() ? "năm" : "tháng"), time));
         graph.setTitleColor(Objects.requireNonNull(getContext()).getColor(R.color.colorPrimary));
 
+        tongDoanhThu = 0;
         ResfulApi.getInstance().getService(TheCoffeeService.class)
                 .getTurnOver(time, turnOverStatus)
                 .enqueue(new Callback<ResponseData<List<TurnOver>>>() {
@@ -100,6 +107,7 @@ public class ThongKeFragment extends BaseFragment {
                                 dataPointList.add(new DataPoint(turnOver.getName(), turnOver.getTurnOver()));
                                 if (turnOver.getTurnOver() > 0) {
                                     dataPointList2.add(new DataPoint(turnOver.getName(), turnOver.getTurnOver()));
+                                    tongDoanhThu += turnOver.getTurnOver();
                                 }
                             }
 
@@ -123,10 +131,11 @@ public class ThongKeFragment extends BaseFragment {
                             graph.removeAllSeries();
 //                            graph.setCursorMode(true);
                             graph.addSeries(lineGraphSeries);
-//                            graph.addSeries(barGraphSeries);
+                            graph.addSeries(barGraphSeries);
 
                             graph.getViewport().setScalable(true);
                             graph.getViewport().setScalableY(true);
+                            graph.getViewport().calcCompleteRange();
                         } else {
                             graph.removeAllSeries();
                         }
@@ -175,9 +184,27 @@ public class ThongKeFragment extends BaseFragment {
         spnYear.setSelection(listYear.indexOf(calendar.get(Calendar.YEAR) + ""));
     }
 
+    private void openViewDetail() {
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+        String turnOverStatus = toggleViewBy.isChecked() ? "YEAR" : "MONTH";
+
+        int month = Integer.parseInt(listMonth.get(spnMonth.getSelectedItemPosition()));
+        int year = Integer.parseInt(listYear.get(spnYear.getSelectedItemPosition()));
+
+        String time = toggleViewBy.isChecked() ? (year + "") : (month + "/" + year);
+
+        fragmentTransaction.add(R.id.container, new ChiTietThongKeFragment(mainView, tongDoanhThu, turnOverStatus, time,
+                () -> getChildFragmentManager().popBackStack()), "thong_ke_detail")
+                .commitAllowingStateLoss();
+        fragmentTransaction.addToBackStack("thong_ke_detail");
+    }
+
     @Override
     public void setEvents() {
         toggleViewBy.setOnCheckedChangeListener((compoundButton, b) -> loadData());
         btnView.setOnClickListener(view1 -> loadData());
+        btnViewDetail.setPaintFlags(btnViewDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        btnViewDetail.setOnClickListener(view1 -> openViewDetail());
     }
 }
