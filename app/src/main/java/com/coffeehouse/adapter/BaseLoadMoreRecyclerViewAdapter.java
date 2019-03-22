@@ -69,6 +69,13 @@ public abstract class BaseLoadMoreRecyclerViewAdapter<T, VH extends BaseRecycler
         }
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull BaseViewHolder vh, int position) {
+        if (!(vh instanceof LoadingViewHoler)) {
+            super.onBindViewHolder(vh, position);
+        }
+    }
+
     private void initLoadMoreListener(ViewGroup parent) {
         if ((onLoadMoreListener != null || onBottomReachedListener != null) && !isInitLoadMoreListener) {
             RecyclerView recyclerView = (RecyclerView) parent;
@@ -94,7 +101,8 @@ public abstract class BaseLoadMoreRecyclerViewAdapter<T, VH extends BaseRecycler
                                             : (dy > 0 && !recyclerView.canScrollVertically(1)))) {
                                 setLoading(true);
                                 recyclerView.scrollToPosition(getItemCount() - 1);
-                                onLoadMoreListener.onLoadMore(++currentPageIndex);
+                                recyclerView.postDelayed(() -> onLoadMoreListener.onLoadMore(++currentPageIndex), 1000);
+
                             }
                         }
                     }
