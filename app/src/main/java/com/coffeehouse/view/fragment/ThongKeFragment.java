@@ -6,26 +6,33 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.coffeehouse.AppInstance;
 import com.coffeehouse.R;
 import com.coffeehouse.interfaces.MainView;
 import com.coffeehouse.model.entity.TurnOver;
 import com.coffeehouse.restapi.ResfulApi;
 import com.coffeehouse.restapi.ResponseData;
 import com.coffeehouse.restapi.TheCoffeeService;
+import com.coffeehouse.util.Utils;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,12 +48,14 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 @SuppressLint("ValidFragment")
-public class ThongKeFragment extends BaseFragment {
+public class ThongKeFragment extends BaseFragment implements OnDataPointTapListener {
 
     @BindView(R.id.spn_month)
     Spinner spnMonth;
     @BindView(R.id.spn_year)
     Spinner spnYear;
+    @BindView(R.id.layout_month)
+    View layoutMonth;
     @BindView(R.id.btn_view)
     Button btnView;
     @BindView(R.id.btn_view_detail)
@@ -78,14 +87,18 @@ public class ThongKeFragment extends BaseFragment {
     public void loadData() {
         mainView.showLoading();
 
-        String turnOverStatus = toggleViewBy.isChecked() ? "YEAR" : "MONTH";
+        boolean viewByYear = toggleViewBy.isChecked();
+
+        String turnOverStatus = viewByYear ? "YEAR" : "MONTH";
 
         int month = Integer.parseInt(listMonth.get(spnMonth.getSelectedItemPosition()));
         int year = Integer.parseInt(listYear.get(spnYear.getSelectedItemPosition()));
 
-        String time = toggleViewBy.isChecked() ? (year + "") : (month + "/" + year);
+        String time = viewByYear ? (year + "") : (month + "/" + year);
 
-        graph.setTitle(String.format("Doanh thu trong %1s %2s", (toggleViewBy.isChecked() ? "năm" : "tháng"), time));
+        layoutMonth.setVisibility(viewByYear ? View.INVISIBLE : View.VISIBLE);
+
+        graph.setTitle(String.format("Doanh thu trong %1s %2s", (viewByYear ? "năm" : "tháng"), time));
         graph.setTitleColor(Objects.requireNonNull(getContext()).getColor(R.color.colorPrimary));
 
         tongDoanhThu = 0;
@@ -117,10 +130,7 @@ public class ThongKeFragment extends BaseFragment {
                             lineGraphSeries.setDrawDataPoints(true);
                             lineGraphSeries.setDrawBackground(true);
                             lineGraphSeries.setAnimated(true);
-                            lineGraphSeries.setOnDataPointTapListener((series, dataPoint) -> {
-                                Toast.makeText(getContext(), "" + dataPoint.getY(), Toast.LENGTH_SHORT).show();
-                            });
-
+                            lineGraphSeries.setOnDataPointTapListener(ThongKeFragment.this);
 
                             BarGraphSeries<DataPoint> barGraphSeries = new BarGraphSeries<>(dataPointList2.toArray(new DataPoint[0]));
                             barGraphSeries.setDrawValuesOnTop(true);
@@ -148,6 +158,25 @@ public class ThongKeFragment extends BaseFragment {
                         graph.removeAllSeries();
                     }
                 });
+    }
+
+    @Override
+    public void onTap(Series series, DataPointInterface dataPoint) {
+        boolean viewByYear = toggleViewBy.isChecked();
+        String info = ((int) dataPoint.getX()) + ": " + Utils.formatMoneyToVnd(dataPoint.getY());
+        showSnackbar((viewByYear ? "Tháng " : "Ngày ") + info);
+    }
+
+    public void showSnackbar(String message) {
+        if (!TextUtils.isEmpty(message)) {
+            final Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+            View viewSnackbar = snackbar.getView();
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewSnackbar.getLayoutParams();
+            params.width = AppInstance.getContext().getResources().getDisplayMetrics().widthPixels / 2;
+            viewSnackbar.setLayoutParams(params);
+            viewSnackbar.setOnClickListener(v -> snackbar.dismiss());
+            snackbar.show();
+        }
     }
 
     @Override
@@ -187,12 +216,13 @@ public class ThongKeFragment extends BaseFragment {
     private void openViewDetail() {
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        String turnOverStatus = toggleViewBy.isChecked() ? "YEAR" : "MONTH";
+        boolean viewByYear = toggleViewBy.isChecked();
+        String turnOverStatus = viewByYear ? "YEAR" : "MONTH";
 
         int month = Integer.parseInt(listMonth.get(spnMonth.getSelectedItemPosition()));
         int year = Integer.parseInt(listYear.get(spnYear.getSelectedItemPosition()));
 
-        String time = toggleViewBy.isChecked() ? (year + "") : (month + "/" + year);
+        String time = viewByYear ? (year + "") : (month + "/" + year);
 
         fragmentTransaction.add(R.id.container, new ChiTietThongKeFragment(mainView, tongDoanhThu, turnOverStatus, time,
                 () -> getChildFragmentManager().popBackStack()), "thong_ke_detail")

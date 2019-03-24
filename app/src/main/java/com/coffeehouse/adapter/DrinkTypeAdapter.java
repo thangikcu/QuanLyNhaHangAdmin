@@ -17,11 +17,11 @@ import java.util.List;
  * Created by Thanggun99 on 19/11/2016.
  */
 
-public class NhomMonAdapter extends BaseAdapter {
+public class DrinkTypeAdapter extends BaseAdapter {
     private List<DrinkType> nhomMonList;
     private OnClickDrinkType onClickDrinkType;
 
-    public NhomMonAdapter(List<DrinkType> nhomMonList, OnClickDrinkType onClickDrinkType) {
+    public DrinkTypeAdapter(List<DrinkType> nhomMonList, OnClickDrinkType onClickDrinkType) {
         this.nhomMonList = nhomMonList;
         this.onClickDrinkType = onClickDrinkType;
     }

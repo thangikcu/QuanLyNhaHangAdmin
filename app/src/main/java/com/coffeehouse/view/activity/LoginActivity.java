@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.coffeehouse.AppInstance;
 import com.coffeehouse.BuildConfig;
 import com.coffeehouse.R;
-import com.coffeehouse.model.LoginTask;
 import com.coffeehouse.model.entity.Admin;
 import com.coffeehouse.model.entity.User;
 import com.coffeehouse.restapi.ResfulApi;
@@ -113,7 +112,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Admin admin = new Admin();
                 admin.setTenDangNhap(edtUsername.getText().toString().trim());
                 admin.setMatKhau(edtPassword.getText().toString().trim());
-                admin.setKieuDangNhap(LoginTask.NOT_AUTO);
                 admin.setGhiNho(ckbGhiNho.isChecked());
 
                 if (checkConnect()) {

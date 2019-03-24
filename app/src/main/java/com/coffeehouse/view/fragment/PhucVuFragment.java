@@ -28,8 +28,8 @@ import com.coffeehouse.AppInstance;
 import com.coffeehouse.R;
 import com.coffeehouse.adapter.DeskAdapter;
 import com.coffeehouse.adapter.DrinkAdapter;
+import com.coffeehouse.adapter.DrinkTypeAdapter;
 import com.coffeehouse.adapter.MonOrderAdapter;
-import com.coffeehouse.adapter.NhomMonAdapter;
 import com.coffeehouse.interfaces.MainView;
 import com.coffeehouse.model.entity.Bill;
 import com.coffeehouse.model.entity.Desk;
@@ -146,7 +146,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
                     drinkList = new ArrayList<>();
                     drinkTypeList.forEach(drinkType -> drinkList.addAll(drinkType.getListDrinks()));
 
-                    listNhomMon.setAdapter(new NhomMonAdapter(drinkTypeList, drinkType -> {
+                    listNhomMon.setAdapter(new DrinkTypeAdapter(drinkTypeList, drinkType -> {
                         showListDrink(drinkType);
                     }));
 
@@ -452,12 +452,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewSnackbar.getLayoutParams();
             params.width = AppInstance.getContext().getResources().getDisplayMetrics().widthPixels / 2;
             viewSnackbar.setLayoutParams(params);
-            viewSnackbar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    snackbar.dismiss();
-                }
-            });
+            viewSnackbar.setOnClickListener(v -> snackbar.dismiss());
             snackbar.show();
         }
     }

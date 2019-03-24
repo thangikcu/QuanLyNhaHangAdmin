@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.coffeehouse.AppInstance;
-import com.coffeehouse.model.LoginTask;
 import com.coffeehouse.view.dialog.NotifiDialog;
 
 
 public class BeginActivity extends AppCompatActivity {
-
-    private LoginTask loginTask;
 
     private ProgressDialog progressDialog;
     private NotifiDialog notifiDialog;

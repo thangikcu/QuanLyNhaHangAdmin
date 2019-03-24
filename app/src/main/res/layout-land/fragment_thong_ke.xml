@@ -22,18 +22,26 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/layout_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tháng:"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:visibility="invisible">
 
-            <Spinner
-                android:id="@+id/spn_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tháng:"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spn_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"

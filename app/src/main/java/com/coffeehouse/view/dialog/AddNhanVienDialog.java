@@ -3,6 +3,7 @@ package com.coffeehouse.view.dialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -90,12 +91,16 @@ public class AddNhanVienDialog extends BaseDialog implements DatePickerDialog.On
         if (date != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            tvAge.setText("Tuổi: " + Period.between(LocalDate.of(calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH) + 1,
-                    calendar.get(Calendar.DAY_OF_MONTH)),
-                    LocalDate.now()).getYears());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                tvAge.setText("Tuổi: " + Period.between(LocalDate.of(calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH) + 1,
+                        calendar.get(Calendar.DAY_OF_MONTH)),
+                        LocalDate.now()).getYears());
+            } else {
+                int year = Calendar.getInstance().get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+                tvAge.setText("Tuổi: " + year);
+            }
         }
-
         Glide.with(getContext())
                 .load(user.getImageToShow())
                 .placeholder(R.drawable.ic_account)
@@ -234,7 +239,16 @@ public class AddNhanVienDialog extends BaseDialog implements DatePickerDialog.On
 
         edtDob.setText(new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
 
-        tvAge.setText("Tuổi: " + Period.between(LocalDate.of(year, month + 1, day), LocalDate.now()).getYears());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            tvAge.setText("Tuổi: " + Period.between(LocalDate.of(year, month + 1, day), LocalDate.now()).getYears());
+        } else {
+            int age = Calendar.getInstance().get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+            tvAge.setText("Tuổi: " + age);
+        }
+        long l = Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis();
+        Calendar difference = Calendar.getInstance();
+        difference.setTimeInMillis(l);
+        tvAge.setText("Tuổi: " + difference.get(Calendar.YEAR));
     }
 
     public interface OnClickOkListener {
