@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.coffeehouse.AppInstance;
-import com.coffeehouse.BuildConfig;
 import com.coffeehouse.R;
 import com.coffeehouse.model.entity.Admin;
 import com.coffeehouse.model.entity.User;
@@ -60,10 +59,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnLogin.setOnClickListener(this);
 
-        if (BuildConfig.DEBUG) {
+/*        if (BuildConfig.DEBUG) {
             edtUsername.setText("tran1");
             edtPassword.setText("tran096");
-        }
+        }*/
     }
 
     public void onStartTask() {

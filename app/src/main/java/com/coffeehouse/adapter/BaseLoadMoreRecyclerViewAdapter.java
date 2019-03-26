@@ -10,7 +10,7 @@ import com.coffeehouse.R;
 
 import java.util.List;
 
-public abstract class BaseLoadMoreRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdapter.BaseViewHolder> extends BaseRecyclerViewAdapter<T, VH> {
+public abstract class BaseLoadMoreRecyclerViewAdapter<T, VH extends BaseViewHolder> extends BaseRecyclerViewAdapter<T, VH> {
     protected final int LOADING_TYPE = 1;
 
     protected OnLoadMoreListener onLoadMoreListener;
@@ -59,7 +59,7 @@ public abstract class BaseLoadMoreRecyclerViewAdapter<T, VH extends BaseRecycler
 
     @NonNull
     @Override
-    public BaseRecyclerViewAdapter.BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         initLoadMoreListener(viewGroup);
 
         if (viewType == LOADING_TYPE) {

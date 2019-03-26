@@ -13,7 +13,6 @@ import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +26,7 @@ import com.coffeehouse.view.dialog.NotifiDialog;
 import com.coffeehouse.view.fragment.BaseFragment;
 import com.coffeehouse.view.fragment.ChamCongForQuanLyFragment;
 import com.coffeehouse.view.fragment.ChamCongNhanVienFragment;
+import com.coffeehouse.view.fragment.DepotFragment;
 import com.coffeehouse.view.fragment.ManagerFragment;
 import com.coffeehouse.view.fragment.PhucVuFragment;
 import com.coffeehouse.view.fragment.SettingFragment;
@@ -47,14 +47,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnManager;
     @BindView(R.id.btn_thong_ke)
     Button btnThongKe;
+    @BindView(R.id.btn_depot)
+    Button btnDepot;
     @BindView(R.id.btn_setting)
     Button btnSetting;
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.tv_rule)
     TextView tvRule;
-    @BindView(R.id.btn_drop_down)
-    ImageButton btnDropDown;
+    @BindView(R.id.layout_user_info)
+    View layoutUserInfo;
     @BindView(R.id.iv_avatar)
     ImageView ivAvatar;
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ChamCongForQuanLyFragment chamCongForQuanLyFragment;
     private ManagerFragment managerFragment;
     private ThongKeFragment thongKeFragment;
+    private DepotFragment depotFragment;
     private Fragment fragmentIsShow;
 
     private ProgressDialog progressDialog;
@@ -115,14 +118,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void initComponents() {
         btnSelected = new Button(this);
 
-        popupMenu = new PopupMenu(this, btnDropDown);
+        popupMenu = new PopupMenu(this, layoutUserInfo);
         popupMenu.getMenuInflater().inflate(R.menu.account_menu, popupMenu.getMenu());
     }
 
     public void setEvents() {
-        setAdmin();
+        setupUserInstance();
 
-        btnDropDown.setOnClickListener(this);
+        layoutUserInfo.setOnClickListener(this);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -143,11 +146,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPhucVu.setOnClickListener(this);
         btnManager.setOnClickListener(this);
         btnThongKe.setOnClickListener(this);
+        btnDepot.setOnClickListener(this);
         btnChamCong.setOnClickListener(this);
         btnSetting.setOnClickListener(this);
     }
 
-    private void setAdmin() {
+    private void setupUserInstance() {
         Glide.with(this)
                 .load(AppInstance.getLoginUser().getImageToShow())
                 .placeholder(R.drawable.ic_account)
@@ -160,9 +164,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (AppInstance.getLoginUser().isAdmin()) {
             btnManager.setVisibility(View.VISIBLE);
             btnThongKe.setVisibility(View.VISIBLE);
+//            btnDepot.setVisibility(View.VISIBLE);
         } else {
             btnManager.setVisibility(View.GONE);
             btnThongKe.setVisibility(View.GONE);
+//            btnDepot.setVisibility(View.GONE);
         }
     }
 
@@ -183,6 +189,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 fillFrame(thongKeFragment, btnThongKe);
                 break;
+            case R.id.btn_depot:
+                if (depotFragment == null) {
+                    depotFragment = new DepotFragment(this);
+                }
+                fillFrame(depotFragment, btnDepot);
+                break;
             case R.id.btn_cham_cong:
                 if (AppInstance.getLoginUser().isAdmin()) {
                     if (chamCongForQuanLyFragment == null) {
@@ -200,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (settingFragment == null) settingFragment = new SettingFragment();
                 fillFrame(settingFragment, btnSetting);
                 break;
-            case R.id.btn_drop_down:
+            case R.id.layout_user_info:
                 popupMenu.show();
                 break;
             default:

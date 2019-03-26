@@ -3,6 +3,7 @@ package com.coffeehouse.restapi;
 import com.coffeehouse.model.entity.Bill;
 import com.coffeehouse.model.entity.Desk;
 import com.coffeehouse.model.entity.DrinkType;
+import com.coffeehouse.model.entity.GoodReceipt;
 import com.coffeehouse.model.entity.TurnOver;
 import com.coffeehouse.model.entity.TurnOverDetail;
 import com.coffeehouse.model.entity.User;
@@ -17,7 +18,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface TheCoffeeService {
-
     @POST("api/employee/login")
     Call<ResponseData<User>> login(@Body RequestBody requestBody);
 
@@ -96,5 +96,11 @@ public interface TheCoffeeService {
     Call<ResponseData<List<TurnOverDetail>>> getTurnOverDetail(@Query("yearOrMonth") String yearOrMonth,
                                                                @Query("turnOverStatus") String turnOverStatus,
                                                                @Query("pageIndex") int pageIndex);
+
+    @GET("api/depot/get-all")
+    Call<ResponseData<List<GoodReceipt>>> getListReceipt(@Query("pageIndex") int pageIndex);
+
+    @POST("api/depot/save")
+    Call<ResponseData<String>> addReceipt(@Body RequestBody requestBody);
 }
 

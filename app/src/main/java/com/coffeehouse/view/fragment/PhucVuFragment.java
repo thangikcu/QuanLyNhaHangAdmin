@@ -437,7 +437,7 @@ public class PhucVuFragment extends BaseFragment implements View.OnClickListener
 
             } else {
                 edtTimKiemMon.onActionViewCollapsed();
-                tvTenLoai.setText(getResources().getString(R.string.thuc_don));
+                tvTenLoai.setText("Đồ uống");
                 tvTenLoai.setVisibility(VISIBLE);
             }
         });

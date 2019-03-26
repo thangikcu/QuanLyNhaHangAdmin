@@ -44,12 +44,22 @@
             android:text="@string/thong_ke" />
 
         <Button
+            android:id="@+id/btn_depot"
+            style="@style/CommonButton"
+            android:background="@drawable/menu_main_button_background"
+            android:drawableStart="@drawable/ic_depot"
+            android:padding="@dimen/layout_padding"
+            android:text="Kho hàng" />
+
+
+        <Button
             android:id="@+id/btn_setting"
             style="@style/CommonButton"
             android:background="@drawable/menu_main_button_background"
             android:drawableStart="@drawable/ic_btn_setting"
             android:padding="@dimen/layout_padding"
-            android:text="@string/cai_dat" />
+            android:text="@string/cai_dat"
+            android:visibility="gone" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -57,6 +67,7 @@
             android:layout_weight="1">
 
             <TableRow
+                android:id="@+id/layout_user_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

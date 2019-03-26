@@ -11,9 +11,7 @@ import com.coffeehouse.util.AvoidDoubleClick;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-
-public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdapter.BaseViewHolder> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder> {
+public abstract class BaseRecyclerViewAdapter<T, VH extends BaseViewHolder> extends RecyclerView.Adapter<BaseViewHolder> {
 
     public List<T> listItem;
 
@@ -49,6 +47,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
     }
 
     public void addItem(T item) {
+        if (listItem == null) {
+            listItem = new ArrayList<>();
+        }
         addItem(item, listItem.size());
     }
 
@@ -62,6 +63,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
     }
 
     public void addItem(List<T> listItem) {
+        if (this.listItem == null) {
+            this.listItem = new ArrayList<>();
+        }
         addItem(listItem, this.listItem.size());
     }
 
@@ -132,14 +136,6 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseRecyclerViewAdap
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
-    }
-
-    public static abstract class BaseViewHolder extends RecyclerView.ViewHolder {
-
-        public BaseViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
     }
 
 }
