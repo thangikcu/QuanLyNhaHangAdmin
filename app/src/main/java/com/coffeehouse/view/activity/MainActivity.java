@@ -164,11 +164,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (AppInstance.getLoginUser().isAdmin()) {
             btnManager.setVisibility(View.VISIBLE);
             btnThongKe.setVisibility(View.VISIBLE);
-//            btnDepot.setVisibility(View.VISIBLE);
+            btnDepot.setVisibility(View.VISIBLE);
         } else {
             btnManager.setVisibility(View.GONE);
             btnThongKe.setVisibility(View.GONE);
-//            btnDepot.setVisibility(View.GONE);
+            btnDepot.setVisibility(View.GONE);
         }
     }
 
