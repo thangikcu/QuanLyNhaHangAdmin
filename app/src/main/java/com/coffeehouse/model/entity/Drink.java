@@ -61,7 +61,10 @@ public class Drink {
 
     public byte[] getImageToShow() {
         if (!TextUtils.isEmpty(drinkImage)) {
-            return Base64.decode(drinkImage, Base64.DEFAULT);
+            try {
+                return Base64.decode(drinkImage, Base64.DEFAULT);
+            } catch (Exception ignored) {
+            }
         }
         return null;
     }
